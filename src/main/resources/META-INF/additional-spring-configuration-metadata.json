@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "wx.api.login",
+      "type": "java.lang.String",
+      "description": "Description for wx.api.login."
+  }
+] }

@@ -1,0 +1,111 @@
+server:
+  port: 8888
+spring:
+  config:
+    activate:
+      on-profile: local
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 5000MB
+      max-request-size: 5000MB
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/tz?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+  jpa:
+    hibernate:
+      ddlAuto: none
+    showSql: false
+    properties:
+      hibernate:
+        session_factory:
+          interceptor: com.yn.printer.service.interceptor.AuditInterceptor
+  redis:
+    database: 1
+    host: 127.0.0.1
+    port: 6379
+    pool:
+      max-active: 8
+      max-wait: 1
+      max-idle: 8
+      min-idle: 0
+    timeout: 20000
+    password:
+api:
+  # 微信小程序相关接口url
+  wx:
+    # 小程序登录
+    loginUrl: https://api.weixin.qq.com/sns/jscode2session
+    # 获取小程序接口调用凭证
+    getAccessTokenUrl: https://api.weixin.qq.com/cgi-bin/token
+    # 获取用户手机号
+    getPhoneNumberUrl: https://api.weixin.qq.com/wxa/business/getuserphonenumber
+    applet:
+      # 小程序 appid
+      appid: wx5b66e47c8a23f684
+      # 小程序 secret
+      secret: 0a08108a1e0951bcc6d7d17e8c6f212b
+    pay:
+      # 商户号
+      mchId: 1666324656
+      # 支付状态回调地址
+      notifyUrl: https://mps.xlmalls.com/api/order/wxPayCallback
+      # 商户API私钥路径
+      privateKeyPath: C:\Users\16479\Desktop\update\1666324656_20240119_cert\apiclient_key.pem
+      #商户证书序列号
+      merchantSerialNumber: 1BA87299355A97019FE913725F5E34069F464EC1
+      # 商户APIV3密钥
+      apiV3key: 1426yoqfqtf4gfm4xb9lcz67l1awtlrh
+
+  # 天章支付相关接口url
+  tz:
+    # 创建订单
+    createOrderUrl: https://cashier.xlmalls.com/b2c/mps/buildorder
+    # 创建支付码
+    createQrCodeUrl: https://cashier.xlmalls.com/b2c/mps/qrcode
+    # 查询支付结果
+    queryPayResultUrl: https://cashier.xlmalls.com/b2c/mps/payresult
+  # 阿里云接口url
+  ali:
+    # 证件照制作
+    idPhoto:
+      makeUrl: https://idp2.market.alicloudapi.com/idphoto/make
+
+## MQTT##
+mqtt:
+  host: tcp://broker.emqx.io:1883
+  userName: admin
+  passWord: public
+  clientId: tzdy-service
+  completionTimeout: 10000
+  heartbeat: 10
+  topicSendDevice: /tzdy/send/device/
+  topicReceiveDevice: /tzdy/receive/device/
+  topicSendQos: 2
+  topicReceiveQos: 2
+## 文件相关
+file:
+  basePath:
+    D:/yn-shared-printer/files/
+  previewPath:
+    http://192.168.250.29:60000/files/
+  ossPath:
+    https://mps-oss-south.s3.cn-south-1.jdcloud-oss.com/
+  ossPath1:
+    https://mps-oss-south.s3.cn-south-1.jdcloud-oss.com/
+
+oss:
+  jd:
+    keyId: JDC_711AC05B56BF7F42EB2E4270BD96
+    keySecret: D7ABEE1C809EE23B9951A1BCF55A90E3
+
+  s3:
+    bucketName: mps-oss-south
+    region: cn-south-1
+    endpoint: https://s3.cn-south-1.jdcloud-oss.com
+    endpoint1: https://s3.cn-south-1.jdcloud-oss.com
+
+common:
+  instance: 0

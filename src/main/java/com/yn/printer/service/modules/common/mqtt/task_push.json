@@ -1,0 +1,8 @@
+{
+  "taskCode": "任务号",
+  "printFileType": "打印文件类型: IMAGE(图片), PDF(pdf)",
+  "printFileUrl": "打印文件下载地址",
+  "printColor": "打印颜色: BW(黑白), COLOR(彩色)",
+  "printFaces": "打印面数: SINGLE(单面), DOUBLE(双面)",
+  "printDirection": "打印方向: LEVEL(水平), VERTICAL(垂直)"
+}

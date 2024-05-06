@@ -1,0 +1,4 @@
+{
+  "cmd": "pay",
+  "payCodeUrl": "http://xxzf.umfintech.com/pospymf/do_wx?q=4010192508669211"
+}

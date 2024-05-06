@@ -1,0 +1,26 @@
+server:
+  tomcat:
+    uri-encoding: UTF-8
+spring:
+  profiles:
+    active: local
+  mail:
+    host: smtp.qq.com
+    port: 587
+    username: fuheguan@qq.com
+    password: pqaqlmotgkrcfcic
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    default-encoding: UTF-8
+  jpa:
+    open-in-view: true
+  data:
+    redis:
+      repositories:
+        enabled: false
+logging:
+  config: classpath:logback-${spring.profiles.active}.xml

@@ -1,0 +1,3446 @@
+[
+  {
+    "title": "自定义尺寸",
+    "color": [
+      "blue",
+      "white",
+      "red",
+      "blue_gradual",
+      "gray_gradual"
+    ],
+    "spec": "0mmx0mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "12",
+    "size": [
+      0,
+      0
+    ]
+  },
+  {
+    "title": "导游证",
+    "color": [
+      "white",
+      "blue_gradual"
+    ],
+    "spec": "285x385",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "14",
+    "size": [
+      285,
+      385
+    ]
+  },
+  {
+    "title": "小一寸",
+    "color": [
+      "blue",
+      "white",
+      "red",
+      "blue_grey",
+      "blue_gradual",
+      "gray_gradual"
+    ],
+    "spec": "22mmx32mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "2",
+    "size": [
+      260,
+      378
+    ]
+  },
+  {
+    "title": "大一寸",
+    "color": [
+      "blue",
+      "white",
+      "red",
+      "blue_grey",
+      "blue_gradual",
+      "gray_gradual"
+    ],
+    "spec": "33mmx48mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "3",
+    "size": [
+      390,
+      567
+    ]
+  },
+  {
+    "title": "职业兽医资格证",
+    "color": [
+      "blue",
+      "red",
+      "white"
+    ],
+    "spec": "230x334",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "32",
+    "size": [
+      230,
+      334
+    ]
+  },
+  {
+    "title": "成人自考",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "384x512",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "33",
+    "size": [
+      384,
+      512
+    ]
+  },
+  {
+    "title": "英语四六级考试",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "240x320，20~30kb",
+    "file_size": [
+      20,
+      30
+    ],
+    "id": "46",
+    "size": [
+      240,
+      320
+    ]
+  },
+  {
+    "title": "普通话水平测试",
+    "color": [
+      "blue"
+    ],
+    "spec": "390x567",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "50",
+    "size": [
+      390,
+      567
+    ]
+  },
+  {
+    "title": "大二寸",
+    "color": [
+      "blue",
+      "white",
+      "red",
+      "blue_grey",
+      "blue_gradual",
+      "gray_gradual"
+    ],
+    "spec": "35mmx53mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "6",
+    "size": [
+      413,
+      626
+    ]
+  },
+  {
+    "title": "执法证",
+    "color": [
+      "white"
+    ],
+    "spec": "265x351",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "26",
+    "size": [
+      265,
+      351
+    ]
+  },
+  {
+    "title": "校园卡",
+    "color": [
+      "blue"
+    ],
+    "spec": "240x320",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "27",
+    "size": [
+      240,
+      320
+    ]
+  },
+  {
+    "title": "一级建造师证（电子版）",
+    "color": [
+      "blue",
+      "red",
+      "white"
+    ],
+    "spec": "472x630",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "30",
+    "size": [
+      472,
+      630
+    ]
+  },
+  {
+    "title": "英语四六级考试",
+    "color": [
+      "blue",
+      "white",
+      "blue_gradual"
+    ],
+    "spec": "144x192，10~20kb",
+    "file_size": [
+      10,
+      20
+    ],
+    "id": "42",
+    "size": [
+      144,
+      192
+    ]
+  },
+  {
+    "title": "学籍照片",
+    "color": [
+      "white"
+    ],
+    "spec": "358x441",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "67",
+    "size": [
+      358,
+      441
+    ]
+  },
+  {
+    "title": "社保卡（350dpi， 无回执，50~100KB）",
+    "color": [
+      "white"
+    ],
+    "spec": "358x441",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "13",
+    "size": [
+      358,
+      441
+    ]
+  },
+  {
+    "title": "医保证",
+    "color": [
+      "white"
+    ],
+    "spec": "358x441",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "24",
+    "size": [
+      358,
+      441
+    ]
+  },
+  {
+    "title": "泰国签证",
+    "color": [
+      "white"
+    ],
+    "spec": "35mmx45mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "77",
+    "size": [
+      551,
+      708
+    ]
+  },
+  {
+    "title": "国考（二寸）",
+    "color": [
+      "blue",
+      "blue_gradual",
+      "red",
+      "white"
+    ],
+    "spec": "35mmx45mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "22",
+    "size": [
+      413,
+      531
+    ]
+  },
+  {
+    "title": "美国签证",
+    "color": [
+      "white"
+    ],
+    "spec": "51mmx51mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "7",
+    "size": [
+      602,
+      602
+    ]
+  },
+  {
+    "title": "五寸",
+    "color": [
+      "blue",
+      "blue_gradual",
+      "red",
+      "white"
+    ],
+    "spec": "89mmx127mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "21",
+    "size": [
+      1051,
+      1500
+    ]
+  },
+  {
+    "title": "二级建造师证",
+    "color": [
+      "white"
+    ],
+    "spec": "295x413",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "29",
+    "size": [
+      295,
+      413
+    ]
+  },
+  {
+    "title": "巴西、冰岛签证",
+    "color": [
+      "white"
+    ],
+    "spec": "40mmx50mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "86",
+    "size": [
+      472,
+      590
+    ]
+  },
+  {
+    "title": "二级建造师证",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "455x661",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "31",
+    "size": [
+      455,
+      661
+    ]
+  },
+  {
+    "title": "电子护照人像照片",
+    "color": [
+      "white"
+    ],
+    "spec": "33mmx48mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "37",
+    "size": [
+      389,
+      566
+    ]
+  },
+  {
+    "title": "入台证",
+    "color": [
+      "white"
+    ],
+    "spec": "35mmx45mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "81",
+    "size": [
+      551,
+      709
+    ]
+  },
+  {
+    "title": "入学照",
+    "color": [
+      "blue",
+      "blue_gradual",
+      "red",
+      "white"
+    ],
+    "spec": "25mmx35mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "17",
+    "size": [
+      295,
+      413
+    ]
+  },
+  {
+    "title": "教师资格证",
+    "color": [
+      "white"
+    ],
+    "spec": "25mmx35mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "15",
+    "size": [
+      295,
+      413
+    ]
+  },
+  {
+    "title": "健康证（一寸）",
+    "color": [
+      "blue",
+      "red",
+      "white"
+    ],
+    "spec": "25mmx35mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "25",
+    "size": [
+      295,
+      413
+    ]
+  },
+  {
+    "title": "成人自考",
+    "color": [
+      "blue",
+      "white",
+      "red"
+    ],
+    "spec": "25x35mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "35",
+    "size": [
+      295,
+      413
+    ]
+  },
+  {
+    "title": "学位英语",
+    "color": [
+      "white"
+    ],
+    "spec": "390x567",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "48",
+    "size": [
+      390,
+      567
+    ]
+  },
+  {
+    "title": "高考报名",
+    "color": [
+      "blue"
+    ],
+    "spec": "420x560",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "70",
+    "size": [
+      420,
+      560
+    ]
+  },
+  {
+    "title": "社保卡（350dpi)",
+    "color": [
+      "white"
+    ],
+    "spec": "252x312",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "71",
+    "size": [
+      252,
+      312
+    ]
+  },
+  {
+    "title": "四寸",
+    "color": [
+      "blue",
+      "white",
+      "red",
+      "blue_gradual"
+    ],
+    "spec": "76mmx102mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "20",
+    "size": [
+      897,
+      1204
+    ]
+  },
+  {
+    "title": "英语AB级考试",
+    "color": [
+      "blue"
+    ],
+    "spec": "390x567",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "49",
+    "size": [
+      390,
+      567
+    ]
+  },
+  {
+    "title": "入学报名（一寸）",
+    "color": [
+      "white"
+    ],
+    "spec": "25mmx35mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "68",
+    "size": [
+      295,
+      413
+    ]
+  },
+  {
+    "title": "大学入学（小二寸）",
+    "color": [
+      "blue"
+    ],
+    "spec": "35mmx45mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "69",
+    "size": [
+      413,
+      531
+    ]
+  },
+  {
+    "title": "一寸",
+    "color": [
+      "blue",
+      "blue_gradual",
+      "red",
+      "white"
+    ],
+    "spec": "25mmx35mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "1",
+    "size": [
+      295,
+      413
+    ]
+  },
+  {
+    "title": "驾驶证、驾照（无回执，小一寸）",
+    "color": [
+      "white"
+    ],
+    "spec": "22mmx32mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "16",
+    "size": [
+      260,
+      378
+    ]
+  },
+  {
+    "title": "二寸",
+    "color": [
+      "blue",
+      "white",
+      "red",
+      "blue_gradual"
+    ],
+    "spec": "35mmx49mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "4",
+    "size": [
+      413,
+      579
+    ]
+  },
+  {
+    "title": "阿根廷签证",
+    "color": [
+      "white"
+    ],
+    "spec": "40mmx40mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "85",
+    "size": [
+      472,
+      472
+    ]
+  },
+  {
+    "title": "肯尼亚签证",
+    "color": [
+      "white"
+    ],
+    "spec": "50mmx50mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "87",
+    "size": [
+      590,
+      590
+    ]
+  },
+  {
+    "title": "英语四六级考试",
+    "color": [
+      "blue"
+    ],
+    "spec": "144x172，0~40kb",
+    "file_size": [
+      0,
+      40
+    ],
+    "id": "40",
+    "size": [
+      144,
+      172
+    ]
+  },
+  {
+    "title": "社保卡（350dpi， 无回执，10-20KB）",
+    "color": [
+      "white"
+    ],
+    "spec": "358x441",
+    "file_size": [
+      10,
+      20
+    ],
+    "id": "72",
+    "size": [
+      358,
+      441
+    ]
+  },
+  {
+    "title": "社保卡（350dpi， 无回执，25~40KB）",
+    "color": [
+      "white"
+    ],
+    "spec": "358x441",
+    "file_size": [
+      25,
+      40
+    ],
+    "id": "73",
+    "size": [
+      358,
+      441
+    ]
+  },
+  {
+    "title": "马来西亚签证",
+    "color": [
+      "white"
+    ],
+    "spec": "35mmx45mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "82",
+    "size": [
+      551,
+      709
+    ]
+  },
+  {
+    "title": "越南签证",
+    "color": [
+      "blue",
+      "red",
+      "white"
+    ],
+    "spec": "40x60mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "9",
+    "size": [
+      472,
+      708
+    ]
+  },
+  {
+    "title": "入台证（小二寸）",
+    "color": [
+      "white"
+    ],
+    "spec": "35mmx45mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "28",
+    "size": [
+      413,
+      531
+    ]
+  },
+  {
+    "title": "执业医师资格报名",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "354x472",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "62",
+    "size": [
+      354,
+      472
+    ]
+  },
+  {
+    "title": "日本签证",
+    "color": [
+      "white"
+    ],
+    "spec": "45mmx45mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "8",
+    "size": [
+      531,
+      531
+    ]
+  },
+  {
+    "title": "居住证",
+    "color": [
+      "white"
+    ],
+    "spec": "26mmx32mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "11",
+    "size": [
+      307,
+      377
+    ]
+  },
+  {
+    "title": "三寸",
+    "color": [
+      "blue",
+      "white",
+      "red",
+      "blue_gradual"
+    ],
+    "spec": "55mmx84mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "19",
+    "size": [
+      649,
+      991
+    ]
+  },
+  {
+    "title": "简历照片（一寸）",
+    "color": [
+      "blue",
+      "red",
+      "white"
+    ],
+    "spec": "25mmx35mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "18",
+    "size": [
+      295,
+      413
+    ]
+  },
+  {
+    "title": "国家司法考试",
+    "color": [
+      "blue"
+    ],
+    "spec": "413x626",
+    "file_size": [
+      40,
+      100
+    ],
+    "id": "23",
+    "size": [
+      413,
+      626
+    ]
+  },
+  {
+    "title": "会计从业资格证",
+    "color": [
+      "white"
+    ],
+    "spec": "25mmx35mm",
+    "file_size": [
+      10,
+      200
+    ],
+    "id": "39",
+    "size": [
+      295,
+      413
+    ]
+  },
+  {
+    "title": "港澳通行证",
+    "color": [
+      "white"
+    ],
+    "spec": "33mmx48mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "75",
+    "size": [
+      389,
+      566
+    ]
+  },
+  {
+    "title": "印度签证",
+    "color": [
+      "white"
+    ],
+    "spec": "51mmx51mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "78",
+    "size": [
+      602,
+      602
+    ]
+  },
+  {
+    "title": "新西兰签证",
+    "color": [
+      "white"
+    ],
+    "spec": "76mmx102mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "83",
+    "size": [
+      897,
+      1204
+    ]
+  },
+  {
+    "title": "身份证（无回执）",
+    "color": [
+      "white"
+    ],
+    "spec": "26mmx32mm",
+    "file_size": [
+      14,
+      28
+    ],
+    "id": "10",
+    "size": [
+      358,
+      441
+    ]
+  },
+  {
+    "title": "世界通用签证",
+    "color": [
+      "white"
+    ],
+    "spec": "35mmx45mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "74",
+    "size": [
+      551,
+      709
+    ]
+  },
+  {
+    "title": "签证采集",
+    "color": [
+      "white"
+    ],
+    "spec": "30mmx40mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "80",
+    "size": [
+      354,
+      472
+    ]
+  },
+  {
+    "title": "韩国签证",
+    "color": [
+      "white"
+    ],
+    "spec": "35mmx45mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "76",
+    "size": [
+      551,
+      709
+    ]
+  },
+  {
+    "title": "公务员考试",
+    "color": [
+      "blue",
+      "red",
+      "white"
+    ],
+    "spec": "35mmx45mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "36",
+    "size": [
+      413,
+      531
+    ]
+  },
+  {
+    "title": "小二寸",
+    "color": [
+      "blue",
+      "white",
+      "red",
+      "blue_gradual"
+    ],
+    "spec": "35mmx45mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "5",
+    "size": [
+      413,
+      531
+    ]
+  },
+  {
+    "title": "执业药师资格考试（一寸）",
+    "color": [
+      "blue",
+      "white",
+      "red"
+    ],
+    "spec": "295x413",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "60",
+    "size": [
+      295,
+      413
+    ]
+  },
+  {
+    "title": "执业药师资格考试（二寸）",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "413x579",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "61",
+    "size": [
+      413,
+      579
+    ]
+  },
+  {
+    "title": "以色列签证",
+    "color": [
+      "white"
+    ],
+    "spec": "51mmx51mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "79",
+    "size": [
+      602,
+      602
+    ]
+  },
+  {
+    "title": "意大利签证",
+    "color": [
+      "white"
+    ],
+    "spec": "35mmx40mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "84",
+    "size": [
+      413,
+      472
+    ]
+  },
+  {
+    "title": "一级建造师证（电子版）",
+    "color": [
+      "blue",
+      "red",
+      "white"
+    ],
+    "spec": "472x630",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "93",
+    "size": [
+      472,
+      630
+    ]
+  },
+  {
+    "title": "海外申请护照在线预约照片",
+    "color": [
+      "white"
+    ],
+    "spec": "33mmx48mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "38",
+    "size": [
+      389,
+      566
+    ]
+  },
+  {
+    "title": "护士执业资格考试(20~45kb)",
+    "color": [
+      "white"
+    ],
+    "spec": "160x210，20~45kb",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "94",
+    "size": [
+      210,
+      276
+    ]
+  },
+  {
+    "title": "公务员考试报名",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "340x450(20k以内)",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "95",
+    "size": [
+      340,
+      450
+    ]
+  },
+  {
+    "title": "入金证",
+    "color": [
+      "white"
+    ],
+    "spec": "35mmx45mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "96",
+    "size": [
+      413,
+      531
+    ]
+  },
+  {
+    "title": "社保卡（350dpi， 无回执，大于100KB）",
+    "color": [
+      "white"
+    ],
+    "spec": "358x441",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "97",
+    "size": [
+      520,
+      640
+    ]
+  },
+  {
+    "title": "成人自考（本科）",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "480x720",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "98",
+    "size": [
+      480,
+      720
+    ]
+  },
+  {
+    "title": "自考学位外语考试（390x567）",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "390x567",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "99",
+    "size": [
+      390,
+      567
+    ]
+  },
+  {
+    "title": "英语四级考试",
+    "color": [
+      "blue"
+    ],
+    "spec": "480x640，100KB",
+    "file_size": [
+      30,
+      100
+    ],
+    "id": "100",
+    "size": [
+      480,
+      640
+    ]
+  },
+  {
+    "title": "二级建造师（天津）",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "160x200，20~40kb",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "101",
+    "size": [
+      160,
+      200
+    ]
+  },
+  {
+    "title": " 二级建造师（湖南）",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "130x170",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "102",
+    "size": [
+      295,
+      413
+    ]
+  },
+  {
+    "title": "社保证（350dpi， 无回执，30~60kb）",
+    "color": [
+      "white"
+    ],
+    "spec": "358x441",
+    "file_size": [
+      30,
+      60
+    ],
+    "id": "103",
+    "size": [
+      358,
+      441
+    ]
+  },
+  {
+    "title": "英语AB级考试(144X192)",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "144x192",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "104",
+    "size": [
+      144,
+      192
+    ]
+  },
+  {
+    "title": "英语三级考试",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "144x192",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "105",
+    "size": [
+      144,
+      192
+    ]
+  },
+  {
+    "title": "公务员考试(130X170)",
+    "color": [
+      "white"
+    ],
+    "spec": "130x170",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "106",
+    "size": [
+      130,
+      170
+    ]
+  },
+  {
+    "title": "二级建造师（西藏）",
+    "color": [
+      "blue"
+    ],
+    "spec": "455x661",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "107",
+    "size": [
+      455,
+      661
+    ]
+  },
+  {
+    "title": "国家公务员考试",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "25x35mm",
+    "file_size": [
+      10,
+      20
+    ],
+    "id": "108",
+    "size": [
+      295,
+      413
+    ]
+  },
+  {
+    "title": "保险职业认证",
+    "color": [
+      "white"
+    ],
+    "spec": "210x270（10-25K）",
+    "file_size": [
+      10,
+      25
+    ],
+    "id": "109",
+    "size": [
+      210,
+      270
+    ]
+  },
+  {
+    "title": "注册会计师考试（178x220）",
+    "color": [
+      "white"
+    ],
+    "spec": "15x19mm",
+    "file_size": [
+      3,
+      19
+    ],
+    "id": "110",
+    "size": [
+      178,
+      220
+    ]
+  },
+  {
+    "title": "保险职业证",
+    "color": [
+      "white"
+    ],
+    "spec": "210x370（10-25K）",
+    "file_size": [
+      10,
+      25
+    ],
+    "id": "111",
+    "size": [
+      210,
+      370
+    ]
+  },
+  {
+    "title": "全国计算机等级考试",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "33x48mm",
+    "file_size": [
+      10,
+      200
+    ],
+    "id": "53",
+    "size": [
+      390,
+      567
+    ]
+  },
+  {
+    "title": "事业单位招聘",
+    "color": [
+      "blue"
+    ],
+    "spec": "90x120",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "112",
+    "size": [
+      90,
+      120
+    ]
+  },
+  {
+    "title": "英语三级",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "33mmx48mm",
+    "file_size": [
+      5,
+      30
+    ],
+    "id": "113",
+    "size": [
+      390,
+      567
+    ]
+  },
+  {
+    "title": "半身职业照",
+    "color": [
+      "blue",
+      "blue_gradual",
+      "red",
+      "red_gradual",
+      "white",
+      "gray_gradual"
+    ],
+    "spec": "850x1200",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "114",
+    "size": [
+      850,
+      1200
+    ]
+  },
+  {
+    "title": "成人自考",
+    "color": [
+      "blue"
+    ],
+    "spec": "480x640",
+    "file_size": [
+      20,
+      40
+    ],
+    "id": "115",
+    "size": [
+      480,
+      640
+    ]
+  },
+  {
+    "title": "高清证件照",
+    "color": [
+      "blue",
+      "white",
+      "red",
+      "blue_gradual"
+    ],
+    "spec": "1000x1400",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "116",
+    "size": [
+      1000,
+      1400
+    ]
+  },
+  {
+    "title": "成人高考报名",
+    "color": [
+      "blue"
+    ],
+    "spec": "295x413",
+    "file_size": [
+      10,
+      20
+    ],
+    "id": "117",
+    "size": [
+      295,
+      413
+    ]
+  },
+  {
+    "title": "全国计算机等级考试",
+    "color": [
+      "blue",
+      "white",
+      "red"
+    ],
+    "spec": "12x16mm",
+    "file_size": [
+      50,
+      100
+    ],
+    "id": "119",
+    "size": [
+      144,
+      192
+    ]
+  },
+  {
+    "title": "车载终端照片",
+    "color": [
+      "red"
+    ],
+    "spec": "96x128",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "120",
+    "size": [
+      96,
+      128
+    ]
+  },
+  {
+    "title": "河北社保卡（300dpi， 无回执，小于100KB）",
+    "color": [
+      "white"
+    ],
+    "spec": "358x441, 300dpi",
+    "file_size": [
+      0,
+      100
+    ],
+    "id": "121",
+    "size": [
+      358,
+      441
+    ]
+  },
+  {
+    "title": "教师资格证",
+    "color": [
+      "white"
+    ],
+    "spec": "150x200像素，不大于200K",
+    "file_size": [
+      0,
+      200
+    ],
+    "id": "122",
+    "size": [
+      150,
+      200
+    ]
+  },
+  {
+    "title": "卫生专业技术资格考试",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "35mmx45mm",
+    "file_size": [
+      45,
+      200
+    ],
+    "id": "123",
+    "size": [
+      413,
+      531
+    ]
+  },
+  {
+    "title": "小二寸",
+    "color": [
+      "blue",
+      "white",
+      "red",
+      "blue_gradual"
+    ],
+    "spec": "35mmx45mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "125",
+    "size": [
+      413,
+      531
+    ]
+  },
+  {
+    "title": "贵州公务员考试",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "35x49mm",
+    "file_size": [
+      50,
+      100
+    ],
+    "id": "127",
+    "size": [
+      413,
+      579
+    ]
+  },
+  {
+    "title": "海南公务员",
+    "color": [
+      "blue",
+      "white",
+      "red"
+    ],
+    "spec": "14x18mm",
+    "file_size": [
+      0,
+      30
+    ],
+    "id": "128",
+    "size": [
+      168,
+      218
+    ]
+  },
+  {
+    "title": "湖北公务员考试",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "25x35mm",
+    "file_size": [
+      20,
+      30
+    ],
+    "id": "129",
+    "size": [
+      295,
+      413
+    ]
+  },
+  {
+    "title": "江西公务员考试",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "35x45mm",
+    "file_size": [
+      15,
+      20
+    ],
+    "id": "130",
+    "size": [
+      413,
+      531
+    ]
+  },
+  {
+    "title": "山东公务员考试",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "35x45mm",
+    "file_size": [
+      10,
+      50
+    ],
+    "id": "132",
+    "size": [
+      413,
+      531
+    ]
+  },
+  {
+    "title": "成都公务员",
+    "color": [
+      "blue",
+      "white",
+      "red"
+    ],
+    "spec": "9x11mm",
+    "file_size": [
+      20,
+      160
+    ],
+    "id": "133",
+    "size": [
+      102,
+      126
+    ]
+  },
+  {
+    "title": "深圳公务员",
+    "color": [
+      "blue",
+      "red"
+    ],
+    "spec": "13x18mm",
+    "file_size": [
+      0,
+      1024
+    ],
+    "id": "134",
+    "size": [
+      100,
+      138
+    ]
+  },
+  {
+    "title": "国考（100x140）",
+    "color": [
+      "blue"
+    ],
+    "spec": "8x12mm",
+    "file_size": [
+      0,
+      20
+    ],
+    "id": "135",
+    "size": [
+      100,
+      140
+    ]
+  },
+  {
+    "title": "国考（99x128）",
+    "color": [
+      "blue"
+    ],
+    "spec": "8x11mm",
+    "file_size": [
+      0,
+      20
+    ],
+    "id": "136",
+    "size": [
+      99,
+      128
+    ]
+  },
+  {
+    "title": "甘肃省（国考）",
+    "color": [
+      "blue",
+      "white",
+      "red"
+    ],
+    "spec": "18x25mm",
+    "file_size": [
+      30,
+      1024
+    ],
+    "id": "137",
+    "size": [
+      215,
+      300
+    ]
+  },
+  {
+    "title": "江西省（国考）",
+    "color": [
+      "blue"
+    ],
+    "spec": "8x11mm",
+    "file_size": [
+      0,
+      20
+    ],
+    "id": "138",
+    "size": [
+      99,
+      128
+    ]
+  },
+  {
+    "title": "宁夏回族自治区（国考）",
+    "color": [
+      "blue"
+    ],
+    "spec": "18x25mm",
+    "file_size": [
+      30,
+      1024
+    ],
+    "id": "139",
+    "size": [
+      215,
+      300
+    ]
+  },
+  {
+    "title": "青海省（国考）",
+    "color": [
+      "blue"
+    ],
+    "spec": "10x15mm",
+    "file_size": [
+      0,
+      20
+    ],
+    "id": "140",
+    "size": [
+      120,
+      180
+    ]
+  },
+  {
+    "title": "山东省（国考）",
+    "color": [
+      "blue"
+    ],
+    "spec": "10x13mm",
+    "file_size": [
+      0,
+      20
+    ],
+    "id": "141",
+    "size": [
+      120,
+      160
+    ]
+  },
+  {
+    "title": "上海市（国考）",
+    "color": [
+      "blue"
+    ],
+    "spec": "18x25mm",
+    "file_size": [
+      30,
+      1024
+    ],
+    "id": "142",
+    "size": [
+      215,
+      300
+    ]
+  },
+  {
+    "title": "浙江省（国考）",
+    "color": [
+      "blue"
+    ],
+    "spec": "8x12mm",
+    "file_size": [
+      0,
+      30
+    ],
+    "id": "143",
+    "size": [
+      100,
+      140
+    ]
+  },
+  {
+    "title": "教师资格证（180x240）",
+    "color": [
+      "blue",
+      "white",
+      "red"
+    ],
+    "spec": "15x20mm",
+    "file_size": [
+      0,
+      20
+    ],
+    "id": "144",
+    "size": [
+      180,
+      240
+    ]
+  },
+  {
+    "title": "中国教师资格证",
+    "color": [
+      "blue",
+      "white",
+      "red"
+    ],
+    "spec": "10x13mm",
+    "file_size": [
+      0,
+      15
+    ],
+    "id": "145",
+    "size": [
+      114,
+      156
+    ]
+  },
+  {
+    "title": "福建教师资格证",
+    "color": [
+      "white"
+    ],
+    "spec": "25x34mm",
+    "file_size": [
+      0,
+      200
+    ],
+    "id": "146",
+    "size": [
+      300,
+      400
+    ]
+  },
+  {
+    "title": "教师资格证（150x200）",
+    "color": [
+      "white"
+    ],
+    "spec": "13x17mm",
+    "file_size": [
+      0,
+      200
+    ],
+    "id": "147",
+    "size": [
+      150,
+      200
+    ]
+  },
+  {
+    "title": "教师资格证（384x512）",
+    "color": [
+      "blue",
+      "white",
+      "red"
+    ],
+    "spec": "32x43mm",
+    "file_size": [
+      0,
+      100
+    ],
+    "id": "148",
+    "size": [
+      384,
+      512
+    ]
+  },
+  {
+    "title": "教师资格证（360x480）",
+    "color": [
+      "white"
+    ],
+    "spec": "30x41mm",
+    "file_size": [
+      0,
+      200
+    ],
+    "id": "149",
+    "size": [
+      360,
+      480
+    ]
+  },
+  {
+    "title": "护士执业资格考试（120x160）",
+    "color": [
+      "white"
+    ],
+    "spec": "10x13mm",
+    "file_size": [
+      20,
+      45
+    ],
+    "id": "150",
+    "size": [
+      120,
+      160
+    ]
+  },
+  {
+    "title": "工商银行网申（100x140）",
+    "color": [
+      "blue",
+      "white",
+      "red"
+    ],
+    "spec": "8x12mm",
+    "file_size": [
+      0,
+      30
+    ],
+    "id": "151",
+    "size": [
+      100,
+      140
+    ]
+  },
+  {
+    "title": "建设银行网申",
+    "color": [
+      "blue",
+      "white",
+      "red"
+    ],
+    "spec": "10x13mm",
+    "file_size": [
+      0,
+      20
+    ],
+    "id": "152",
+    "size": [
+      120,
+      160
+    ]
+  },
+  {
+    "title": "中国人民银行网申",
+    "color": [
+      "blue",
+      "white",
+      "red"
+    ],
+    "spec": "17x22mm",
+    "file_size": [
+      20,
+      100
+    ],
+    "id": "153",
+    "size": [
+      200,
+      260
+    ]
+  },
+  {
+    "title": "工商银行网申（240x370）",
+    "color": [
+      "blue",
+      "white",
+      "red"
+    ],
+    "spec": "20x31mm",
+    "file_size": [
+      0,
+      80
+    ],
+    "id": "154",
+    "size": [
+      240,
+      370
+    ]
+  },
+  {
+    "title": "工商银行网申生活照",
+    "color": [
+      "blue",
+      "white",
+      "red"
+    ],
+    "spec": "20x27mm",
+    "file_size": [
+      0,
+      80
+    ],
+    "id": "155",
+    "size": [
+      240,
+      320
+    ]
+  },
+  {
+    "title": "中国银行",
+    "color": [
+      "blue",
+      "white",
+      "red"
+    ],
+    "spec": "26x35mm",
+    "file_size": [
+      0,
+      200
+    ],
+    "id": "156",
+    "size": [
+      324,
+      417
+    ]
+  },
+  {
+    "title": "中国交通银行",
+    "color": [
+      "blue",
+      "white",
+      "red"
+    ],
+    "spec": "26x35mm",
+    "file_size": [
+      0,
+      100
+    ],
+    "id": "157",
+    "size": [
+      324,
+      417
+    ]
+  },
+  {
+    "title": "中国储蓄银行",
+    "color": [
+      "blue",
+      "white",
+      "red"
+    ],
+    "spec": "6x8mm",
+    "file_size": [
+      0,
+      500
+    ],
+    "id": "158",
+    "size": [
+      70,
+      100
+    ]
+  },
+  {
+    "title": "金融服务师",
+    "color": [
+      "blue"
+    ],
+    "spec": "8x12mm",
+    "file_size": [
+      2,
+      8
+    ],
+    "id": "159",
+    "size": [
+      100,
+      140
+    ]
+  },
+  {
+    "title": "事业单位",
+    "color": [
+      "blue",
+      "white",
+      "red"
+    ],
+    "spec": "10x13mm",
+    "file_size": [
+      0,
+      18
+    ],
+    "id": "160",
+    "size": [
+      120,
+      160
+    ]
+  },
+  {
+    "title": "宁德事业单位",
+    "color": [
+      "blue",
+      "blue_gradual"
+    ],
+    "spec": "22x29mm",
+    "file_size": [
+      0,
+      150
+    ],
+    "id": "161",
+    "size": [
+      300,
+      400
+    ]
+  },
+  {
+    "title": "石家庄铁路职专毕业照",
+    "color": [
+      "blue"
+    ],
+    "spec": "480x640，10-40KB",
+    "file_size": [
+      20,
+      500
+    ],
+    "id": "162",
+    "size": [
+      480,
+      640
+    ]
+  },
+  {
+    "title": "上海事业单位",
+    "color": [
+      "blue",
+      "white",
+      "red"
+    ],
+    "spec": "120x168px",
+    "file_size": [
+      0,
+      50
+    ],
+    "id": "163",
+    "size": [
+      120,
+      168
+    ]
+  },
+  {
+    "title": "BIM技能等级考试",
+    "color": [
+      "white"
+    ],
+    "spec": "250x350，20-40KB",
+    "file_size": [
+      20,
+      40
+    ],
+    "id": "164",
+    "size": [
+      250,
+      350
+    ]
+  },
+  {
+    "title": "证券考试报名",
+    "color": [
+      "blue",
+      "white",
+      "red"
+    ],
+    "spec": "215x300px",
+    "file_size": [
+      31,
+      500
+    ],
+    "id": "165",
+    "size": [
+      215,
+      300
+    ]
+  },
+  {
+    "title": "英语四六级考试",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "33x48mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "166",
+    "size": [
+      390,
+      567
+    ]
+  },
+  {
+    "title": "商务英语考试",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "25x34mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "167",
+    "size": [
+      300,
+      400
+    ]
+  },
+  {
+    "title": "全国计算机等级考试",
+    "color": [
+      "blue",
+      "white",
+      "red"
+    ],
+    "spec": "20x27mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "168",
+    "size": [
+      240,
+      320
+    ]
+  },
+  {
+    "title": "山西省全国计算机等级考试",
+    "color": [
+      "blue",
+      "white",
+      "red"
+    ],
+    "spec": "25x35mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "169",
+    "size": [
+      295,
+      413
+    ]
+  },
+  {
+    "title": "河南计算机二级考试",
+    "color": [
+      "blue",
+      "white",
+      "red"
+    ],
+    "spec": "33x48mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "170",
+    "size": [
+      390,
+      567
+    ]
+  },
+  {
+    "title": "成人自考",
+    "color": [
+      "blue"
+    ],
+    "spec": "30x41mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "171",
+    "size": [
+      360,
+      480
+    ]
+  },
+  {
+    "title": "上海中考网报名",
+    "color": [
+      "blue",
+      "white",
+      "red",
+      "blue_gradual"
+    ],
+    "spec": "14x20mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "172",
+    "size": [
+      168,
+      240
+    ]
+  },
+  {
+    "title": "香港学生国内报名",
+    "color": [
+      "blue",
+      "white",
+      "red",
+      "blue_gradual"
+    ],
+    "spec": "14x20mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "173",
+    "size": [
+      168,
+      240
+    ]
+  },
+  {
+    "title": "武汉大学研究生考试",
+    "color": [
+      "blue",
+      "white",
+      "red"
+    ],
+    "spec": "13x17mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "174",
+    "size": [
+      150,
+      200
+    ]
+  },
+  {
+    "title": "中南财经政法大学入学考试报名",
+    "color": [
+      "blue",
+      "white",
+      "red"
+    ],
+    "spec": "15x20mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "175",
+    "size": [
+      180,
+      240
+    ]
+  },
+  {
+    "title": "厦门大学毕业证",
+    "color": [
+      "blue",
+      "white",
+      "red"
+    ],
+    "spec": "39x54mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "176",
+    "size": [
+      460,
+      640
+    ]
+  },
+  {
+    "title": "在职研究生考试",
+    "color": [
+      "blue",
+      "red"
+    ],
+    "spec": "33x48mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "177",
+    "size": [
+      390,
+      567
+    ]
+  },
+  {
+    "title": "江苏自考",
+    "color": [
+      "blue",
+      "white",
+      "blue_gradual"
+    ],
+    "spec": "30x41mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "178",
+    "size": [
+      360,
+      480
+    ]
+  },
+  {
+    "title": "驾驶证、驾照（无回执，一寸）",
+    "color": [
+      "white"
+    ],
+    "spec": "25x35mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "179",
+    "size": [
+      295,
+      413
+    ]
+  },
+  {
+    "title": "电子导游证",
+    "color": [
+      "white"
+    ],
+    "spec": "35x53mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "180",
+    "size": [
+      413,
+      626
+    ]
+  },
+  {
+    "title": "会计从业资格证",
+    "color": [
+      "white"
+    ],
+    "spec": "10x13mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "181",
+    "size": [
+      114,
+      156
+    ]
+  },
+  {
+    "title": "教师招聘报名",
+    "color": [
+      "blue",
+      "white",
+      "red"
+    ],
+    "spec": "9x12mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "182",
+    "size": [
+      110,
+      140
+    ]
+  },
+  {
+    "title": "特殊招聘要求",
+    "color": [
+      "blue",
+      "white",
+      "red"
+    ],
+    "spec": "20x27mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "183",
+    "size": [
+      240,
+      320
+    ]
+  },
+  {
+    "title": "育婴师考试报名（小二寸）",
+    "color": [
+      "blue",
+      "white",
+      "red"
+    ],
+    "spec": "35x49mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "184",
+    "size": [
+      413,
+      579
+    ]
+  },
+  {
+    "title": "一级注册消防工程师考试",
+    "color": [
+      "blue",
+      "white",
+      "red"
+    ],
+    "spec": "25x35mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "185",
+    "size": [
+      295,
+      413
+    ]
+  },
+  {
+    "title": "一级建造师",
+    "color": [
+      "blue",
+      "white",
+      "red"
+    ],
+    "spec": "25x35mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "186",
+    "size": [
+      295,
+      413
+    ]
+  },
+  {
+    "title": "职业医师注册",
+    "color": [
+      "blue",
+      "white",
+      "red"
+    ],
+    "spec": "35x49mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "187",
+    "size": [
+      413,
+      578
+    ]
+  },
+  {
+    "title": "初级护师",
+    "color": [
+      "blue",
+      "white",
+      "red"
+    ],
+    "spec": "35x45mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "188",
+    "size": [
+      413,
+      531
+    ]
+  },
+  {
+    "title": "国家医学考试",
+    "color": [
+      "blue",
+      "white",
+      "red"
+    ],
+    "spec": "25x35mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "189",
+    "size": [
+      295,
+      413
+    ]
+  },
+  {
+    "title": "职业医师资格证",
+    "color": [
+      "blue",
+      "white",
+      "red"
+    ],
+    "spec": "25x35mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "190",
+    "size": [
+      295,
+      413
+    ]
+  },
+  {
+    "title": "护士职业资格考试",
+    "color": [
+      "blue",
+      "white",
+      "red"
+    ],
+    "spec": "14x18mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "191",
+    "size": [
+      160,
+      210
+    ]
+  },
+  {
+    "title": "国家公务员考试",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "35x45mm",
+    "file_size": [
+      15,
+      20
+    ],
+    "id": "192",
+    "size": [
+      413,
+      531
+    ]
+  },
+  {
+    "title": "国家公务员考试",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "35x49mm",
+    "file_size": [
+      15,
+      20
+    ],
+    "id": "193",
+    "size": [
+      413,
+      579
+    ]
+  },
+  {
+    "title": "广州公务员考试",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "35x49mm",
+    "file_size": [
+      20,
+      30
+    ],
+    "id": "194",
+    "size": [
+      413,
+      579
+    ]
+  },
+  {
+    "title": "重庆公务员考试",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "25x35mm",
+    "file_size": [
+      15,
+      20
+    ],
+    "id": "195",
+    "size": [
+      295,
+      413
+    ]
+  },
+  {
+    "title": "黑龙江公务员考试",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "35x45mm",
+    "file_size": [
+      5,
+      50
+    ],
+    "id": "196",
+    "size": [
+      413,
+      531
+    ]
+  },
+  {
+    "title": "云南公务员考试",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "35x45mm",
+    "file_size": [
+      30,
+      50
+    ],
+    "id": "197",
+    "size": [
+      413,
+      531
+    ]
+  },
+  {
+    "title": "四川公务员考试",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "35x45mm",
+    "file_size": [
+      10,
+      20
+    ],
+    "id": "198",
+    "size": [
+      413,
+      531
+    ]
+  },
+  {
+    "title": "广西公务员考试",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "25x35mm",
+    "file_size": [
+      10,
+      20
+    ],
+    "id": "199",
+    "size": [
+      295,
+      413
+    ]
+  },
+  {
+    "title": "山西公务员考试",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "25x35mm",
+    "file_size": [
+      30,
+      50
+    ],
+    "id": "200",
+    "size": [
+      295,
+      413
+    ]
+  },
+  {
+    "title": "河北公务员考试",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "35x45mm",
+    "file_size": [
+      30,
+      50
+    ],
+    "id": "201",
+    "size": [
+      413,
+      531
+    ]
+  },
+  {
+    "title": "上海公务员考试",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "13x17mm",
+    "file_size": [
+      20,
+      200
+    ],
+    "id": "202",
+    "size": [
+      150,
+      200
+    ]
+  },
+  {
+    "title": "宁夏公务员考试",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "35x45mm",
+    "file_size": [
+      30,
+      50
+    ],
+    "id": "203",
+    "size": [
+      413,
+      531
+    ]
+  },
+  {
+    "title": "陕西公务员考试",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "35x45mm",
+    "file_size": [
+      30,
+      50
+    ],
+    "id": "204",
+    "size": [
+      413,
+      531
+    ]
+  },
+  {
+    "title": "河南公务员考试",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "25x35mm",
+    "file_size": [
+      30,
+      50
+    ],
+    "id": "205",
+    "size": [
+      295,
+      413
+    ]
+  },
+  {
+    "title": "江苏公务员考试",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "34x45mm",
+    "file_size": [
+      15,
+      18
+    ],
+    "id": "206",
+    "size": [
+      402,
+      513
+    ]
+  },
+  {
+    "title": "安徽公务员考试",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "35x45mm",
+    "file_size": [
+      15,
+      20
+    ],
+    "id": "207",
+    "size": [
+      413,
+      531
+    ]
+  },
+  {
+    "title": "湖南公务员考试",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "35x45mm",
+    "file_size": [
+      15,
+      20
+    ],
+    "id": "208",
+    "size": [
+      413,
+      531
+    ]
+  },
+  {
+    "title": "北京公务员考试",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "35x53mm",
+    "file_size": [
+      35,
+      100
+    ],
+    "id": "209",
+    "size": [
+      413,
+      626
+    ]
+  },
+  {
+    "title": "成都公务员考试",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "25x35mm",
+    "file_size": [
+      20,
+      45
+    ],
+    "id": "210",
+    "size": [
+      295,
+      413
+    ]
+  },
+  {
+    "title": "甘肃公务员考试",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "35x49mm",
+    "file_size": [
+      30,
+      50
+    ],
+    "id": "211",
+    "size": [
+      413,
+      579
+    ]
+  },
+  {
+    "title": "青海公务员考试",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "35x45mm",
+    "file_size": [
+      20,
+      30
+    ],
+    "id": "212",
+    "size": [
+      413,
+      531
+    ]
+  },
+  {
+    "title": "新疆公务员考试",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "25x35mm",
+    "file_size": [
+      10,
+      20
+    ],
+    "id": "213",
+    "size": [
+      295,
+      413
+    ]
+  },
+  {
+    "title": "西藏公务员考试",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "35x45mm",
+    "file_size": [
+      10,
+      200
+    ],
+    "id": "214",
+    "size": [
+      413,
+      531
+    ]
+  },
+  {
+    "title": "三支一扶山东",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "25x35mm",
+    "file_size": [
+      30,
+      200
+    ],
+    "id": "215",
+    "size": [
+      295,
+      413
+    ]
+  },
+  {
+    "title": "山西省省直事业单位考试报名",
+    "color": [
+      "blue",
+      "white",
+      "red"
+    ],
+    "spec": "25x35mm",
+    "file_size": [
+      50,
+      100
+    ],
+    "id": "216",
+    "size": [
+      295,
+      413
+    ]
+  },
+  {
+    "title": "全国计算机等级考试",
+    "color": [
+      "blue",
+      "white",
+      "red"
+    ],
+    "spec": "35x49mm",
+    "file_size": [
+      50,
+      200
+    ],
+    "id": "217",
+    "size": [
+      413,
+      579
+    ]
+  },
+  {
+    "title": "全国计算机等级考试",
+    "color": [
+      "blue"
+    ],
+    "spec": "13x18mm",
+    "file_size": [
+      20,
+      100
+    ],
+    "id": "218",
+    "size": [
+      150,
+      210
+    ]
+  },
+  {
+    "title": "青少年软件编程等级考试",
+    "color": [
+      "blue",
+      "red"
+    ],
+    "spec": "41x62mm",
+    "file_size": [
+      50,
+      1024
+    ],
+    "id": "219",
+    "size": [
+      482,
+      730
+    ]
+  },
+  {
+    "title": "青少年机器人技术等级考试",
+    "color": [
+      "blue",
+      "red"
+    ],
+    "spec": "41x62mm",
+    "file_size": [
+      50,
+      1024
+    ],
+    "id": "220",
+    "size": [
+      480,
+      730
+    ]
+  },
+  {
+    "title": "青少年电子信息等级考试",
+    "color": [
+      "blue",
+      "red"
+    ],
+    "spec": "41x62mm",
+    "file_size": [
+      50,
+      1024
+    ],
+    "id": "221",
+    "size": [
+      482,
+      730
+    ]
+  },
+  {
+    "title": "计算机应用能力考试报名",
+    "color": [
+      "white"
+    ],
+    "spec": "25x35mm",
+    "file_size": [
+      50,
+      200
+    ],
+    "id": "222",
+    "size": [
+      295,
+      413
+    ]
+  },
+  {
+    "title": "退役军人优待证",
+    "color": [
+      "white"
+    ],
+    "spec": "30x37mm",
+    "file_size": [
+      20,
+      50
+    ],
+    "id": "223",
+    "size": [
+      352,
+      440
+    ]
+  },
+  {
+    "title": "注册会计师考试（102x126）",
+    "color": [
+      "white"
+    ],
+    "spec": "9x11mm",
+    "file_size": [
+      2,
+      20
+    ],
+    "id": "224",
+    "size": [
+      102,
+      126
+    ]
+  },
+  {
+    "title": "注册会计师考试（一寸）",
+    "color": [
+      "white"
+    ],
+    "spec": "25x35mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "225",
+    "size": [
+      295,
+      413
+    ]
+  },
+  {
+    "title": "大学生图像信息采集",
+    "color": [
+      "blue"
+    ],
+    "spec": "41x54mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "226",
+    "size": [
+      480,
+      640
+    ]
+  },
+  {
+    "title": "研究生考试",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "45x60mm",
+    "file_size": [
+      0,
+      100
+    ],
+    "id": "227",
+    "size": [
+      531,
+      708
+    ]
+  },
+  {
+    "title": "高考报名（480x640）",
+    "color": [
+      "blue",
+      "white",
+      "red",
+      "blue_grey"
+    ],
+    "spec": "41x54mm",
+    "file_size": [
+      0,
+      0
+    ],
+    "id": "228",
+    "size": [
+      480,
+      640
+    ]
+  },
+  {
+    "title": "护士执业资格考试（一寸，大于45KB）",
+    "color": [
+      "blue",
+      "white"
+    ],
+    "spec": "25 x 35 mm",
+    "file_size": [
+      46,
+      600
+    ],
+    "id": "229",
+    "size": [
+      295,
+      413
+    ]
+  }
+]

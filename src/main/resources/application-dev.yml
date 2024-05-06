@@ -1,0 +1,36 @@
+server:
+  port: 8888
+spring:
+  config:
+    activate:
+      on-profile: dev
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 50MB
+      max-request-size: 50MB
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/xxx?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddlAuto: update
+    showSql: false
+    properties:
+      hibernate:
+        session_factory:
+          interceptor: com.yn.printer.service.interceptor.AuditInterceptor
+  redis:
+    database: 1
+    host: localhost
+    port: 6379
+    pool:
+      max-active: 8
+      max-wait: 1
+      max-idle: 8
+      min-idle: 0
+    timeout: 20000
+
+

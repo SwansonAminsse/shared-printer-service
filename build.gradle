@@ -1,0 +1,63 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.4.5'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+}
+
+group = 'com.yn'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = 'VERSION_1_8'
+}
+
+repositories {
+    mavenLocal()
+//    maven { url 'http://120.76.99.226:8889/nexus/content/repositories/snapshots' }
+//    mavenCentral()
+    maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+}
+
+// 本地依赖
+dependencies {
+    compile fileTree(dir:'/src/main/resources/libs',includes:['*.jar'])
+}
+
+// 外部依赖
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    runtimeOnly 'mysql:mysql-connector-java'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    implementation group: 'com.github.xiaoymin', name: 'knife4j-spring-boot-starter', version: '3.0.3'
+    implementation group: 'com.alibaba', name: 'fastjson', version: '1.2.76'
+    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hibernate5', version: '2.9.8'
+    implementation group: 'org.apache.shiro', name: 'shiro-core', version: '1.7.1'
+    implementation group: 'cn.hutool', name: 'hutool-all', version: '5.8.16'
+    implementation group: 'org.springframework.integration', name: 'spring-integration-mqtt'
+    implementation group: 'com.github.wechatpay-apiv3', name: 'wechatpay-java', version: '0.2.12'
+    // 处理pdf相关依赖
+    implementation group: 'com.itextpdf', name: 'itextpdf', version: '5.4.2'
+    implementation group: 'org.apache.poi', name: 'poi', version: '3.14'
+    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '3.14'
+    implementation group: 'org.apache.poi', name: 'poi-scratchpad', version: '3.14'
+    implementation group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.9'
+    // 处理pdf相关依赖
+    implementation 'com.alibaba:fastjson:2.0.26'
+
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.11.490'
+
+//    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

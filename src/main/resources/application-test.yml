@@ -1,0 +1,76 @@
+server:
+  port: 8888
+spring:
+  config:
+    activate:
+      on-profile: test
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 50MB
+      max-request-size: 50MB
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://221.4.217.75:3306/tzdy_test?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+  jpa:
+    hibernate:
+      ddlAuto: update
+    showSql: false
+    properties:
+      hibernate:
+        session_factory:
+          interceptor: com.yn.printer.service.interceptor.AuditInterceptor
+  redis:
+    database: 1
+    host: localhost
+    port: 6379
+    pool:
+      max-active: 8
+      max-wait: 1
+      max-idle: 8
+      min-idle: 0
+    timeout: 20000
+    password:
+api:
+  # 微信小程序相关接口url
+  wx:
+    # 小程序登录
+    loginUrl: https://api.weixin.qq.com/sns/jscode2session
+    # 获取小程序接口调用凭证
+    getAccessTokenUrl: https://api.weixin.qq.com/cgi-bin/token
+    # 获取用户手机号
+    getPhoneNumberUrl: https://api.weixin.qq.com/wxa/business/getuserphonenumber
+    applet:
+      # 小程序 appid
+      appid: wx5b66e47c8a23f684
+      # 小程序 secret
+      secret: 0a08108a1e0951bcc6d7d17e8c6f212b
+  # 天章支付相关接口url
+  tz:
+    # 创建订单
+    createOrderUrl: https://cashier.xlmalls.com/b2c/mps/buildorder
+    # 创建支付码
+    createQrCodeUrl: https://cashier.xlmalls.com/b2c/mps/qrcode
+    # 查询支付结果
+    queryPayResultUrl: https://cashier.xlmalls.com/b2c/mps/payresult
+
+## MQTT##
+mqtt:
+  host: tcp://221.4.217.75:1883
+  userName: admin
+  passWord: public
+  clientId: tzdy-service-
+  completionTimeout: 10000
+  heartbeat: 10
+  topicSendDevice: /tzdy/send/device/
+  topicReceiveDevice: /tzdy/receive/device/
+  topicSendQos: 2
+  topicReceiveQos: 2
+## 文件相关
+file:
+  basePath:
+    D:/yn-shared-printer/files/
+  previewPath:
+    http://221.4.217.75:60000/files/

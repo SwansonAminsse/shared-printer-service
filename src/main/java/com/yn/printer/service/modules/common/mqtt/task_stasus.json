@@ -1,0 +1,11 @@
+{
+  "a": {
+    "taskCode": "任务号",
+    "taskStatus": "任务状态: PRINTING(打印中), COMPLETE(已完成), CANCELED(已取消), INTERRUPT(已中断)"
+  },
+  "b": {
+    "cmd": "PRINT_STATUS",
+    "taskCode": "20240122150637913989-0",
+    "taskStatus": "COMPLETE"
+  }
+}
