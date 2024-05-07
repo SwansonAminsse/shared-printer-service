@@ -30,8 +30,9 @@ public class CurrentDataAnalysisController {
 
     @GetMapping("/todayorders")
     @ApiOperation(value = "实时订单详情")
-    public Page<OrderVO> getTodayOrders() {
-        return currentDataAnalysisService.getTodayOrders(PageRequest.of(0, 10));
+    public Page<OrderVO> getTodayOrders(@RequestParam(value = "page", defaultValue = "0") int page,
+                                        @RequestParam(value = "size", defaultValue = "10") int size) {
+        return currentDataAnalysisService.getTodayOrders(PageRequest.of(page, size));
     }
 
     @GetMapping("/getusertodayanalysis")
