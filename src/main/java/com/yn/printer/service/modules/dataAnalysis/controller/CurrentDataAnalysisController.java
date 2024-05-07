@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Api(value = "CurrentDataAnalysisController", tags = "PC后台端-实时数据分析")
@@ -27,8 +28,9 @@ public class CurrentDataAnalysisController {
 
     @GetMapping("/todayorders")
     @ApiOperation(value = "实时订单详情")
-    public Page<OrderVO> getTodayOrders() {
-        return currentDataAnalysisService.getTodayOrders(PageRequest.of(0, 10));
+    public Page<OrderVO> getTodayOrders(@RequestParam(value = "page", defaultValue = "0") int page,
+                                        @RequestParam(value = "size", defaultValue = "10") int size) {
+        return currentDataAnalysisService.getTodayOrders(PageRequest.of(page, size));
     }
 
     @GetMapping("/getusertodayanalysis")
