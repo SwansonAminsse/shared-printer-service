@@ -2,7 +2,9 @@ package com.yn.printer.service.modules.dataAnalysis.controller;
 
 import com.yn.printer.service.modules.dataAnalysis.service.DataAnalysisService;
 import com.yn.printer.service.modules.dataAnalysis.vo.*;
+import com.yn.printer.service.modules.operation.vo.ChannelSelectVO;
 import com.yn.printer.service.modules.operation.vo.DevicesListVO;
+import com.yn.printer.service.modules.operation.vo.TaskDetailsVO;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -56,5 +58,21 @@ public class DataAnalysisController {
     public List<BigDecimal> getGrossProfit() {
         return dataAnalysisService.getGrossProfit();
     }
+
+//    @GetMapping("/ChannelSelect")
+//    @ApiOperation(value = "渠道商选择器")
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(name = "page", value = "页码（默认为0）", defaultValue = "0", dataType = "java.lang.Integer", paramType = "query"),
+//            @ApiImplicitParam(name = "size", value = "每页条数（默认为10）", defaultValue = "10", dataType = "java.lang.Integer", paramType = "query"),
+//           })
+//    public Page<ChannelSelectVO> getChannelSelectVO(@RequestParam(value = "page", defaultValue = "0") int page,
+//                                                    @RequestParam(value = "size", defaultValue = "10") int size,) {
+//        return dataAnalysisService.getChannelSelectVO(PageRequest.of(page, size));
+//    }
+
+
+
+
+
 
 }
