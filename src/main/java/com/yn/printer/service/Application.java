@@ -9,7 +9,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * 启动入口
  *
  * @author huabiao
- * @create 2023/12/08  15:42
+ * &#064;create  2023/12/08  15:42
  **/
 
 @EnableSwagger2

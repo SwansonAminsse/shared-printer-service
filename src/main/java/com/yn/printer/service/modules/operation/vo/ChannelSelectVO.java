@@ -4,8 +4,6 @@ import com.yn.printer.service.modules.enums.ChannelType;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.math.BigDecimal;
-
 @Data
 public class ChannelSelectVO {
 

@@ -83,7 +83,7 @@ public class DataAnalysisService {
         userTotalVO.setOrdersNumber(ordersNumber);
         Long repeatBuyers = orderManagementRepository.countRepeatBuyersByOrderDate(startOfDate, endOfDate);
         if (userNumber != 0 && repeatBuyers != null) {
-            double customerRepurchaseRate = (userNumber != 0 && repeatBuyers != 0) ? ((double) repeatBuyers / userNumber) * 100 : 0.0;
+            double customerRepurchaseRate = repeatBuyers != 0 ? (double) repeatBuyers / userNumber * 100 : 0.0;
             userTotalVO.setCustomerRepurchaseRate(customerRepurchaseRate);
         }
         long ordersTotalNumber = orderManagementRepository.countByPayStatus(PAID);
