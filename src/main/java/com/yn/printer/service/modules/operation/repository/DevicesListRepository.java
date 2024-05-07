@@ -134,10 +134,13 @@ public interface DevicesListRepository extends JpaRepository<DevicesList, Long>,
     List<DevicesList> findByStatus(DeviceStatus status);
 
 
-
     @Query("SELECT d.code FROM DevicesList d " +
-            "WHERE d.status = :status " )
+            "WHERE d.status = :status ")
     List<String> findCodeByStatus(@Param("status") DeviceStatus status);
 
+    @Query("SELECT COUNT(d) FROM DevicesList d WHERE d.status IN ('ONLINE', 'OFFLINE', 'RUN', 'ABNORMAL')")
+    Long countTotalDevicesWithStatus();
+
+    Long countByStatus(@Param("status") DeviceStatus status);
 }
 

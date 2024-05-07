@@ -24,6 +24,8 @@ public interface OrderManagementRepository extends JpaRepository<OrderManagement
                                                                                        Member member,
                                                                                        OrderType orderType);
 
+    Page<OrderManagement> findByOrderDateBetween(@Param("startOfDay") LocalDateTime startOfDay, @Param("currentDate") LocalDateTime currentDate, Pageable pageable);
+
     List<OrderManagement> findAllByTransactionStatus(TransactionStatus init);
 
 
@@ -120,16 +122,26 @@ public interface OrderManagementRepository extends JpaRepository<OrderManagement
             "WHERE o.orderDate < :startDate " +
             "AND o.payStatus = :paidStatus ")
     BigDecimal sumByOldDeviceIncome(@Param("startDate") LocalDateTime startDate,
-                                 @Param("paidStatus") PayStatus paidStatus);
+                                    @Param("paidStatus") PayStatus paidStatus);
 
     List<OrderManagement> findByDeviceAndPayStatusAndOrderDateBetween(DevicesList devicesList, PayStatus payStatus, LocalDateTime startOfDate, LocalDateTime endOfDate);
 
-  @Query("SELECT COUNT(o) FROM OrderManagement o WHERE o.payStatus = :payStatus ")
+    @Query("SELECT COUNT(o) FROM OrderManagement o WHERE o.payStatus = :payStatus ")
     long countByPayStatus(@Param("payStatus") PayStatus payStatus);
-
 
 
     @Query("SELECT o.transactionStatus FROM OrderManagement o WHERE o.code = :code ")
     TransactionStatus findTransactionStatusByCode(@Param("code") String code);
+
+    @Query("SELECT SUM(o.paymentAmount) FROM OrderManagement o WHERE DATE(o.orderDate) = CURRENT_DATE " +
+            "AND o.payStatus = :paidStatus")
+    BigDecimal sumTotalOrderIncome(@Param("paidStatus") PayStatus paidStatus);
+
+    @Query("SELECT COUNT(o) FROM OrderManagement o WHERE o.orderDate BETWEEN :startOfDay AND :currentDate AND o.transactionStatus = :transactionStatus")
+    Long countTodayOrdersByTransactionStatus(@Param("startOfDay") LocalDateTime startOfDay, @Param("currentDate") LocalDateTime currentDate,
+                                             @Param("transactionStatus") TransactionStatus transactionStatus);
+
+    @Query("SELECT COUNT(o) FROM OrderManagement o WHERE o.orderDate >= :startOfDay AND o.orderDate < :currentDate")
+    Long countTodayOrders(@Param("startOfDay") LocalDateTime startOfDay, @Param("currentDate") LocalDateTime currentDate);
 }
 
