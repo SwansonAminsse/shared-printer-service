@@ -88,7 +88,7 @@ public class CurrentDataAnalysisService {
         UserAnalysisVO userAnalysisVO = new UserAnalysisVO();
         LocalDateTime currentDate = LocalDateTime.now();
         LocalDateTime startOfDay = LocalDateTime.of(currentDate.toLocalDate(), LocalTime.MIN);
-        Long addUserNumber = orderManagementRepository.countNewUsersByOrderDate(startOfDay, currentDate);
+        Long addUserNumber = Optional.ofNullable(memberRepository.countByJoiningDate(currentDate.toLocalDate())).orElse(0L);
         Long userNumber = memberRepository.countByStatus(true);
         Long oldUserNumber = userNumber - addUserNumber;
         userAnalysisVO.setUserNumber(userNumber);

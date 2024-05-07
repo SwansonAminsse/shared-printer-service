@@ -6,12 +6,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Api(value = "CurrentDataAnalysisController", tags = "用户端-实时数据分析")
+@Api(value = "CurrentDataAnalysisController", tags = "PC后台端-实时数据分析")
 @RestController
 @RequestMapping("/currentdataanalysis")
 public class CurrentDataAnalysisController {
@@ -26,8 +27,8 @@ public class CurrentDataAnalysisController {
 
     @GetMapping("/todayorders")
     @ApiOperation(value = "实时订单详情")
-    public Page<OrderVO> getTodayOrders(Pageable pageable) {
-        return currentDataAnalysisService.getTodayOrders(pageable);
+    public Page<OrderVO> getTodayOrders() {
+        return currentDataAnalysisService.getTodayOrders(PageRequest.of(0, 10));
     }
 
     @GetMapping("/getusertodayanalysis")
