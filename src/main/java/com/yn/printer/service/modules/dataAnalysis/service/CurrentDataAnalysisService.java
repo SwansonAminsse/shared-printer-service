@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,15 +48,15 @@ public class CurrentDataAnalysisService {
         TotalDevicesVO totalDevicesVO = new TotalDevicesVO();
         Long totalDevices = devicesListRepository.countTotalDevicesWithStatus();
         totalDevicesVO.setDevicesNumber(totalDevices);
-        totalDevicesVO.setDeviceIncome(orderManagementRepository.sumTotalOrderIncome(PayStatus.PAID));
+        totalDevicesVO.setDeviceIncome(Optional.ofNullable(orderManagementRepository.sumTotalOrderIncome(PayStatus.PAID)).orElse(BigDecimal.ZERO));
         totalDevicesVO.setUserNumber(memberRepository.countByStatus(true));
-        Long onlineDevicesNumber = devicesListRepository.countByStatus(DeviceStatus.ONLINE);
+        Long onlineDevicesNumber = Optional.ofNullable(devicesListRepository.countByStatus(DeviceStatus.ONLINE)).orElse(0L);
         totalDevicesVO.setOnlineDevicesNumber(onlineDevicesNumber);
-        Long runDevicesNumber = devicesListRepository.countByStatus(DeviceStatus.RUN);
+        Long runDevicesNumber = Optional.ofNullable(devicesListRepository.countByStatus(DeviceStatus.RUN)).orElse(0L);
         totalDevicesVO.setRunDevicesNumber(runDevicesNumber);
-        Long abnormalDevicesNumber = devicesListRepository.countByStatus(DeviceStatus.ABNORMAL);
+        Long abnormalDevicesNumber = Optional.ofNullable(devicesListRepository.countByStatus(DeviceStatus.ABNORMAL)).orElse(0L);
         totalDevicesVO.setAbnormalDevicesNumber(abnormalDevicesNumber);
-        Long offlineDevicesNumber = devicesListRepository.countByStatus(DeviceStatus.OFFLINE);
+        Long offlineDevicesNumber = Optional.ofNullable(devicesListRepository.countByStatus(DeviceStatus.OFFLINE)).orElse(0L);
         totalDevicesVO.setOfflineDevicesNumber(offlineDevicesNumber);
         totalDevicesVO.setOnlineDevicesRate((double) onlineDevicesNumber / totalDevices * 100);
         totalDevicesVO.setAbnormalDevicesRate((double) abnormalDevicesNumber / totalDevices * 100);
@@ -122,27 +123,30 @@ public class CurrentDataAnalysisService {
         LocalDateTime startOfYesterday = LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.MIN);
         LocalDateTime yesterdayEnd = LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.MAX);
         IncometotalVO incometotalVO = new IncometotalVO();
-        BigDecimal incomeTotal = orderManagementRepository.sumByDeviceIncome(startOfDay, currentDate, PayStatus.PAID);
+        BigDecimal incomeTotal = Optional.ofNullable(orderManagementRepository.sumByDeviceIncome(startOfDay, currentDate, PayStatus.PAID)).orElse(BigDecimal.ZERO);
         incometotalVO.setDeviceIncome(incomeTotal);
         orderManagementRepository.sumByDeviceIncome(startOfYesterday, startOfDay, PayStatus.PAID);
-        BigDecimal yesterdayIncome = orderManagementRepository.sumByDeviceIncome(startOfYesterday, yesterdayEnd, PayStatus.PAID);
-        yesterdayIncome = (yesterdayIncome != null) ? yesterdayIncome : BigDecimal.ZERO;
-        BigDecimal lastWeekSameDayTimeIncome = orderManagementRepository.sumByDeviceIncome(lastWeekSameDayTime, lastWeekSameDayEnd, PayStatus.PAID);
+        BigDecimal yesterdayIncome = Optional.ofNullable(orderManagementRepository.sumByDeviceIncome(startOfYesterday, yesterdayEnd, PayStatus.PAID)).orElse(BigDecimal.ZERO);
+        BigDecimal lastWeekSameDayTimeIncome = Optional.ofNullable(orderManagementRepository.sumByDeviceIncome(lastWeekSameDayTime, lastWeekSameDayEnd, PayStatus.PAID)).orElse(BigDecimal.ZERO);
         lastWeekSameDayTimeIncome = (lastWeekSameDayTimeIncome != null) ? lastWeekSameDayTimeIncome : BigDecimal.ZERO;
         BigDecimal yesterdayRate;
-        if (yesterdayIncome.compareTo(BigDecimal.ZERO) == 0) {
+        if (yesterdayIncome.compareTo(BigDecimal.ZERO) == 0 && incomeTotal.compareTo(BigDecimal.ZERO) == 0) {
+            yesterdayRate = BigDecimal.ZERO;
+        } else if (yesterdayIncome.compareTo(BigDecimal.ZERO) == 0) {
             yesterdayRate = new BigDecimal(100);
         } else {
-            BigDecimal increase = incomeTotal.subtract(yesterdayIncome);
-            yesterdayRate = increase.divide(yesterdayIncome, 4, RoundingMode.HALF_UP)
+            yesterdayRate = incomeTotal.subtract(yesterdayIncome)
+                    .divide(yesterdayIncome, 4, RoundingMode.HALF_UP)
                     .multiply(new BigDecimal(100));
         }
         BigDecimal lastWeekSameDayTimeIncomeRate;
-        if (lastWeekSameDayTimeIncome.compareTo(BigDecimal.ZERO) == 0) {
+        if (lastWeekSameDayTimeIncome.compareTo(BigDecimal.ZERO) == 0 && incomeTotal.compareTo(BigDecimal.ZERO) == 0) {
+            lastWeekSameDayTimeIncomeRate = BigDecimal.ZERO;
+        } else if (lastWeekSameDayTimeIncome.compareTo(BigDecimal.ZERO) == 0) {
             lastWeekSameDayTimeIncomeRate = new BigDecimal(100);
         } else {
-            BigDecimal increase = incomeTotal.subtract(lastWeekSameDayTimeIncome);
-            lastWeekSameDayTimeIncomeRate = increase.divide(lastWeekSameDayTimeIncome, 4, RoundingMode.HALF_UP)
+            lastWeekSameDayTimeIncomeRate = incomeTotal.subtract(lastWeekSameDayTimeIncome)
+                    .divide(lastWeekSameDayTimeIncome, 4, RoundingMode.HALF_UP)
                     .multiply(new BigDecimal(100));
         }
         incometotalVO.setLastWeekRate(lastWeekSameDayTimeIncomeRate.doubleValue());
