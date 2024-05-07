@@ -5,11 +5,12 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public enum OrderPrintType {
-	DOCUMENT("DOCUMENT"),
-	PHOTO("PHOTO"),
-	DOCUMENT_PHOTO("DOCUMENT_PHOTO");
-	private final String value;
-	public String getValue() {
-		return value;
-	}
+    DOCUMENT("文档"),
+    PHOTO("照片"),
+    DOCUMENT_PHOTO("文档照片");
+    private final String value;
+
+    public String getValue() {
+        return value;
+    }
 }

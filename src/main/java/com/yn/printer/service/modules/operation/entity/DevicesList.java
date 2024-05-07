@@ -8,6 +8,7 @@ import com.yn.printer.service.modules.meta.entity.Area;
 import com.yn.printer.service.modules.meta.entity.XingHao;
 import com.yn.printer.service.modules.operation.entity.FixPrice;
 import com.yn.printer.service.modules.operation.enums.Cene;
+import com.yn.printer.service.modules.operation.enums.DeviceType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.Type;
@@ -70,7 +71,9 @@ public class DevicesList extends AuditableModel implements Serializable {
 
   // 收入
   private BigDecimal income = BigDecimal.ZERO;
-
+  // 设备类型
+  @Enumerated(value = EnumType.STRING)
+  private DeviceType deviceType;
   // 打印页数
   private Integer printCount = 0;
 

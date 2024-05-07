@@ -1,9 +1,11 @@
 package com.yn.printer.service.modules.orders.repository;
 
 
+import com.yn.printer.service.modules.dataAnalysis.vo.DeviceRankVO;
 import com.yn.printer.service.modules.member.entity.Member;
 import com.yn.printer.service.modules.operation.entity.DevicesList;
 import com.yn.printer.service.modules.orders.entity.OrderManagement;
+import com.yn.printer.service.modules.orders.enums.OrderPrintType;
 import com.yn.printer.service.modules.orders.enums.OrderType;
 import com.yn.printer.service.modules.orders.enums.PayStatus;
 import com.yn.printer.service.modules.orders.enums.TransactionStatus;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -24,7 +27,7 @@ public interface OrderManagementRepository extends JpaRepository<OrderManagement
                                                                                        Member member,
                                                                                        OrderType orderType);
 
-    Page<OrderManagement> findByOrderDateBetween(@Param("startOfDay") LocalDateTime startOfDay, @Param("currentDate") LocalDateTime currentDate, Pageable pageable);
+    Page<OrderManagement> findByOrderDateBetweenOrderByOrderDateDesc(@Param("startOfDay") LocalDateTime startOfDay, @Param("currentDate") LocalDateTime currentDate, Pageable pageable);
 
     List<OrderManagement> findAllByTransactionStatus(TransactionStatus init);
 
@@ -44,6 +47,14 @@ public interface OrderManagementRepository extends JpaRepository<OrderManagement
             @Param("device") DevicesList device);
 
     @Query("SELECT COUNT(DISTINCT o.orderer) FROM OrderManagement o " +
+            "WHERE o.orderDate BETWEEN :startDate AND :endDate " +
+            "AND o.device IN :deviceLists")
+    Long countDistinctOrderByOrderDateBetweenAndDeviceList(
+            @Param("startDate") LocalDateTime startDate,
+            @Param("endDate") LocalDateTime endDate,
+            @Param("deviceLists") List<DevicesList> deviceLists);
+
+    @Query("SELECT COUNT(DISTINCT o.orderer) FROM OrderManagement o " +
             "WHERE o.orderDate BETWEEN :startDate AND :endDate ")
     Long countDistinctOrderByOrderDateBetween(
             @Param("startDate") LocalDateTime startDate,
@@ -56,9 +67,6 @@ public interface OrderManagementRepository extends JpaRepository<OrderManagement
     Long countDistinctOrderByOrderDateBeforeAndDevice(
             @Param("startDate") LocalDateTime startDate,
             @Param("device") DevicesList device);
-
-
-
 
     @Query("SELECT COUNT(o) FROM OrderManagement o " +
             "WHERE o.orderDate BETWEEN :startDate AND :endDate " +
@@ -81,6 +89,25 @@ public interface OrderManagementRepository extends JpaRepository<OrderManagement
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate,
             @Param("device") DevicesList device);
+
+    @Query("SELECT COUNT(DISTINCT o.orderer) FROM OrderManagement o " +
+            "WHERE o.orderDate BETWEEN :startDate AND :endDate " +
+            "AND o.device IN :deviceLists " +
+            "AND o.orderer.joiningDate BETWEEN :startDate AND :endDate")
+    Long countNewUsersByOrderDateAndJoiningDateAndDeviceList(
+            @Param("startDate") LocalDateTime startDate,
+            @Param("endDate") LocalDateTime endDate,
+            @Param("deviceLists") List<DevicesList> deviceLists);
+
+    @Query("SELECT COUNT(DISTINCT o.orderer) FROM OrderManagement o " +
+            "WHERE o.orderDate BETWEEN :startDate AND :endDate " +
+            "AND o.device IN :deviceLists " +
+            "AND o.orderer.joiningDate < :startDate ")
+    Long countOldUsersByOrderDateAndJoiningDateAndDeviceList(
+            @Param("startDate") LocalDateTime startDate,
+            @Param("endDate") LocalDateTime endDate,
+            @Param("deviceLists") List<DevicesList> deviceLists);
+
     @Query("SELECT COUNT(DISTINCT o.orderer) FROM OrderManagement o " +
             "WHERE o.orderDate BETWEEN :startDate AND :endDate " +
             "AND o.orderer.joiningDate BETWEEN :startDate AND :endDate")
@@ -138,10 +165,113 @@ public interface OrderManagementRepository extends JpaRepository<OrderManagement
     BigDecimal sumTotalOrderIncome(@Param("paidStatus") PayStatus paidStatus);
 
     @Query("SELECT COUNT(o) FROM OrderManagement o WHERE o.orderDate BETWEEN :startOfDay AND :currentDate AND o.transactionStatus = :transactionStatus")
-    Long countTodayOrdersByTransactionStatus(@Param("startOfDay") LocalDateTime startOfDay, @Param("currentDate") LocalDateTime currentDate,
+    long countTodayOrdersByTransactionStatus(@Param("startOfDay") LocalDateTime startOfDay, @Param("currentDate") LocalDateTime currentDate,
                                              @Param("transactionStatus") TransactionStatus transactionStatus);
 
     @Query("SELECT COUNT(o) FROM OrderManagement o WHERE o.orderDate >= :startOfDay AND o.orderDate < :currentDate")
-    Long countTodayOrders(@Param("startOfDay") LocalDateTime startOfDay, @Param("currentDate") LocalDateTime currentDate);
+    long countTodayOrders(@Param("startOfDay") LocalDateTime startOfDay, @Param("currentDate") LocalDateTime currentDate);
+
+    //    @Query("SELECT COUNT(o) FROM OrderManagement o " +
+//            "WHERE o.orderDate BETWEEN :startDate AND :endDate " +
+//            "AND o.device IN :deviceLists " +
+//            "AND o.orderPrintType = :orderPrintType")
+    long countByOrderPrintTypeAndOrderDateBetweenAndDeviceIn(@Param("orderPrintType") OrderPrintType orderPrintType,
+                                                             @Param("startDate") LocalDateTime startDate,
+                                                             @Param("endDate") LocalDateTime endDate,
+                                                             @Param("deviceLists") List<DevicesList> deviceLists);
+
+    @Query("SELECT sum(o.orderAmount) FROM OrderManagement o " +
+            "WHERE o.orderDate BETWEEN :startDate AND :endDate " +
+            "AND o.device IN :deviceLists " +
+            "AND o.orderPrintType = :orderPrintType")
+    BigDecimal sumOrderAmountByOrderPrintTypeAndOrderDateBetweenAndDeviceIn(@Param("orderPrintType") OrderPrintType orderPrintType,
+                                                                            @Param("startDate") LocalDateTime startDate,
+                                                                            @Param("endDate") LocalDateTime endDate,
+                                                                            @Param("deviceLists") List<DevicesList> deviceLists);
+
+
+    @Query("SELECT COUNT(o) FROM OrderManagement o " +
+            "WHERE o.orderDate BETWEEN :startDate AND :endDate " +
+            "AND o.orderAmount >= :startAmount AND o.orderAmount < :endAmount " +
+            "AND o.device IN :deviceLists")
+    long countByOrderDateAndOrderAmountAndDeviceIn(
+            @Param("startDate") LocalDateTime startDate,
+            @Param("endDate") LocalDateTime endDate,
+            @Param("startAmount") BigDecimal startAmount,
+            @Param("endAmount") BigDecimal endAmount,
+            @Param("deviceLists") List<DevicesList> deviceLists);
+
+    @Query("SELECT COUNT(o) FROM OrderManagement o " +
+            "WHERE o.orderDate BETWEEN :startDate AND :endDate " +
+            "AND o.orderAmount > :startAmount AND o.orderAmount < :endAmount " +
+            "AND o.device IN :deviceLists")
+    long countByOrderDateAndOrderAmountLessAndDeviceIn(
+            @Param("startDate") LocalDateTime startDate,
+            @Param("endDate") LocalDateTime endDate,
+            @Param("startAmount") BigDecimal startAmount,
+            @Param("endAmount") BigDecimal endAmount,
+            @Param("deviceLists") List<DevicesList> deviceLists);
+
+    @Query("SELECT COUNT(o) FROM OrderManagement o " +
+            "WHERE o.orderDate BETWEEN :startDate AND :endDate " +
+            "AND o.orderAmount >= :startAmount " +
+            "AND o.device IN :deviceLists")
+    long countByOrderDateAndOrderAmountMoreAndDeviceIn(
+            @Param("startDate") LocalDateTime startDate,
+            @Param("endDate") LocalDateTime endDate,
+            @Param("startAmount") BigDecimal startAmount,
+            @Param("deviceLists") List<DevicesList> deviceLists);
+
+    @Query("SELECT SUM(o.paymentAmount) FROM OrderManagement o " +
+            "WHERE o.orderDate BETWEEN :startDate AND :endDate " +
+            "AND o.device IN :deviceLists " +
+            "AND o.payStatus = :payStatus " +
+            "AND o.transactionStatus = :transactionStatus")
+    BigDecimal sumPaymentAmountByOrderDateAndDeviceAndpayStatusAndTransactionStatus(@Param("startDate") LocalDateTime startDate,
+                                                                                    @Param("endDate") LocalDateTime endDate,
+                                                                                    @Param("deviceLists") List<DevicesList> deviceLists,
+                                                                                    @Param("payStatus") PayStatus payStatus,
+                                                                                    @Param("transactionStatus") TransactionStatus transactionStatus);
+
+    @Query("SELECT COUNT(o) FROM OrderManagement o " +
+            "WHERE o.orderDate BETWEEN :startDate AND :endDate " +
+            "AND o.device IN :deviceLists " +
+            "AND o.payStatus = :payStatus " +
+            "AND o.transactionStatus = :transactionStatus")
+    long countByOrderDateAndDeviceAndpayStatusAndTransactionStatus(@Param("startDate") LocalDateTime startDate,
+                                                                   @Param("endDate") LocalDateTime endDate,
+                                                                   @Param("deviceLists") List<DevicesList> deviceLists,
+                                                                   @Param("payStatus") PayStatus payStatus,
+                                                                   @Param("transactionStatus") TransactionStatus transactionStatus);
+
+    @Query("SELECT SUM(o.orderAmount) FROM OrderManagement o " +
+            "WHERE o.orderDate BETWEEN :startDate AND :endDate " +
+            "AND o.device IN :deviceLists " +
+            "AND o.transactionStatus = :transactionStatus")
+    BigDecimal sumOrderAmountByOrderDateAndDeviceAndTransactionStatus(@Param("startDate") LocalDateTime startDate,
+                                                                      @Param("endDate") LocalDateTime endDate,
+                                                                      @Param("deviceLists") List<DevicesList> deviceLists,
+                                                                      @Param("transactionStatus") TransactionStatus transactionStatus);
+
+    @Query("SELECT COUNT(o) FROM OrderManagement o " +
+            "WHERE o.orderDate BETWEEN :startDate AND :endDate " +
+            "AND o.device IN :deviceLists " +
+            "AND o.transactionStatus = :transactionStatus")
+    long countByOrderDateAndDeviceAndTransactionStatus(@Param("startDate") LocalDateTime startDate,
+                                                       @Param("endDate") LocalDateTime endDate,
+                                                       @Param("deviceLists") List<DevicesList> deviceLists,
+                                                       @Param("transactionStatus") TransactionStatus transactionStatus);
+
+
+    @Query("SElECT New com.yn.printer.service.modules.dataAnalysis.vo.DeviceRankVO" +
+            "(sum(o.paymentAmount),count(o.id),o.device.name) FROM OrderManagement o " +
+            "WHERE o.orderDate BETWEEN :startDate AND :endDate " +
+            "AND o.device IN :deviceLists " +
+            "GROUP BY o.device.name " +
+            "ORDER BY sum(o.paymentAmount) DESC")
+    List<DeviceRankVO> sumPaymentAmountByOrderDateAndDeviceRankAndpayStatusAndTransactionStatus(@Param("startDate") LocalDateTime startDate,
+                                                                                                @Param("endDate") LocalDateTime endDate,
+                                                                                                @Param("deviceLists") List<DevicesList> deviceLists
+    );
 }
 

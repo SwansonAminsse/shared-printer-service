@@ -4,6 +4,7 @@ import com.yn.printer.service.modules.channel.entity.ChannelPartner;
 import com.yn.printer.service.modules.enums.DeviceStatus;
 import com.yn.printer.service.modules.member.entity.Member;
 import com.yn.printer.service.modules.operation.entity.DevicesList;
+import com.yn.printer.service.modules.operation.enums.DeviceType;
 import com.yn.printer.service.modules.operation.vo.DeviceStatusVO;
 import com.yn.printer.service.modules.operation.vo.DevicesListVO;
 import lombok.val;
@@ -17,10 +18,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.yn.printer.service.modules.operation.util.DistanceCalculator.calculateDistance;
@@ -139,8 +137,25 @@ public interface DevicesListRepository extends JpaRepository<DevicesList, Long>,
     List<String> findCodeByStatus(@Param("status") DeviceStatus status);
 
     @Query("SELECT COUNT(d) FROM DevicesList d WHERE d.status IN ('ONLINE', 'OFFLINE', 'RUN', 'ABNORMAL')")
-    Long countTotalDevicesWithStatus();
+    long countTotalDevicesWithStatus();
 
-    Long countByStatus(@Param("status") DeviceStatus status);
+    long countByStatus(@Param("status") DeviceStatus status);
+
+    @Query("SELECT count(d) FROM DevicesList d WHERE " +
+            "(:TerminalMerchants = '全部' OR d.terminalMerchants.name = :TerminalMerchants) " +
+            "AND ( d.status = :status)" +
+            "AND (:deviceType IS NULL OR d.deviceType = :deviceType)")
+    long countByTerminalMerchantsAndStatusAndDeviceType(@Param("TerminalMerchants") String TerminalMerchants,
+                                                        @Param("status") DeviceStatus status,
+                                                        @Param("deviceType") Optional<DeviceType> deviceType);
+
+//    @Query("SELECT count(d) FROM DevicesList d WHERE " +
+//            " ( d.status = :status)" +
+//            "AND (:deviceType IS NULL OR d.deviceType = :deviceType)")
+//    Long countByAndStatus(@Param("status")  DeviceStatus status,
+//                                           @Param("deviceType") Optional<DeviceType> deviceType);
+
+    @Query("SELECT d FROM DevicesList d WHERE (:TerminalMerchants = '全部' OR d.terminalMerchants.name = :TerminalMerchants) ")
+    List<DevicesList> findByTerminalMerchants(@Param("TerminalMerchants") String TerminalMerchants);
 }
 

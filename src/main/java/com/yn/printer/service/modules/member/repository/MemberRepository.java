@@ -22,7 +22,7 @@ public interface MemberRepository extends JpaRepository<Member, Long>, JpaSpecif
     long countByStatus(boolean b);
 
     @Query("SELECT COUNT(m) FROM Member m WHERE m.joiningDate = :currentDate")
-    Long countByJoiningDate(@Param("currentDate") LocalDate currentDate);
+    long countByJoiningDate(@Param("currentDate") LocalDate currentDate);
 
 }
 
