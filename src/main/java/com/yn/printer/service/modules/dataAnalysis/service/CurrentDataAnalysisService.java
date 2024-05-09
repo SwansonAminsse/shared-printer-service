@@ -1,4 +1,5 @@
 package com.yn.printer.service.modules.dataAnalysis.service;
+import com.google.common.collect.Lists;
 
 import cn.hutool.core.date.DateUtil;
 import com.yn.printer.service.modules.advertisement.repository.PlacementPaymentRepository;
@@ -178,10 +179,11 @@ public class CurrentDataAnalysisService {
         DeviceStatus[] statuses = {DeviceStatus.OFFLINE, DeviceStatus.ONLINE, DeviceStatus.RUN, DeviceStatus.NOT_ACTIVE, DeviceStatus.ABNORMAL, DeviceStatus.STOP};
         for (DeviceStatus status : statuses) {
             DeviceStatisticsVO deviceStatisticsVO = new DeviceStatisticsVO();
-            deviceStatisticsVO.setTotalDeviceNumber(devicesListRepository.countByTerminalMerchantsAndStatusAndDeviceType(channelPartnerName, status, Optional.empty()));
-            deviceStatisticsVO.setSWJDeviceNumber(devicesListRepository.countByTerminalMerchantsAndStatusAndDeviceType(channelPartnerName, status, Optional.of(DeviceType.SWJ)));
+            List<ChannelPartner> byName = channelRepository.findByName(channelPartnerName);
+            deviceStatisticsVO.setTotalDeviceNumber(devicesListRepository.countByTerminalMerchantsAndStatusAndDeviceType(byName, status, Optional.empty()));
+            deviceStatisticsVO.setSWJDeviceNumber(devicesListRepository.countByTerminalMerchantsAndStatusAndDeviceType(byName, status, Optional.of(DeviceType.SWJ)));
             deviceStatisticsVO.setDeviceState(status.getName());
-            deviceStatisticsVO.setSNJDeviceNumber(devicesListRepository.countByTerminalMerchantsAndStatusAndDeviceType(channelPartnerName, status, Optional.of(DeviceType.SNJ)));
+            deviceStatisticsVO.setSNJDeviceNumber(devicesListRepository.countByTerminalMerchantsAndStatusAndDeviceType(byName, status, Optional.of(DeviceType.SNJ)));
             deviceStatisticsVoList.add(deviceStatisticsVO);
         }
         return deviceStatisticsVoList;
@@ -192,7 +194,8 @@ public class CurrentDataAnalysisService {
         LocalDateTime startDateTime = date.get(0);
         LocalDateTime endDateTime = date.get(1);
         UserStatisticsVO userStatisticsVO = new UserStatisticsVO();
-        List<DevicesList> DevicesList = devicesListRepository.findByTerminalMerchants(channelPartnerName);
+        List<ChannelPartner> byName = channelRepository.findByName(channelPartnerName);
+        List<DevicesList> DevicesList = devicesListRepository.findByChannel(byName);
         long uUserNumber = orderManagementRepository.
                 countDistinctOrderByOrderDateBetweenAndDeviceList(startDateTime, endDateTime, DevicesList);
         userStatisticsVO.setUUserNumber(uUserNumber);
@@ -252,7 +255,8 @@ public class CurrentDataAnalysisService {
         List<LocalDateTime> date = getDate(dateTime);
         LocalDateTime startDateTime = date.get(0);
         LocalDateTime endDateTime = date.get(1);
-        List<DevicesList> DevicesList = devicesListRepository.findByTerminalMerchants(channelPartnerName);
+        List<ChannelPartner> byName = channelRepository.findByName(channelPartnerName);
+        List<DevicesList> DevicesList = devicesListRepository.findByChannel(byName);
         OrderStatisticsVO orderStatisticsVO = new OrderStatisticsVO();
         orderStatisticsVO.setPhotoPrintNumber(orderManagementRepository
                 .countByOrderPrintTypeAndOrderDateBetweenAndDeviceIn(OrderPrintType.PHOTO, startDateTime, endDateTime, DevicesList));
@@ -270,7 +274,8 @@ public class CurrentDataAnalysisService {
         LocalDateTime startDateTime = date.get(0);
         LocalDateTime endDateTime = date.get(1);
         OrderAmountStatisticsVO orderAmountStatisticsVO = new OrderAmountStatisticsVO();
-        List<DevicesList> DevicesList = devicesListRepository.findByTerminalMerchants(channelPartnerName);
+        List<ChannelPartner> byName = channelRepository.findByName(channelPartnerName);
+        List<DevicesList> DevicesList = devicesListRepository.findByChannel(byName);
         orderAmountStatisticsVO.setPhotoPrintAmount(orderManagementRepository
                 .sumOrderAmountByOrderPrintTypeAndOrderDateBetweenAndDeviceIn(OrderPrintType.PHOTO, startDateTime, endDateTime, DevicesList));
         orderAmountStatisticsVO.setDocumentPrintAmount(orderManagementRepository
@@ -286,7 +291,8 @@ public class CurrentDataAnalysisService {
         List<LocalDateTime> date = getDate(dateTime);
         LocalDateTime startDateTime = date.get(0);
         LocalDateTime endDateTime = date.get(1);
-        List<DevicesList> DevicesList = devicesListRepository.findByTerminalMerchants(channelPartnerName);
+        List<ChannelPartner> byName = channelRepository.findByName(channelPartnerName);
+        List<DevicesList> DevicesList = devicesListRepository.findByChannel(byName);
         SingleOrderAmountStatisticsVO singleOrderAmountStatisticsVO = new SingleOrderAmountStatisticsVO();
 
         singleOrderAmountStatisticsVO.setOneToTwoYuan(orderManagementRepository.
@@ -317,7 +323,8 @@ public class CurrentDataAnalysisService {
         List<LocalDateTime> date = getDate(dateTime);
         LocalDateTime startDateTime = date.get(0);
         LocalDateTime endDateTime = date.get(1);
-        List<DevicesList> DevicesList = devicesListRepository.findByTerminalMerchants(channelPartnerName);
+        List<ChannelPartner> byName = channelRepository.findByName(channelPartnerName);
+        List<DevicesList> DevicesList = devicesListRepository.findByChannel(byName);
         OrderIncomeRateVo orderIncomeRateVo = new OrderIncomeRateVo();
         BigDecimal totalIncome = Optional.ofNullable(orderManagementRepository
                 .sumPaymentAmountByOrderDateAndDeviceAndpayStatusAndTransactionStatus(
@@ -378,13 +385,13 @@ public class CurrentDataAnalysisService {
         List<LocalDateTime> date = getDate(dateTime);
         LocalDateTime startDateTime = date.get(0);
         LocalDateTime endDateTime = date.get(1);
-        List<DevicesList> DevicesList = devicesListRepository.findByTerminalMerchants(channelPartnerName);
+        List<ChannelPartner> byName = channelRepository.findByName(channelPartnerName);
+        List<DevicesList> DevicesList = devicesListRepository.findByChannel(byName);
         List<DeviceRankVO> deviceRankVOS = orderManagementRepository
                 .sumPaymentAmountByOrderDateAndDeviceRankAndpayStatusAndTransactionStatus(startDateTime,
                         endDateTime, DevicesList);
         return deviceRankVOS;
     }
-
     public List<String> getDateRange() {
         List<String> list = new ArrayList<>();
         list.addAll(Arrays.asList("今日", "本周", "本月", "年度"));

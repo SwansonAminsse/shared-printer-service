@@ -16,6 +16,8 @@ public interface ChannelPartnerRepository extends JpaRepository<ChannelPartner, 
   @Query("SELECT COUNT(c) FROM ChannelPartner c WHERE c.channelType = :channelType")
   long countByChannelType(ChannelType channelType);
 
+  @Query("SELECT c FROM ChannelPartner c WHERE (:TerminalMerchantsName = '全部' OR c.name = :TerminalMerchantsName)")
+  List<ChannelPartner> findByName(String TerminalMerchantsName);
 
   List<ChannelPartner> findAll();
 }

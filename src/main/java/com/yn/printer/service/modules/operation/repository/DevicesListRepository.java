@@ -141,13 +141,26 @@ public interface DevicesListRepository extends JpaRepository<DevicesList, Long>,
 
     long countByStatus(@Param("status") DeviceStatus status);
 
-    @Query("SELECT count(d) FROM DevicesList d WHERE " +
-            "(:TerminalMerchants = '全部' OR d.terminalMerchants.name = :TerminalMerchants) " +
-            "AND ( d.status = :status)" +
-            "AND (:deviceType IS NULL OR d.deviceType = :deviceType)")
-    long countByTerminalMerchantsAndStatusAndDeviceType(@Param("TerminalMerchants") String TerminalMerchants,
-                                                        @Param("status") DeviceStatus status,
-                                                        @Param("deviceType") Optional<DeviceType> deviceType);
+//    @Query("SELECT count(distinct d) FROM DevicesList d WHERE " +
+//            "(d.platform = :channelPartner OR " +
+//            "d.cityPartner = :channelPartner OR " +
+//            "d.partners = :channelPartner OR " +
+//            "d.terminalMerchants = :channelPartner) "+
+//            "AND ( d.status = :status)" +
+//            "AND (:deviceType IS NULL OR d.deviceType = :deviceType)")
+//    long countByTerminalMerchantsAndStatusAndDeviceType(@Param("channelPartner") ChannelPartner channelPartner,
+//                                                        @Param("status") DeviceStatus status,
+//                                                        @Param("deviceType") Optional<DeviceType> deviceType);
+@Query("SELECT count(distinct d) FROM DevicesList d WHERE " +
+        "(d.platform IN :channelPartner OR " +
+        "d.cityPartner IN :channelPartner OR " +
+        "d.partners IN :channelPartner OR " +
+        "d.terminalMerchants IN :channelPartner) " +
+        "AND ( d.status = :status)" +
+        "AND (:deviceType IS NULL OR d.deviceType = :deviceType)")
+long countByTerminalMerchantsAndStatusAndDeviceType(@Param("channelPartner") List<ChannelPartner> channelPartner,
+                                                    @Param("status") DeviceStatus status,
+                                                    @Param("deviceType") Optional<DeviceType> deviceType);
 
 //    @Query("SELECT count(d) FROM DevicesList d WHERE " +
 //            " ( d.status = :status)" +
@@ -157,5 +170,13 @@ public interface DevicesListRepository extends JpaRepository<DevicesList, Long>,
 
     @Query("SELECT d FROM DevicesList d WHERE (:TerminalMerchants = '全部' OR d.terminalMerchants.name = :TerminalMerchants) ")
     List<DevicesList> findByTerminalMerchants(@Param("TerminalMerchants") String TerminalMerchants);
+
+
+    @Query("SELECT DISTINCT d FROM DevicesList d WHERE " +
+            " d.platform IN :channelPartner OR " +
+            " d.cityPartner IN :channelPartner OR " +
+            " d.partners IN :channelPartner OR " +
+            " d.terminalMerchants IN :channelPartner")
+    List<DevicesList> findByChannel(List<ChannelPartner> channelPartner);
 }
 

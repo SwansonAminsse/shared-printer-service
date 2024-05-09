@@ -171,10 +171,10 @@ public interface OrderManagementRepository extends JpaRepository<OrderManagement
     @Query("SELECT COUNT(o) FROM OrderManagement o WHERE o.orderDate >= :startOfDay AND o.orderDate < :currentDate")
     long countTodayOrders(@Param("startOfDay") LocalDateTime startOfDay, @Param("currentDate") LocalDateTime currentDate);
 
-    //    @Query("SELECT COUNT(o) FROM OrderManagement o " +
-//            "WHERE o.orderDate BETWEEN :startDate AND :endDate " +
-//            "AND o.device IN :deviceLists " +
-//            "AND o.orderPrintType = :orderPrintType")
+    @Query("SELECT COUNT(o) FROM OrderManagement o " +
+            "WHERE o.orderDate BETWEEN :startDate AND :endDate " +
+            "AND o.device IN :deviceLists " +
+            "AND o.orderPrintType = :orderPrintType")
     long countByOrderPrintTypeAndOrderDateBetweenAndDeviceIn(@Param("orderPrintType") OrderPrintType orderPrintType,
                                                              @Param("startDate") LocalDateTime startDate,
                                                              @Param("endDate") LocalDateTime endDate,

@@ -11,6 +11,10 @@ import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
+import com.yn.printer.service.modules.operation.entity.DevicesList;
+import com.yn.printer.service.modules.operation.repository.DevicesListRepository;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.*;
@@ -22,7 +26,8 @@ import java.util.*;
 
 @SpringBootTest
 class ApplicationTests {
-
+    @Autowired
+    private DevicesListRepository devicesListRepository;
     public static void main(String[] args) {
         final String accessKey = "JDC_711AC05B56BF7F42EB2E4270BD96";
         final String secretKey = "D7ABEE1C809EE23B9951A1BCF55A90E3";
@@ -52,4 +57,6 @@ class ApplicationTests {
             }
         }
     }
+
+
 }
