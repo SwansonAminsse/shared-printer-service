@@ -1,6 +1,5 @@
 package com.yn.printer.service;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -10,7 +9,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * 启动入口
  *
  * @author huabiao
- * @create 2023/12/08  15:42
+ * &#064;create  2023/12/08  15:42
  **/
 
 @EnableSwagger2

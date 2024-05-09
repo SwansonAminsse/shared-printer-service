@@ -8,6 +8,7 @@ import com.yn.printer.service.modules.member.repository.MemberRepository;
 import com.yn.printer.service.modules.operation.entity.DevicesList;
 import com.yn.printer.service.modules.operation.repository.DevicesListRepository;
 import com.yn.printer.service.modules.operation.repository.TaskListRepository;
+import com.yn.printer.service.modules.orders.entity.OrderManagement;
 import com.yn.printer.service.modules.orders.repository.OrderManagementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,9 +19,9 @@ import java.time.*;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
+
 import static com.yn.printer.service.modules.enums.ChannelType.*;
 import static com.yn.printer.service.modules.orders.enums.PayStatus.PAID;
-import com.yn.printer.service.modules.orders.entity.OrderManagement;
 
 @Service
 public class DataAnalysisService {
@@ -36,19 +37,20 @@ public class DataAnalysisService {
     private TaskListRepository taskListRepository;
     @Autowired
     private PlacementPaymentRepository placementPaymentRepository;
+
     public TotalChannelVO getTotalChannel() {
         return new TotalChannelVO(channelRepository.countByChannelType(PrimaryChannel), channelRepository.countByChannelType(SecondaryChannel), channelRepository.countByChannelType(TerminalChannel));
     }
 
     public IncomeSumVO totalIncome(Boolean time) {
         if (time) {
-            LocalDateTime startOfDate =LocalDateTime.of( LocalDate.now().withDayOfMonth(1), LocalTime.MIN) ;//本月第一天
+            LocalDateTime startOfDate = LocalDateTime.of(LocalDate.now().withDayOfMonth(1), LocalTime.MIN);//本月第一天
         }
         LocalDateTime startOfDate = LocalDateTime.of(LocalDate.now().with(CustomTemporalAdjusters.firstDayOfQuarter()), LocalTime.MIN);//本季度第一天
         LocalDateTime endOfDate = LocalDateTime.now();
         IncomeSumVO incomeSumVO = new IncomeSumVO();
         incomeSumVO.setDevicesNumber(devicesListRepository.countByDeviceStatus(true));
-        incomeSumVO.setDeviceIncome(orderManagementRepository.sumByDeviceIncome(startOfDate,endOfDate,PAID));
+        incomeSumVO.setDeviceIncome(orderManagementRepository.sumByDeviceIncome(startOfDate, endOfDate, PAID));
         List<DevicesList> devicesLists = devicesListRepository.findByDeviceStatus(true);
         BigDecimal totalTzIncome = BigDecimal.ZERO;
         for (DevicesList devicesList : devicesLists) {
@@ -61,9 +63,10 @@ public class DataAnalysisService {
         incomeSumVO.setSettlementAmount(totalTzIncome);
         return incomeSumVO;
     }
+
     public UserTotalVO getUserTotal(Boolean time) {
         if (time) {
-            LocalDateTime startOfDate =LocalDateTime.of( LocalDate.now().withDayOfMonth(1), LocalTime.MIN) ;//本月第一天
+            LocalDateTime startOfDate = LocalDateTime.of(LocalDate.now().withDayOfMonth(1), LocalTime.MIN);//本月第一天
         }
         LocalDateTime startOfDate = LocalDateTime.of(LocalDate.now().with(CustomTemporalAdjusters.firstDayOfQuarter()), LocalTime.MIN);//本季度第一天
         LocalDateTime endOfDate = LocalDateTime.now();
@@ -74,16 +77,15 @@ public class DataAnalysisService {
         userTotalVO.setUserNumber(userNumber);
         userTotalVO.setUserDealNumber(userDealNumber);
         userTotalVO.setAddUserNumber(addUserNumber);
-        double addUserRate = (addUserNumber != 0 && userNumber != 0)
-                ? ((double) userNumber / userNumber) * 100
-                : (userNumber == 0 ? 100.0 : 0.0);
+        double addUserRate = (addUserNumber != 0 && userNumber != 0) ? ((double) userNumber / userNumber) * 100 : (userNumber == 0 ? 100.0 : 0.0);
         userTotalVO.setAddUserRate(addUserRate);
         long ordersNumber = orderManagementRepository.countOrdersByOrderDateBetween(startOfDate, endOfDate);
         userTotalVO.setOrdersNumber(ordersNumber);
         Long repeatBuyers = orderManagementRepository.countRepeatBuyersByOrderDate(startOfDate, endOfDate);
         if (userNumber != 0 && repeatBuyers != null) {
-        double customerRepurchaseRate =  (userNumber != 0 && repeatBuyers != 0) ? ((double) repeatBuyers / userNumber) * 100 : 0.0;
-        userTotalVO.setCustomerRepurchaseRate(customerRepurchaseRate);}
+            double customerRepurchaseRate = repeatBuyers != 0 ? (double) repeatBuyers / userNumber * 100 : 0.0;
+            userTotalVO.setCustomerRepurchaseRate(customerRepurchaseRate);
+        }
         long ordersTotalNumber = orderManagementRepository.countByPayStatus(PAID);
         double ordersGrowthRate = (ordersNumber != 0 && ordersTotalNumber != 0) ? ((double) ordersNumber / ordersTotalNumber) * 100 : 0.0;
         userTotalVO.setOrdersGrowthRate(ordersGrowthRate);
@@ -92,7 +94,7 @@ public class DataAnalysisService {
 
     public DevicesDataVO getDevicesData(Boolean time) {
         if (time) {
-            LocalDateTime startOfDate =LocalDateTime.of( LocalDate.now().withDayOfMonth(1), LocalTime.MIN) ;//本月第一天
+            LocalDateTime startOfDate = LocalDateTime.of(LocalDate.now().withDayOfMonth(1), LocalTime.MIN);//本月第一天
         }
         LocalDateTime startOfDate = LocalDateTime.of(LocalDate.now().with(CustomTemporalAdjusters.firstDayOfQuarter()), LocalTime.MIN);//本季度第一天
         LocalDateTime endOfDate = LocalDateTime.now();
@@ -101,21 +103,19 @@ public class DataAnalysisService {
         devicesDataVO.setNewDevicesNumber(devicesListRepository.countByCreatedOnAfter(startOfDate));
         devicesDataVO.setUseDevicesNumber(orderManagementRepository.countOrdersByOrderDateBetween(startOfDate, endOfDate));
         devicesDataVO.setTaskDevicesNumber(taskListRepository.countByCompletionTimeAfter(startOfDate));
-        BigDecimal turnoverNumber = orderManagementRepository.sumByDeviceIncome(startOfDate,endOfDate,PAID);
-        devicesDataVO.setOrdersTurnoverNumber(orderManagementRepository.sumByDeviceIncome(startOfDate,endOfDate,PAID));
-        BigDecimal oldTurnoverNumber = orderManagementRepository.sumByOldDeviceIncome(startOfDate,PAID);
+        BigDecimal turnoverNumber = orderManagementRepository.sumByDeviceIncome(startOfDate, endOfDate, PAID);
+        devicesDataVO.setOrdersTurnoverNumber(orderManagementRepository.sumByDeviceIncome(startOfDate, endOfDate, PAID));
+        BigDecimal oldTurnoverNumber = orderManagementRepository.sumByOldDeviceIncome(startOfDate, PAID);
         if (turnoverNumber != null && oldTurnoverNumber != null) {
-        double turnoverRate = (oldTurnoverNumber.compareTo(BigDecimal.ZERO) != 0)
-                ? turnoverNumber.subtract(oldTurnoverNumber).divide(oldTurnoverNumber, 2, RoundingMode.HALF_UP).multiply(new BigDecimal("100")).doubleValue()
-                : oldTurnoverNumber.compareTo(BigDecimal.ZERO) == 0 ? 100.0 : 0.0;
-            devicesDataVO.setTurnoverRate(turnoverRate);}
+            double turnoverRate = (oldTurnoverNumber.compareTo(BigDecimal.ZERO) != 0) ? turnoverNumber.subtract(oldTurnoverNumber).divide(oldTurnoverNumber, 2, RoundingMode.HALF_UP).multiply(new BigDecimal("100")).doubleValue() : oldTurnoverNumber.compareTo(BigDecimal.ZERO) == 0 ? 100.0 : 0.0;
+            devicesDataVO.setTurnoverRate(turnoverRate);
+        }
         BigDecimal oldAdvertisementPayment = placementPaymentRepository.getADVERTISEMENTPayment(startOfDate);
-        BigDecimal advertisementPayment = placementPaymentRepository.getADVERTISEMENTPaymentDateBetween(startOfDate,endOfDate);
-        if (oldAdvertisementPayment != null && advertisementPayment != null){
-        double advertisementRate = (oldAdvertisementPayment.compareTo(BigDecimal.ZERO) != 0)
-                ? advertisementPayment.subtract(oldAdvertisementPayment).divide(oldAdvertisementPayment, 2, RoundingMode.HALF_UP).multiply(new BigDecimal("100")).doubleValue()
-                : oldAdvertisementPayment.compareTo(BigDecimal.ZERO) == 0 ? 100.0 : 0.0;
-        devicesDataVO.setAdvertisementRate(advertisementRate);}
+        BigDecimal advertisementPayment = placementPaymentRepository.getADVERTISEMENTPaymentDateBetween(startOfDate, endOfDate);
+        if (oldAdvertisementPayment != null && advertisementPayment != null) {
+            double advertisementRate = (oldAdvertisementPayment.compareTo(BigDecimal.ZERO) != 0) ? advertisementPayment.subtract(oldAdvertisementPayment).divide(oldAdvertisementPayment, 2, RoundingMode.HALF_UP).multiply(new BigDecimal("100")).doubleValue() : oldAdvertisementPayment.compareTo(BigDecimal.ZERO) == 0 ? 100.0 : 0.0;
+            devicesDataVO.setAdvertisementRate(advertisementRate);
+        }
         return devicesDataVO;
     }
 
@@ -136,9 +136,9 @@ public class DataAnalysisService {
                 }
             }
         }
-        for (LocalDateTime startOfDate : daysOfWeek){
+        for (LocalDateTime startOfDate : daysOfWeek) {
             long ordersNumber = orderManagementRepository.countOrdersByOrderDateBetween(startOfDate, startOfDate.with(LocalTime.MAX));
-            BigDecimal  orderTurnoverNumber = orderManagementRepository.sumByDeviceIncome(startOfDate,startOfDate.with(LocalTime.MAX),PAID);
+            BigDecimal orderTurnoverNumber = orderManagementRepository.sumByDeviceIncome(startOfDate, startOfDate.with(LocalTime.MAX), PAID);
             userDealNumber.add(ordersNumber);
             ordersTurnoverNumber.add(orderTurnoverNumber);
         }
@@ -148,8 +148,7 @@ public class DataAnalysisService {
         return usersAndVolumeOfWeekVO;
     }
 
-    public List<BigDecimal>
-    getGrossProfit(){
+    public List<BigDecimal> getGrossProfit() {
         List<BigDecimal> grossProfit = new ArrayList<>();
         List<LocalDateTime> daysOfWeek = new ArrayList<>();
         LocalDate currentMonday = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
@@ -165,11 +164,9 @@ public class DataAnalysisService {
                 }
             }
         }
-        for (LocalDateTime startOfDate : daysOfWeek){
-            grossProfit.add(orderManagementRepository.sumByDeviceIncome(startOfDate,startOfDate.with(LocalTime.MAX),PAID));
+        for (LocalDateTime startOfDate : daysOfWeek) {
+            grossProfit.add(orderManagementRepository.sumByDeviceIncome(startOfDate, startOfDate.with(LocalTime.MAX), PAID));
         }
-
         return grossProfit;
-
     }
 }
