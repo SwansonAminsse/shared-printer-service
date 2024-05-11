@@ -56,7 +56,9 @@ public class CurrentDataAnalysisService {
 
     public TotalDevicesVO totalData() {
         TotalDevicesVO totalDevicesVO = new TotalDevicesVO();
-        Long totalDevices = devicesListRepository.countTotalDevicesWithStatus();
+
+        List<DeviceStatus> deviceStatusList = Arrays.asList(DeviceStatus.ONLINE, DeviceStatus.RUN, DeviceStatus.ABNORMAL, DeviceStatus.OFFLINE);
+        Long totalDevices = devicesListRepository.countTotalDevicesWithStatus(deviceStatusList);
         totalDevicesVO.setDevicesNumber(totalDevices);
         totalDevicesVO.setDeviceIncome(Optional.ofNullable(orderManagementRepository.sumTotalOrderIncome(PayStatus.PAID)).orElse(BigDecimal.ZERO));
         totalDevicesVO.setUserNumber(memberRepository.countByStatus(true));
