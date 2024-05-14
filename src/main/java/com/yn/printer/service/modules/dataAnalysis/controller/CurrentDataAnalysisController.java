@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
@@ -31,8 +32,9 @@ public class CurrentDataAnalysisController {
 
     @GetMapping("/todayorders")
     @ApiOperation(value = "实时订单详情")
-    public Page<OrderVO> getTodayOrders() {
-        return currentDataAnalysisService.getTodayOrders(PageRequest.of(0, 10));
+    public Page<OrderVO> getTodayOrders(@RequestParam(value = "page", defaultValue = "0") int page,
+                                        @RequestParam(value = "size", defaultValue = "10") int size) {
+        return currentDataAnalysisService.getTodayOrders(PageRequest.of(page, size));
     }
 
     @GetMapping("/getusertodayanalysis")
@@ -55,25 +57,26 @@ public class CurrentDataAnalysisController {
 
     @GetMapping("/getAllChannelPartner")
     @ApiOperation(value = "获取全部渠道商")
-    public List<String> getAllChannelPartner() {
-        return currentDataAnalysisService.getAllChannelPartner();
+    public Page<ChannelPartnerInfo> getAllChannelPartner(@RequestParam(value = "page", defaultValue = "0") int page,
+                                                         @RequestParam(value = "size", defaultValue = "10") int size) {
+        return currentDataAnalysisService.getAllChannelPartner(PageRequest.of(page, size));
     }
 
     @GetMapping("/getDeviceByChannelPartner")
     @ApiOperation(value = "设备统计")
-    public List<DeviceStatisticsVO> getDeviceByChannelPartner(String channelPartnerName, String dateTime) {
-        return currentDataAnalysisService.getDeviceByChannelPartner(channelPartnerName, dateTime);
+    public List<DeviceStatisticsVO> getDeviceByChannelPartner(Long channelPartnerId, String dateTime) {
+        return currentDataAnalysisService.getDeviceByChannelPartner(channelPartnerId, dateTime);
     }
 
     @GetMapping("/getUserByChannelPartnerAndDateTime")
     @ApiOperation(value = "用户统计")
-    public UserStatisticsVO getUserByChannelPartnerAndDateTime(String channelPartnerName, String dateTime) {
-        return currentDataAnalysisService.getUserByChannelPartnerAndDateTime(channelPartnerName, dateTime);
+    public UserStatisticsVO getUserByChannelPartnerAndDateTime(Long channelPartnerId, String dateTime) {
+        return currentDataAnalysisService.getUserByChannelPartnerAndDateTime(channelPartnerId, dateTime);
     }
 
     @GetMapping("/getTaskByChannelPartner")
     @ApiOperation(value = "运维统计")
-    public Boolean getTaskByChannelPartner(String channelPartnerName, String dateTime) {
+    public Boolean getTaskByChannelPartner(Long channelPartnerId, String dateTime) {
         return false;
     }
 
@@ -85,33 +88,33 @@ public class CurrentDataAnalysisController {
 
     @GetMapping("/getOrderPrintType")
     @ApiOperation(value = "订单类型")
-    public OrderStatisticsVO getOrderPrintType(String channelPartnerName, String dateTime) {
-        return currentDataAnalysisService.getOrderPrintType(channelPartnerName, dateTime);
+    public OrderStatisticsVO getOrderPrintType(Long channelPartnerId, String dateTime) {
+        return currentDataAnalysisService.getOrderPrintType(channelPartnerId, dateTime);
     }
 
     @GetMapping("/getOrderAmountByOrderPrintType")
     @ApiOperation(value = "类型金额")
-    public OrderAmountStatisticsVO getOrderAmountByOrderPrintType(String channelPartnerName, String dateTime) {
-        return currentDataAnalysisService.getOrderAmountByOrderPrintType(channelPartnerName, dateTime);
+    public OrderAmountStatisticsVO getOrderAmountByOrderPrintType(Long channelPartnerId, String dateTime) {
+        return currentDataAnalysisService.getOrderAmountByOrderPrintType(channelPartnerId, dateTime);
     }
 
     @GetMapping("/getSingleOrderAmount")
     @ApiOperation(value = "单笔订单金额")
-    public SingleOrderAmountStatisticsVO getSingleOrderAmount(String channelPartnerName, String dateTime) {
-        return currentDataAnalysisService.getSingleOrderAmount(channelPartnerName, dateTime);
+    public SingleOrderAmountStatisticsVO getSingleOrderAmount(Long channelPartnerId, String dateTime) {
+        return currentDataAnalysisService.getSingleOrderAmount(channelPartnerId, dateTime);
 
     }
 
     @GetMapping("/getOrderIncomeRate")
     @ApiOperation(value = "各类收入占比")
-    public OrderIncomeRateVo getOrderIncomeRate(String channelPartnerName, String dateTime) {
-        return currentDataAnalysisService.getOrderIncomeRate(channelPartnerName, dateTime);
+    public OrderIncomeRateVo getOrderIncomeRate(Long channelPartnerId, String dateTime) {
+        return currentDataAnalysisService.getOrderIncomeRate(channelPartnerId, dateTime);
     }
 
     @GetMapping("/getDeviceRank")
     @ApiOperation(value = "站点排行")
-    public List<DeviceRankVO> getDeviceRank(String channelPartnerName, String dateTime) {
-        return currentDataAnalysisService.getDeviceRank(channelPartnerName, dateTime);
+    public List<DeviceRankVO> getDeviceRank(Long channelPartnerId, String dateTime) {
+        return currentDataAnalysisService.getDeviceRank(channelPartnerId, dateTime);
     }
 
     @GetMapping("/getDateRange")
