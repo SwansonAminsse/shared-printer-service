@@ -4,12 +4,14 @@ import com.yn.printer.service.modules.common.api.tz.dto.TzPayResultCallback;
 import com.yn.printer.service.modules.enums.PayMode;
 import com.yn.printer.service.modules.member.entity.Member;
 import com.yn.printer.service.modules.operation.entity.DevicesList;
+import com.yn.printer.service.modules.orders.dto.SubmitRechargeTaskDto;
 import com.yn.printer.service.modules.orders.entity.OrderManagement;
 import com.yn.printer.service.modules.orders.enums.TransactionStatus;
 import com.yn.printer.service.modules.orders.vo.PayInfoVo;
 import com.yn.printer.service.modules.orders.vo.PrintOrderVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -52,6 +54,9 @@ public interface IOrderService {
 
     Boolean handleWxPayCallback(String orderCode);
 
+    @Transactional
+    Boolean balancePayment(Long orderId);
+
     /**
      * 支付成功
      *
@@ -76,5 +81,6 @@ public interface IOrderService {
 
     TransactionStatus getTransactionStatus(String code);
 
-//    Boolean yuEPay(Long orderId);
+    Long submitRechargeTask(SubmitRechargeTaskDto dto, Member member);
+
 }

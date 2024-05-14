@@ -6,7 +6,6 @@ import cn.hutool.core.io.FileTypeUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.http.HttpUtil;
-import com.alibaba.fastjson.JSON;
 import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.itextpdf.text.BadElementException;
@@ -20,19 +19,15 @@ import com.yn.printer.service.modules.common.api.ali.idPhoto.response.IdPhotoMak
 import com.yn.printer.service.modules.common.constant.ColorEnum;
 import com.yn.printer.service.modules.common.mqtt.MqttConfig;
 import com.yn.printer.service.modules.common.mqtt.MqttSender;
-//import com.yn.printer.service.modules.common.mqtt.dto.UpdatePush;
 import com.yn.printer.service.modules.common.oss.OssConfig;
 import com.yn.printer.service.modules.common.service.IFileService;
 import com.yn.printer.service.modules.common.util.PdfUtil;
 import com.yn.printer.service.modules.common.vo.MetaFileVo;
-import com.yn.printer.service.modules.enums.DeviceStatus;
-import com.yn.printer.service.modules.member.entity.PointsFile;
 import com.yn.printer.service.modules.member.repository.PointsFileRepository;
 import com.yn.printer.service.modules.meta.entity.MetaFile;
 import com.yn.printer.service.modules.meta.enums.IdPhotoSize;
 import com.yn.printer.service.modules.meta.repository.MetaFileRepository;
 import com.yn.printer.service.modules.meta.repository.ThirdPartyVouchersRepository;
-import com.yn.printer.service.modules.operation.entity.DevicesList;
 import com.yn.printer.service.modules.operation.enums.TutorialTypes;
 import com.yn.printer.service.modules.operation.repository.DevicesListRepository;
 import com.yn.printer.service.modules.operation.repository.TutorialsRepository;
@@ -53,11 +48,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author : Jonas Chan
@@ -72,13 +65,10 @@ public class FileServiceImpl implements IFileService {
 
     @Value("${file.previewPath}")
     String previewPath;
-    @Value("${oss.s3.bucketName}")
-    private String bucketName;
     @Value("${file.ossPath}")
     String ossPath;
     @Value("${file.ossPath1}")
     String ossPath1;
-
     @Autowired
     MetaFileRepository metaFileRepository;
     @Autowired
@@ -97,9 +87,10 @@ public class FileServiceImpl implements IFileService {
     DevicesListRepository devicesListRepository;
     @Autowired
     MqttSender mqttSender;
-
     @Autowired
     MqttConfig mqttConfig;
+    @Value("${oss.s3.bucketName}")
+    private String bucketName;
 
     @Override
     public MetaFileVo uploadFile(MultipartFile file) {
@@ -182,6 +173,7 @@ public class FileServiceImpl implements IFileService {
 //        mqttSender.send(topic, message);
 //        log.info("推送MQTT消息 主题: {}, 内容: {}", topic, message);
 //    }
+
     /**
      * 文件上传方法 使用 nio
      */
@@ -192,10 +184,7 @@ public class FileServiceImpl implements IFileService {
         //获取文件名
         File dest = new File(FileUtil.mkdir(basePath), System.nanoTime() + "." + last);
 
-        try (FileInputStream fis = (FileInputStream) file.getInputStream();
-             FileOutputStream fos = new FileOutputStream(dest);
-             FileChannel inChannel = fis.getChannel();
-             FileChannel outChannel = fos.getChannel()) {
+        try (FileInputStream fis = (FileInputStream) file.getInputStream(); FileOutputStream fos = new FileOutputStream(dest); FileChannel inChannel = fis.getChannel(); FileChannel outChannel = fos.getChannel()) {
             inChannel.transferTo(0, inChannel.size(), outChannel);
         } catch (IOException e) {
             e.printStackTrace();
@@ -343,8 +332,7 @@ public class FileServiceImpl implements IFileService {
             request.setPhoto(Base64.getEncoder().encodeToString(FileUtil.readBytes(src)));
             request.setSpec(idPhotoSize.getSpec().toString());
             request.setBk(colorEnum.name().toLowerCase());
-            IdPhotoMakeResponse response = aliIdPhotoApi.make(request,
-                    thirdPartyVouchersRepository.findAll().get(0).getAliIdPhotoAppCode());
+            IdPhotoMakeResponse response = aliIdPhotoApi.make(request, thirdPartyVouchersRepository.findAll().get(0).getAliIdPhotoAppCode());
             HttpUtil.downloadFile(response.getResult(), src);
         } catch (Exception e) {
             e.printStackTrace();
@@ -392,8 +380,7 @@ public class FileServiceImpl implements IFileService {
         try (FileInputStream fisVertical = new FileInputStream(src)) {
             Image image = Image.getInstance(src.getPath());
             // 如果高比宽小, 则图片 90度 旋转, 使其竖排
-            if (image.getHeight() < image.getWidth())
-                ImgUtil.rotate(src, 90, src);
+            if (image.getHeight() < image.getWidth()) ImgUtil.rotate(src, 90, src);
             // 复制证件照
             int imageType = 1;
             // 排版留白间隙 px
@@ -434,8 +421,7 @@ public class FileServiceImpl implements IFileService {
         try (FileInputStream fisVertical = new FileInputStream(src)) {
             Image image = Image.getInstance(src.getPath());
             // 如果高比宽小, 则图片 90度 旋转, 使其竖排
-            if (image.getHeight() < image.getWidth())
-                ImgUtil.rotate(src, 90, src);
+            if (image.getHeight() < image.getWidth()) ImgUtil.rotate(src, 90, src);
             // 复制证件照
             int imageType = 1;
             // 排版留白间隙 px
@@ -479,9 +465,7 @@ public class FileServiceImpl implements IFileService {
 
         String newFileName = getNewFileName(fileType);
 
-        GeneratePresignedUrlRequest urlRequest = new GeneratePresignedUrlRequest(bucketName, newFileName)
-                .withMethod(HttpMethod.PUT)
-                .withExpiration(expiration);
+        GeneratePresignedUrlRequest urlRequest = new GeneratePresignedUrlRequest(bucketName, newFileName).withMethod(HttpMethod.PUT).withExpiration(expiration);
         MetaFileVo metaFileVo = new MetaFileVo();
         metaFileVo.setFileName(newFileName);
         metaFileVo.setDownloadPath(s3.s3Client().generatePresignedUrl(urlRequest).toString());

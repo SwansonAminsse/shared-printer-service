@@ -64,6 +64,8 @@ public interface YnError {
     YnErrorCode YN_500003 = new YnErrorCode("500003", "订单金额不正确");
     YnErrorCode YN_500004 = new YnErrorCode("500004", "不支持的支付方式");
 
+    YnErrorCode YN_500005 = new YnErrorCode("500005", "余额不足");
+
     /**
      * 运营模块
      */

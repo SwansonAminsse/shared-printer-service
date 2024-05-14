@@ -6,6 +6,8 @@ import com.yn.printer.service.modules.member.entity.Member;
 import com.yn.printer.service.modules.member.vo.MemberLoginVo;
 import com.yn.printer.service.modules.member.vo.integralBalanceVO;
 
+import java.math.BigDecimal;
+
 public interface IMemberService {
 
     /**
@@ -49,4 +51,6 @@ public interface IMemberService {
     MemberLoginVo bindEmail(String email, String verificationCode);
 
     boolean sendVerificationCode(String phoneNumber,String email);
+
+    BigDecimal getChargeBalance();
 }

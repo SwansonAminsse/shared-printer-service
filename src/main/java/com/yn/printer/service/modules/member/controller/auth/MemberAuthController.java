@@ -39,11 +39,12 @@ public class MemberAuthController {
         return memberService.getIntegralBalance();
     }
 
-//    @ApiOperation(value = "添加积分")
-//    @GetMapping(value = "/creatAddPointsFile")
-//    public void creatAddPointsFile(@RequestParam BigDecimal amount, @RequestParam double Magnification) {
-//        printerService.creatAddPointsFile(amount);
-//    }
+    @ApiOperation(value = "会员-查询余额")
+    @GetMapping(value = "/getCharge")
+    public BigDecimal getCharge() {
+        return memberService.getChargeBalance();
+    }
+
     @ApiOperation(value = "会员-修改密码")
     @PostMapping(value = "/fix")
     public MemberLoginVo fixPassWord(@RequestBody String password) {

@@ -26,6 +26,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -240,6 +241,12 @@ public class MemberServiceImpl implements IMemberService {
         message.setText("您的验证码是：" + generateAndSaveVerificationCode(phoneNumber) + "，请妥善保管，勿泄露他人。");
         javaMailSender.send(message);
         return true;
+    }
+
+    @Override
+    public BigDecimal getChargeBalance() {
+        Member member = AuditInterceptor.CURRENT_MEMBER.get();
+        return  member.getAccountBalance();
     }
 
 

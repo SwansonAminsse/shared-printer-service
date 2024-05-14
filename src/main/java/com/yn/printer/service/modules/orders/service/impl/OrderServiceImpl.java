@@ -14,14 +14,15 @@ import com.yn.printer.service.modules.common.api.wx.service.WeChatApiService;
 import com.yn.printer.service.modules.common.service.IFileService;
 import com.yn.printer.service.modules.enums.PayMode;
 import com.yn.printer.service.modules.member.entity.Member;
+import com.yn.printer.service.modules.member.repository.MemberRepository;
 import com.yn.printer.service.modules.member.service.IChargeFileService;
+import com.yn.printer.service.modules.member.service.IMemberService;
 import com.yn.printer.service.modules.member.service.IPointsFileService;
 import com.yn.printer.service.modules.operation.entity.DevicesList;
 import com.yn.printer.service.modules.operation.service.IDeviceService;
+import com.yn.printer.service.modules.orders.dto.SubmitRechargeTaskDto;
 import com.yn.printer.service.modules.orders.entity.OrderManagement;
-import com.yn.printer.service.modules.orders.enums.OrderType;
-import com.yn.printer.service.modules.orders.enums.PayStatus;
-import com.yn.printer.service.modules.orders.enums.TransactionStatus;
+import com.yn.printer.service.modules.orders.enums.*;
 import com.yn.printer.service.modules.orders.repository.OrderManagementRepository;
 import com.yn.printer.service.modules.orders.repository.PrintTaskRepository;
 import com.yn.printer.service.modules.orders.service.IOrderService;
@@ -42,8 +43,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -73,6 +73,12 @@ public class OrderServiceImpl implements IOrderService {
 
     @Autowired
     IChargeFileService chargeFileService;
+
+    @Autowired
+    IMemberService memberService;
+
+    @Autowired
+    MemberRepository memberRepository;
 
     // 定时关闭未支付订单
     @Scheduled(fixedDelay = 1000 * 60)
@@ -164,6 +170,7 @@ public void orderStatusUpdate() {
                 order.setWxPrepayId(prepayResponse.getPrepayId());
                 break;
             case YU_E_PAY:
+
                     break;
             default:
                 throw new YnErrorException(YnError.YN_700001);
@@ -261,6 +268,32 @@ public void orderStatusUpdate() {
 
         return null;
     }
+    @Override
+    @Transactional
+    public Boolean balancePayment(Long orderId) {
+        log.info("开始确认余额支付>>>{}", orderId);
+
+        OrderManagement order = orderManagementRepository.findById(orderId).orElse(null);
+
+        if (order == null) throw new YnErrorException(YnError.YN_500001);
+
+        BigDecimal orderAmount = order.getOrderAmount();
+
+        Member member = order.getPayer();
+
+        BigDecimal memberBalance = member.getAccountBalance();
+
+        if (memberBalance.compareTo(orderAmount) < 0)throw new YnErrorException(YnError.YN_500005);
+
+        chargeFileService.lowAddChargeFile(orderAmount.negate(), member);
+
+        member.setAccountBalance(memberBalance.subtract(orderAmount));
+        memberRepository.save(member);
+
+        orderPaySuccess(order, orderAmount);
+
+        return true;
+    }
 
     @Transactional
     @Override
@@ -270,12 +303,12 @@ public void orderStatusUpdate() {
         order.setPaymentAmount(amount);
         order.setPayDate(LocalDateTime.now());
         orderManagementRepository.save(order);
-        deviceService.executePrintingTask(order);
-        try {
+        if(order.getOrderType().equals(OrderType.PRINT)) {
+            deviceService.executePrintingTask(order);
             pointsFileService.creatAddPointsFile(amount, order.getOrderer());
-        }catch (Exception ex) {
-            log.error("Creating points file failed.", ex);
         }
+        else if(order.getOrderType().equals(OrderType.RECHARGE))
+            chargeFileService.creatAddChargeFile(order.getPaymentAmount(), order.getOrderer());
         return true;
     }
 
@@ -359,6 +392,72 @@ public void orderStatusUpdate() {
     @Override
     public TransactionStatus getTransactionStatus(String code){
         return orderManagementRepository.findTransactionStatusByCode(code);
+    }
+    public OrderManagement createRechargeOrder(Member member, BigDecimal price, PayMode payMode) {
+        // 生成本地订单号
+        String sn = DateUtil.format(new Date(), "yyyyMMddHHmmss") + RandomUtil.randomNumbers(6);
+
+        if (price.compareTo(BigDecimal.ZERO) <= 0) throw new YnErrorException(YnError.YN_500003);
+
+        // 生成待支付订单 保存支付金额, 支付单号
+        OrderManagement order = new OrderManagement();
+        order.setCode(sn);
+        order.setPayer(member);
+        order.setOrderer(member);
+        order.setOrderAmount(price);
+        order.setTradeNo(sn);
+        order.setPayStatus(PayStatus.UN_PAID);
+        order.setOrderType(OrderType.RECHARGE);
+        order.setOrderDate(LocalDateTime.now());
+
+        switch (payMode) {
+            case TZ_PAY:
+                // 调用天章支付生成支付订单
+                TzCreateOrderRequest tzCreateOrderRequest = new TzCreateOrderRequest();
+                tzCreateOrderRequest.setOrderId(sn);
+                tzCreateOrderRequest.setMerDate(DateUtil.format(new Date(), "yyyyMMdd"));
+                tzCreateOrderRequest.setAmount(String.valueOf(price.multiply(BigDecimal.valueOf(100)).intValue()));
+                TzCreateOrderResponse response = tzPayService.createOrder(tzCreateOrderRequest);
+                order.setQrCode(response.getQrCode());
+                break;
+            case WX_NATIVE_PAY:
+                String wxPayLink = weChatApiService.createNativePayOrder(price, "订单支付", sn);
+                order.setWxPayLink(wxPayLink);
+                break;
+            case WX_JS_PAY:
+                // 调用微信支付生成小程序支付订单
+                PrepayRequest jsPrepayRequest = new PrepayRequest();
+                // 付款人
+                Payer payer = new Payer();
+                payer.setOpenid(member.getOpenId());
+                jsPrepayRequest.setPayer(payer);
+                // 订单金额
+                Amount amount = new Amount();
+                amount.setTotal(price.multiply(BigDecimal.valueOf(100)).intValue());
+                jsPrepayRequest.setAmount(amount);
+                // 订单描述
+                jsPrepayRequest.setDescription("订单支付");
+                // 本地订单号
+                jsPrepayRequest.setOutTradeNo(sn);
+                PrepayResponse prepayResponse = weChatApiService.createJsPayOrder(jsPrepayRequest);
+                order.setWxPrepayId(prepayResponse.getPrepayId());
+                break;
+            case YU_E_PAY:
+                break;
+            default:
+                throw new YnErrorException(YnError.YN_700001);
+
+        }
+        order.setPayMode(payMode);
+        orderManagementRepository.save(order);
+        return order;
+    }
+
+    @Override
+    public Long submitRechargeTask(SubmitRechargeTaskDto dto, Member member) {
+        BigDecimal price = dto.getRefillAmount();
+        OrderManagement order = createRechargeOrder(member, price, dto.getPayMode());
+        return order.getId();
     }
 
 }

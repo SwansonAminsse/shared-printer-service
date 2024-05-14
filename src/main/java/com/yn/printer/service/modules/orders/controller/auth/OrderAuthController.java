@@ -2,6 +2,7 @@ package com.yn.printer.service.modules.orders.controller.auth;
 
 import com.yn.printer.service.interceptor.AuditInterceptor;
 import com.yn.printer.service.modules.operation.dto.SubmitPrintingTaskDto;
+import com.yn.printer.service.modules.orders.dto.SubmitRechargeTaskDto;
 import com.yn.printer.service.modules.orders.service.IOrderService;
 import com.yn.printer.service.modules.orders.vo.PayInfoVo;
 import com.yn.printer.service.modules.orders.vo.PrintOrderVo;
@@ -40,10 +41,16 @@ public class OrderAuthController {
         return orderService.getPrintOrderVo(id);
     }
 
-//    @ApiOperation(value = "订单-提交充值任务")
-//    @PostMapping("/submitRechargeTask")
-//    public Long submitRechargeTask(@RequestBody SubmitPrintingTaskDto dto) {
-//        return deviceService.submitPrintingTask(dto, AuditInterceptor.CURRENT_MEMBER.get());
-//    }
+    @ApiOperation(value = "订单-提交充值任务")
+    @PostMapping("/submitRechargeTask")
+    public Long submitRechargeTask(@RequestBody SubmitRechargeTaskDto dto) {
+        return orderService.submitRechargeTask(dto, AuditInterceptor.CURRENT_MEMBER.get());
+    }
+
+    @ApiOperation(value = "订单-确认支付余额")
+    @PostMapping("/balancePayment")
+    public Boolean balancePayment(@RequestBody Long id) {
+        return orderService.balancePayment(id);
+    }
 
 }

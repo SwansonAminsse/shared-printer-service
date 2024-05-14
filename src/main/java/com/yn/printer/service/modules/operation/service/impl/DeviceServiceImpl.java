@@ -437,16 +437,12 @@ public class DeviceServiceImpl implements IDeviceService {
 
     @Override
     public boolean printTaskPush(PrintTask printTask) {
-        // 扣除打印任务所用纸张和耗材
-//        deductPaperAndConsumables(printTask);
-
         PrintTaskPush push = new PrintTaskPush();
         BeanUtils.copyProperties(printTask, push);
         push.setPrintFileType(printTask.getTranscodingFile().getFileName().endsWith(".pdf") ? PrintFileType.PDF : PrintFileType.IMAGE);
         push.setPrintFileId(printTask.getTranscodingFile().getId());
         push.setPrintFileName(printTask.getTranscodingFile().getFileName());
         this.mqttPush(printTask.getDevice(), JSON.toJSONString(push));
-
         printTask.setPushTime(LocalDateTime.now());
         printTask.setPrintTaskStatus(PrintTaskStatus.PUSHED);
         printTaskRepository.save(printTask);
