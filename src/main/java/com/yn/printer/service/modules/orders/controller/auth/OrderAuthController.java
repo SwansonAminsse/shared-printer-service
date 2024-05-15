@@ -1,7 +1,10 @@
 package com.yn.printer.service.modules.orders.controller.auth;
 
 import com.yn.printer.service.interceptor.AuditInterceptor;
+import com.yn.printer.service.modules.operation.dto.PreprintTask;
+import com.yn.printer.service.modules.operation.dto.PrintTaskListDTO;
 import com.yn.printer.service.modules.operation.dto.SubmitPrintingTaskDto;
+import com.yn.printer.service.modules.orders.dto.PrintInfoDTO;
 import com.yn.printer.service.modules.orders.dto.SubmitRechargeTaskDto;
 import com.yn.printer.service.modules.orders.service.IOrderService;
 import com.yn.printer.service.modules.orders.vo.PayInfoVo;
@@ -13,6 +16,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 @Validated
 @Api(value = "OrderController", tags = "用户端-订单")
@@ -52,5 +58,9 @@ public class OrderAuthController {
     public Boolean balancePayment(@RequestBody Long id) {
         return orderService.balancePayment(id);
     }
-
+    @ApiOperation(value = "订单-确认任务金额")
+    @PostMapping("/getTaskListsPayment")
+    public BigDecimal getTaskListsPayment(@RequestBody PrintTaskListDTO printTaskList) {
+        return orderService.getTaskListsPayment(printTaskList.getPreprintTaskList(),printTaskList.getDeviceId());
+    }
 }

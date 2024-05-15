@@ -3,7 +3,9 @@ package com.yn.printer.service.modules.orders.service;
 import com.yn.printer.service.modules.common.api.tz.dto.TzPayResultCallback;
 import com.yn.printer.service.modules.enums.PayMode;
 import com.yn.printer.service.modules.member.entity.Member;
+import com.yn.printer.service.modules.operation.dto.PreprintTask;
 import com.yn.printer.service.modules.operation.entity.DevicesList;
+import com.yn.printer.service.modules.orders.dto.PrintInfoDTO;
 import com.yn.printer.service.modules.orders.dto.SubmitRechargeTaskDto;
 import com.yn.printer.service.modules.orders.entity.OrderManagement;
 import com.yn.printer.service.modules.orders.enums.TransactionStatus;
@@ -14,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -83,4 +86,5 @@ public interface IOrderService {
 
     Long submitRechargeTask(SubmitRechargeTaskDto dto, Member member);
 
+    BigDecimal getTaskListsPayment(List<PreprintTask> preprintTaskList, Long deviceId);
 }

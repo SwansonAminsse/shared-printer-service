@@ -18,8 +18,11 @@ import com.yn.printer.service.modules.member.repository.MemberRepository;
 import com.yn.printer.service.modules.member.service.IChargeFileService;
 import com.yn.printer.service.modules.member.service.IMemberService;
 import com.yn.printer.service.modules.member.service.IPointsFileService;
+import com.yn.printer.service.modules.operation.dto.PreprintTask;
 import com.yn.printer.service.modules.operation.entity.DevicesList;
+import com.yn.printer.service.modules.operation.repository.DevicesListRepository;
 import com.yn.printer.service.modules.operation.service.IDeviceService;
+import com.yn.printer.service.modules.orders.dto.PrintInfoDTO;
 import com.yn.printer.service.modules.orders.dto.SubmitRechargeTaskDto;
 import com.yn.printer.service.modules.orders.entity.OrderManagement;
 import com.yn.printer.service.modules.orders.enums.*;
@@ -79,6 +82,9 @@ public class OrderServiceImpl implements IOrderService {
 
     @Autowired
     MemberRepository memberRepository;
+
+    @Autowired
+    DevicesListRepository devicesListRepository;
 
     // 定时关闭未支付订单
     @Scheduled(fixedDelay = 1000 * 60)
@@ -298,17 +304,25 @@ public void orderStatusUpdate() {
     @Transactional
     @Override
     public Boolean orderPaySuccess(OrderManagement order, BigDecimal amount) {
+        Member member = order.getPayer();
+        BigDecimal accumulatedAmount = member.getAccumulatedAmount();
+        member.setAccountBalance(accumulatedAmount.add(amount));
+        memberRepository.save(member);
         order.setPayStatus(PayStatus.PAID);
         order.setTransactionStatus(TransactionStatus.IN_PROGRESS);
         order.setPaymentAmount(amount);
         order.setPayDate(LocalDateTime.now());
-        orderManagementRepository.save(order);
         if(order.getOrderType().equals(OrderType.PRINT)) {
+            orderManagementRepository.save(order);
             deviceService.executePrintingTask(order);
             pointsFileService.creatAddPointsFile(amount, order.getOrderer());
         }
-        else if(order.getOrderType().equals(OrderType.RECHARGE))
-            chargeFileService.creatAddChargeFile(order.getPaymentAmount(), order.getOrderer());
+        else if(order.getOrderType().equals(OrderType.RECHARGE)) {
+            if (chargeFileService.creatAddChargeFile(order.getPaymentAmount(), order.getOrderer())) {
+                order.setTransactionStatus(TransactionStatus.COMPLETE);
+                orderManagementRepository.save(order);
+            }
+        }
         return true;
     }
 
@@ -460,4 +474,14 @@ public void orderStatusUpdate() {
         return order.getId();
     }
 
+    @Override
+    public BigDecimal getTaskListsPayment(List<PreprintTask> preprintTaskList,Long deviceId) {
+        DevicesList device = devicesListRepository.findById(deviceId).orElse(null);
+        if (device == null) throw new YnErrorException(YnError.YN_400010);
+        BigDecimal price = BigDecimal.ZERO;
+        for (PreprintTask preprintTask : preprintTaskList){
+            price = price.add(deviceService.getPrintPrice(device.getId(), preprintTask));
+        }
+        return price;
+    }
 }
