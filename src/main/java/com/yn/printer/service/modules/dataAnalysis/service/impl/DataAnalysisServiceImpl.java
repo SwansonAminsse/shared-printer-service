@@ -1,8 +1,9 @@
-package com.yn.printer.service.modules.dataAnalysis.service;
+package com.yn.printer.service.modules.dataAnalysis.service.impl;
 
 import com.yn.printer.service.modules.advertisement.repository.PlacementPaymentRepository;
 import com.yn.printer.service.modules.channel.repository.ChannelPartnerRepository;
-import com.yn.printer.service.modules.dataAnalysis.unit.CustomTemporalAdjusters;
+import com.yn.printer.service.modules.dataAnalysis.service.IDataAnalysisService;
+import com.yn.printer.service.modules.dataAnalysis.unitl.CustomTemporalAdjusters;
 import com.yn.printer.service.modules.dataAnalysis.vo.*;
 import com.yn.printer.service.modules.member.repository.MemberRepository;
 import com.yn.printer.service.modules.operation.entity.DevicesList;
@@ -20,11 +21,11 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.yn.printer.service.modules.enums.ChannelType.*;
+import static com.yn.printer.service.modules.channel.enums.ChannelType.*;
 import static com.yn.printer.service.modules.orders.enums.PayStatus.PAID;
 
 @Service
-public class DataAnalysisService {
+public class DataAnalysisServiceImpl implements IDataAnalysisService {
     @Autowired
     private ChannelPartnerRepository channelRepository;
     @Autowired
@@ -38,10 +39,12 @@ public class DataAnalysisService {
     @Autowired
     private PlacementPaymentRepository placementPaymentRepository;
 
+    @Override
     public TotalChannelVO getTotalChannel() {
         return new TotalChannelVO(channelRepository.countByChannelType(PrimaryChannel), channelRepository.countByChannelType(SecondaryChannel), channelRepository.countByChannelType(TerminalChannel));
     }
 
+    @Override
     public IncomeSumVO totalIncome(Boolean time) {
         if (time) {
             LocalDateTime startOfDate = LocalDateTime.of(LocalDate.now().withDayOfMonth(1), LocalTime.MIN);//本月第一天
@@ -64,6 +67,7 @@ public class DataAnalysisService {
         return incomeSumVO;
     }
 
+    @Override
     public UserTotalVO getUserTotal(Boolean time) {
         if (time) {
             LocalDateTime startOfDate = LocalDateTime.of(LocalDate.now().withDayOfMonth(1), LocalTime.MIN);//本月第一天
@@ -92,6 +96,7 @@ public class DataAnalysisService {
         return userTotalVO;
     }
 
+    @Override
     public DevicesDataVO getDevicesData(Boolean time) {
         if (time) {
             LocalDateTime startOfDate = LocalDateTime.of(LocalDate.now().withDayOfMonth(1), LocalTime.MIN);//本月第一天
@@ -119,6 +124,7 @@ public class DataAnalysisService {
         return devicesDataVO;
     }
 
+    @Override
     public UsersAndVolumeOfWeekVO getUsersAndVolumeOfWeekVO() {
         List<Long> userDealNumber = new ArrayList<>();
         List<BigDecimal> ordersTurnoverNumber = new ArrayList<>();
@@ -148,6 +154,7 @@ public class DataAnalysisService {
         return usersAndVolumeOfWeekVO;
     }
 
+    @Override
     public List<BigDecimal> getGrossProfit() {
         List<BigDecimal> grossProfit = new ArrayList<>();
         List<LocalDateTime> daysOfWeek = new ArrayList<>();

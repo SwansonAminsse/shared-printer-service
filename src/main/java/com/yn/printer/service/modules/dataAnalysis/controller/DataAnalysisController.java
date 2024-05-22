@@ -1,6 +1,6 @@
 package com.yn.printer.service.modules.dataAnalysis.controller;
 
-import com.yn.printer.service.modules.dataAnalysis.service.DataAnalysisService;
+import com.yn.printer.service.modules.dataAnalysis.service.IDataAnalysisService;
 import com.yn.printer.service.modules.dataAnalysis.vo.*;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import java.util.List;
 @RequestMapping("/dataAnalysis")
 public class DataAnalysisController {
     @Autowired
-    private DataAnalysisService dataAnalysisService;
+    private IDataAnalysisService dataAnalysisService;
 
     @GetMapping("/channel")
     @ApiOperation(value = "渠道")
@@ -54,16 +54,7 @@ public class DataAnalysisController {
         return dataAnalysisService.getGrossProfit();
     }
 
-//    @GetMapping("/ChannelSelect")
-//    @ApiOperation(value = "渠道商选择器")
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(name = "page", value = "页码（默认为0）", defaultValue = "0", dataType = "java.lang.Integer", paramType = "query"),
-//            @ApiImplicitParam(name = "size", value = "每页条数（默认为10）", defaultValue = "10", dataType = "java.lang.Integer", paramType = "query"),
-//           })
-//    public Page<ChannelSelectVO> getChannelSelectVO(@RequestParam(value = "page", defaultValue = "0") int page,
-//                                                    @RequestParam(value = "size", defaultValue = "10") int size,) {
-//        return dataAnalysisService.getChannelSelectVO(PageRequest.of(page, size));
-//    }
+
 
 
 }

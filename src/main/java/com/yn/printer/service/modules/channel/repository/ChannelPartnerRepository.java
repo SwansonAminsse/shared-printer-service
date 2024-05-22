@@ -2,13 +2,10 @@ package com.yn.printer.service.modules.channel.repository;
 
 import com.yn.printer.service.modules.channel.entity.ChannelPartner;
 import com.yn.printer.service.modules.dataAnalysis.vo.ChannelPartnerInfo;
-import com.yn.printer.service.modules.enums.ChannelType;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.yn.printer.service.modules.channel.enums.ChannelType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.nio.channels.Channel;
 import java.util.List;
 
 public interface ChannelPartnerRepository extends JpaRepository<ChannelPartner, Long> {

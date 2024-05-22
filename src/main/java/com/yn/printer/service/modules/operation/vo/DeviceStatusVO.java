@@ -1,6 +1,6 @@
 package com.yn.printer.service.modules.operation.vo;
 
-import com.yn.printer.service.modules.enums.DeviceStatus;
+import com.yn.printer.service.modules.operation.enums.DeviceStatus;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;

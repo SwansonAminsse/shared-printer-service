@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class UserStatisticsVO {
     @ApiModelProperty(value = "使用用户", example = "0")
-    private long uUserNumber;
+    private long userNumber;
     @ApiModelProperty(value = "新用户", example = "0")
     private long newUserNumber;
     @ApiModelProperty(value = "老用户", example = "0")

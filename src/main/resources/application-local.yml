@@ -53,7 +53,7 @@ api:
       # 支付状态回调地址
       notifyUrl: https://mps.xlmalls.com/api/order/wxPayCallback
       # 商户API私钥路径
-      privateKeyPath: C:\Users\16479\Desktop\update\1666324656_20240119_cert\apiclient_key.pem
+      privateKeyPath: D:\log\apiclient_key.pem
       #商户证书序列号
       merchantSerialNumber: 1BA87299355A97019FE913725F5E34069F464EC1
       # 商户APIV3密钥

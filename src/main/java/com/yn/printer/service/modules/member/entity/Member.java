@@ -55,8 +55,14 @@ public class Member extends AuditableModel implements Serializable {
 	// 账户余额
 	private BigDecimal accountBalance = BigDecimal.ZERO;
 
+	//累计充值金额
+	private BigDecimal investMoney = BigDecimal.ZERO;
+
 	// 状态
 	private Boolean status = Boolean.FALSE;
+
+	//充值次数
+	private Integer chargeTimes = 0;
 
 	// openId
 	private String openId;

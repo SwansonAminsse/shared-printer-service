@@ -63,9 +63,11 @@ public interface YnError {
     YnErrorCode YN_500002 = new YnErrorCode("500002", "打印机剩余纸张数不足");
     YnErrorCode YN_500003 = new YnErrorCode("500003", "订单金额不正确");
     YnErrorCode YN_500004 = new YnErrorCode("500004", "不支持的支付方式");
-
     YnErrorCode YN_500005 = new YnErrorCode("500005", "余额不足");
 
+    YnErrorCode YN_500006 = new YnErrorCode("500005", "充值失败");
+
+    YnErrorCode YN_500007 = new YnErrorCode("500005", "余额扣减失败");
     /**
      * 运营模块
      */

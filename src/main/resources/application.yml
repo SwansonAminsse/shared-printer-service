@@ -3,7 +3,7 @@ server:
     uri-encoding: UTF-8
 spring:
   profiles:
-    active: local
+    active: prod
   mail:
     host: smtp.qq.com
     port: 587

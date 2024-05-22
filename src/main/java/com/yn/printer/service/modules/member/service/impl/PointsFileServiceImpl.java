@@ -25,10 +25,8 @@ public class PointsFileServiceImpl implements IPointsFileService {
 
     @Override
     public void creatAddPointsFile(BigDecimal amount, Member member) {
-        double Magnification = 100;
         PointsFile pointsFile = new PointsFile();
-        int newPoints = amount.multiply(new BigDecimal(Magnification)).setScale(0, RoundingMode.DOWN).intValue();
-
+        int newPoints = amount.setScale(0, RoundingMode.DOWN).intValue();
         // 如果新增积分小于1，不做处理
         if (newPoints < 1) {
             return;

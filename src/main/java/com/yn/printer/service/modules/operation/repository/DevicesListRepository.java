@@ -1,7 +1,7 @@
 package com.yn.printer.service.modules.operation.repository;
 
 import com.yn.printer.service.modules.channel.entity.ChannelPartner;
-import com.yn.printer.service.modules.enums.DeviceStatus;
+import com.yn.printer.service.modules.operation.enums.DeviceStatus;
 import com.yn.printer.service.modules.member.entity.Member;
 import com.yn.printer.service.modules.operation.entity.DevicesList;
 import com.yn.printer.service.modules.operation.enums.DeviceType;

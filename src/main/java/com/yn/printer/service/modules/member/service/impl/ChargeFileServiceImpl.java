@@ -1,5 +1,7 @@
 package com.yn.printer.service.modules.member.service.impl;
 
+import com.yn.printer.service.common.exception.YnError;
+import com.yn.printer.service.common.exception.YnErrorException;
 import com.yn.printer.service.interceptor.AuditInterceptor;
 import com.yn.printer.service.modules.member.entity.ChargeFile;
 import com.yn.printer.service.modules.member.entity.Member;
@@ -35,38 +37,39 @@ public class ChargeFileServiceImpl implements IChargeFileService {
         public Boolean creatAddChargeFile(BigDecimal amount, Member member) {
             try {
                 ChargeFile chargeFile = new ChargeFile();
+                BigDecimal newInvestMoney = member.getInvestMoney() != null ? member.getInvestMoney().add(amount) : amount;
+                BigDecimal newAccountBalance = member.getAccountBalance() != null ? member.getAccountBalance().add(amount) : amount;
+                Integer newChargeTimes = member.getChargeTimes() != null ? member.getChargeTimes() + 1 : 1;
+                member.setAccountBalance(newAccountBalance);
+                member.setInvestMoney(newInvestMoney);
+                member.setChargeTimes(newChargeTimes);
+                chargeFile.setPayAmount(amount);
                 chargeFile.setRefillAmount(amount);
                 chargeFile.setTime(LocalDateTime.now());
                 chargeFile.setIncreasing(true);
                 chargeFile.setMember(member);
-                // 在保存ChargeFile之前更新Member的账户余额
-                member.setAccountBalance(member.getAccountBalance().add(amount)); // 增加充值金额
-                memberRepository.save(member); // 保存更新后的Member
-                chargeFileRepository.save(chargeFile); // 保存ChargeFile记录
+                memberRepository.save(member);
+                chargeFileRepository.save(chargeFile);
                 return true;
             } catch (Exception e) {
-                log.error("充值失败", e);
-                return false;
+                throw new YnErrorException(YnError.YN_500006);
             }
         };
 
     @Override
     public Boolean lowAddChargeFile(BigDecimal amount, Member member){
-        try{ ChargeFile chargeFile = new ChargeFile();
-        chargeFile.setRefillAmount(amount);
-        chargeFile.setTime(LocalDateTime.now());
-        chargeFile.setIncreasing(false);
-        chargeFile.setMember(member);
-        chargeFileRepository.save(chargeFile);
-            return true;}catch (Exception e){
-            log.error("充值失败",e);
-            return false;
+        try {
+            ChargeFile chargeFile = new ChargeFile();
+            chargeFile.setRefillAmount(amount);
+            chargeFile.setTime(LocalDateTime.now());
+            chargeFile.setIncreasing(false);
+            chargeFile.setMember(member);
+            chargeFileRepository.save(chargeFile);
+            return true;
+        }
+        catch (Exception e){
+            throw new YnErrorException(YnError.YN_500007);
         }
     };
 
-    private BigDecimal sumCharge() {
-        BigDecimal increasingTotal = chargeFileRepository.sumOfActiveIncreasingPoints(AuditInterceptor.CURRENT_MEMBER.get());
-        BigDecimal lowTotal = chargeFileRepository.sumOfLowPoints(AuditInterceptor.CURRENT_MEMBER.get());
-        return increasingTotal.subtract(lowTotal);
-    }
 }

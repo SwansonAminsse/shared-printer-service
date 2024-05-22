@@ -1,4 +1,4 @@
-package com.yn.printer.service.modules.enums;
+package com.yn.printer.service.modules.operation.enums;
 
 import lombok.AllArgsConstructor;
 

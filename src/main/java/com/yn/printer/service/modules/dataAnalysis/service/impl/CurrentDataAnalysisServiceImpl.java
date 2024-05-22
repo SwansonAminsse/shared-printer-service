@@ -1,32 +1,30 @@
-package com.yn.printer.service.modules.dataAnalysis.service;
-import com.aspose.slides.internal.oe.all;
-import com.google.common.collect.Lists;
+package com.yn.printer.service.modules.dataAnalysis.service.impl;
 
 import cn.hutool.core.date.DateUtil;
 import com.yn.printer.service.modules.advertisement.repository.PlacementPaymentRepository;
 import com.yn.printer.service.modules.channel.entity.ChannelPartner;
 import com.yn.printer.service.modules.channel.repository.ChannelPartnerRepository;
+import com.yn.printer.service.modules.dataAnalysis.enums.TimeSelect;
+import com.yn.printer.service.modules.dataAnalysis.service.ICurrentDataAnalysisService;
 import com.yn.printer.service.modules.dataAnalysis.vo.*;
-import com.yn.printer.service.modules.enums.DeviceStatus;
+import com.yn.printer.service.modules.member.entity.Member;
+import com.yn.printer.service.modules.operation.enums.DeviceStatus;
 import com.yn.printer.service.modules.member.repository.MemberRepository;
 import com.yn.printer.service.modules.operation.entity.DevicesList;
 import com.yn.printer.service.modules.operation.enums.DeviceType;
 import com.yn.printer.service.modules.operation.repository.DevicesListRepository;
 import com.yn.printer.service.modules.operation.repository.TaskListRepository;
-import com.yn.printer.service.modules.operation.vo.DevicesListVO;
 import com.yn.printer.service.modules.orders.entity.OrderManagement;
 import com.yn.printer.service.modules.orders.enums.OrderPrintType;
 import com.yn.printer.service.modules.orders.enums.PayStatus;
 import com.yn.printer.service.modules.orders.enums.TransactionStatus;
 import com.yn.printer.service.modules.orders.repository.OrderManagementRepository;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.DayOfWeek;
@@ -34,14 +32,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.TemporalAdjusters;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class CurrentDataAnalysisService {
+public class CurrentDataAnalysisServiceImpl implements ICurrentDataAnalysisService {
     @Autowired
     private ChannelPartnerRepository channelRepository;
     @Autowired
@@ -55,6 +50,7 @@ public class CurrentDataAnalysisService {
     @Autowired
     private PlacementPaymentRepository placementPaymentRepository;
 
+    @Override
     public TotalDevicesVO totalData() {
         TotalDevicesVO totalDevicesVO = new TotalDevicesVO();
 
@@ -78,25 +74,54 @@ public class CurrentDataAnalysisService {
         return totalDevicesVO;
     }
 
+    @Override
     public Page<OrderVO> getTodayOrders(Pageable pageable) {
         LocalDateTime currentDate = LocalDateTime.now();
         LocalDateTime startOfDay = LocalDateTime.of(currentDate.toLocalDate(), LocalTime.MIN);
+
         Page<OrderManagement> byOrderDateBetween = orderManagementRepository.findByOrderDateBetweenOrderByOrderDateDesc(startOfDay, currentDate, pageable);
+
         List<OrderVO> orderVOList = byOrderDateBetween.getContent().stream()
                 .map(orderManagement -> {
+                    if (orderManagement == null) {
+                        return null; // 或者抛出一个自定义的异常
+                    }
+
                     OrderVO orderVO = new OrderVO();
-                    orderVO.setTransactionStatus(orderManagement.getTransactionStatus().getName());
+
+                    TransactionStatus transactionStatus = orderManagement.getTransactionStatus();
+                    if (transactionStatus != null) {
+                        orderVO.setTransactionStatus(transactionStatus.getName());
+                    }
+
                     orderVO.setOrderdate(DateUtil.formatLocalDateTime(orderManagement.getOrderDate()));
-                    orderVO.setOrderPrintType(orderManagement.getOrderPrintType().getValue());
-                    orderVO.setUserName(orderManagement.getOrderer().getName());
+
+                    OrderPrintType orderPrintType = orderManagement.getOrderPrintType();
+                    if (orderPrintType != null) {
+                        orderVO.setOrderPrintType(orderPrintType.getValue());
+                    }
+
+                    Member orderer = orderManagement.getOrderer();
+                    if (orderer != null) {
+                        orderVO.setUserName(orderer.getName());
+                    }
+
                     orderVO.setOrderAmount(orderManagement.getOrderAmount());
-                    orderVO.setDeviceName(orderManagement.getDevice().getName());
+
+                    DevicesList device = orderManagement.getDevice();
+                    if (device != null) {
+                        orderVO.setDeviceName(device.getName());
+                    }
+
                     return orderVO;
                 })
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
+
         return new PageImpl<>(orderVOList, pageable, byOrderDateBetween.getTotalElements());
     }
 
+    @Override
     public UserAnalysisVO getUserTodayAnalysis() {
         UserAnalysisVO userAnalysisVO = new UserAnalysisVO();
         LocalDateTime currentDate = LocalDateTime.now();
@@ -113,6 +138,7 @@ public class CurrentDataAnalysisService {
         return userAnalysisVO;
     }
 
+    @Override
     public OrderTotalVO getOrderTotal() {
         LocalDateTime currentDate = LocalDateTime.now();
         LocalDateTime startOfDay = LocalDateTime.of(currentDate.toLocalDate(), LocalTime.MIN);
@@ -127,6 +153,7 @@ public class CurrentDataAnalysisService {
         return orderTotalVO;
     }
 
+    @Override
     public IncometotalVO getIncomeTotal() {
         LocalDateTime currentDate = LocalDateTime.now();
         LocalDateTime startOfDay = LocalDateTime.of(currentDate.toLocalDate(), LocalTime.MIN);
@@ -168,13 +195,15 @@ public class CurrentDataAnalysisService {
         return incometotalVO;
     }
 
+    @Override
     public Page<ChannelPartnerInfo> getAllChannelPartner(Pageable pageable) {
         List<ChannelPartnerInfo> allChannel = channelRepository.findAllChannel();
         System.out.println(allChannel);
         return new PageImpl<>(allChannel, pageable, allChannel.size());
     }
 
-    public List<DeviceStatisticsVO> getDeviceByChannelPartner(Long channelPartnerId, String dateTime) {
+    @Override
+    public List<DeviceStatisticsVO> getDeviceByChannelPartner(Long channelPartnerId, TimeSelect dateTime) {
         ArrayList<DeviceStatisticsVO> deviceStatisticsVoList = new ArrayList<>();
         DeviceStatus[] statuses = {DeviceStatus.OFFLINE, DeviceStatus.ONLINE, DeviceStatus.RUN, DeviceStatus.NOT_ACTIVE, DeviceStatus.ABNORMAL, DeviceStatus.STOP};
         for (DeviceStatus status : statuses) {
@@ -189,7 +218,8 @@ public class CurrentDataAnalysisService {
         return deviceStatisticsVoList;
     }
 
-    public UserStatisticsVO getUserByChannelPartnerAndDateTime(Long channelPartnerId, String dateTime) {
+    @Override
+    public UserStatisticsVO getUserByChannelPartnerAndDateTime(Long channelPartnerId, TimeSelect dateTime) {
         List<LocalDateTime> date = getDate(dateTime);
         LocalDateTime startDateTime = date.get(0);
         LocalDateTime endDateTime = date.get(1);
@@ -198,7 +228,7 @@ public class CurrentDataAnalysisService {
         List<DevicesList> DevicesList = devicesListRepository.findByChannel(byName);
         long uUserNumber = orderManagementRepository.
                 countDistinctOrderByOrderDateBetweenAndDeviceList(startDateTime, endDateTime, DevicesList);
-        userStatisticsVO.setUUserNumber(uUserNumber);
+        userStatisticsVO.setUserNumber(uUserNumber);
         long newUserNumber = orderManagementRepository.
                 countNewUsersByOrderDateAndJoiningDateAndDeviceList(startDateTime, endDateTime, DevicesList);
         userStatisticsVO.setNewUserNumber(newUserNumber);
@@ -209,7 +239,8 @@ public class CurrentDataAnalysisService {
         return userStatisticsVO;
     }
 
-    public List<LocalDate> getDateBySelect(String dateTime) {
+    @Override
+    public List<LocalDate> getDateBySelect(TimeSelect dateTime) {
         List<LocalDateTime> date = getDate(dateTime);
         List<LocalDate> startAndEnd = new ArrayList<>();
         startAndEnd.add(date.get(0).toLocalDate());
@@ -217,28 +248,29 @@ public class CurrentDataAnalysisService {
         return startAndEnd;
     }
 
-    public List<LocalDateTime> getDate(String dateTime) {
+    @Override
+    public List<LocalDateTime> getDate(TimeSelect dateTime) {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime startDateTime = null;
         LocalDateTime endDateTime = null;
         List<LocalDateTime> startAndEnd = new ArrayList<>();
         switch (dateTime) {
-            case "今日":
+            case TODAY:
                 startDateTime = now.toLocalDate().atStartOfDay();
 //              endDateTime = LocalDateTime.of(now.toLocalDate(), LocalTime.MAX);
                 endDateTime = LocalDateTime.now();
                 break;
-            case "本周":
+            case THIS_WEEK:
                 startDateTime = now.with(DayOfWeek.MONDAY).toLocalDate().atStartOfDay();
 //              endDateTime = now.with(DayOfWeek.SUNDAY).toLocalDate().atTime(LocalTime.MAX);
                 endDateTime = LocalDateTime.now();
                 break;
-            case "本月":
+            case THIS_MONTH:
                 startDateTime = now.with(TemporalAdjusters.firstDayOfMonth()).toLocalDate().atStartOfDay();
 //              endDateTime = now.with(TemporalAdjusters.lastDayOfMonth()).toLocalDate().atTime(LocalTime.MAX);
                 endDateTime = LocalDateTime.now();
                 break;
-            case "年度":
+            case THIS_YEAR:
                 startDateTime = now.with(TemporalAdjusters.firstDayOfYear()).toLocalDate().atStartOfDay();
 //              endDateTime = now.with(TemporalAdjusters.lastDayOfYear()).toLocalDate().atTime(LocalTime.MAX);
                 endDateTime = LocalDateTime.now();
@@ -251,7 +283,8 @@ public class CurrentDataAnalysisService {
         return startAndEnd;
     }
 
-    public OrderStatisticsVO getOrderPrintType(Long channelPartnerId, String dateTime) {
+    @Override
+    public OrderStatisticsVO getOrderPrintType(Long channelPartnerId, TimeSelect dateTime) {
         List<LocalDateTime> date = getDate(dateTime);
         LocalDateTime startDateTime = date.get(0);
         LocalDateTime endDateTime = date.get(1);
@@ -269,7 +302,8 @@ public class CurrentDataAnalysisService {
         return orderStatisticsVO;
     }
 
-    public OrderAmountStatisticsVO getOrderAmountByOrderPrintType(Long channelPartnerId, String dateTime) {
+    @Override
+    public OrderAmountStatisticsVO getOrderAmountByOrderPrintType(Long channelPartnerId, TimeSelect dateTime) {
         List<LocalDateTime> date = getDate(dateTime);
         LocalDateTime startDateTime = date.get(0);
         LocalDateTime endDateTime = date.get(1);
@@ -287,7 +321,8 @@ public class CurrentDataAnalysisService {
         return orderAmountStatisticsVO;
     }
 
-    public SingleOrderAmountStatisticsVO getSingleOrderAmount(Long channelPartnerId, String dateTime) {
+    @Override
+    public SingleOrderAmountStatisticsVO getSingleOrderAmount(Long channelPartnerId, TimeSelect dateTime) {
         List<LocalDateTime> date = getDate(dateTime);
         LocalDateTime startDateTime = date.get(0);
         LocalDateTime endDateTime = date.get(1);
@@ -319,7 +354,8 @@ public class CurrentDataAnalysisService {
         return singleOrderAmountStatisticsVO;
     }
 
-    public OrderIncomeRateVo getOrderIncomeRate(Long channelPartnerId, String dateTime) {
+    @Override
+    public OrderIncomeRateVo getOrderIncomeRate(Long channelPartnerId, TimeSelect dateTime) {
         List<LocalDateTime> date = getDate(dateTime);
         LocalDateTime startDateTime = date.get(0);
         LocalDateTime endDateTime = date.get(1);
@@ -378,24 +414,19 @@ public class CurrentDataAnalysisService {
         orderIncomeRateVo.setOrderAveragePrice(BigDecimal.valueOf(totalOrders).equals(BigDecimal.ZERO) ?
                 BigDecimal.ZERO : totalAmount.divide(BigDecimal.valueOf(totalOrders), 2, RoundingMode.HALF_UP));
         return orderIncomeRateVo;
-
     }
 
-    public List<DeviceRankVO> getDeviceRank(Long channelPartnerId, String dateTime) {
+    @Override
+    public List<DeviceRankVO> getDeviceRank(Long channelPartnerId, TimeSelect dateTime) {
         List<LocalDateTime> date = getDate(dateTime);
         LocalDateTime startDateTime = date.get(0);
         LocalDateTime endDateTime = date.get(1);
         List<ChannelPartner> byName = channelRepository.findChannelById(channelPartnerId);
         List<DevicesList> DevicesList = devicesListRepository.findByChannel(byName);
-        List<DeviceRankVO> deviceRankVOS = orderManagementRepository
+        return orderManagementRepository
                 .sumPaymentAmountByOrderDateAndDeviceRankAndpayStatusAndTransactionStatus(startDateTime,
                         endDateTime, DevicesList);
-        return deviceRankVOS;
     }
-    public List<String> getDateRange() {
-        List<String> list = new ArrayList<>();
-        list.addAll(Arrays.asList("今日", "本周", "本月", "年度"));
-        return list;
-    }
+
 }
 

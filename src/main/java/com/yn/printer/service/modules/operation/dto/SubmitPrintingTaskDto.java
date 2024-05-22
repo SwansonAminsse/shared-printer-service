@@ -1,6 +1,6 @@
 package com.yn.printer.service.modules.operation.dto;
 
-import com.yn.printer.service.modules.enums.PayMode;
+import com.yn.printer.service.modules.orders.enums.PayMode;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

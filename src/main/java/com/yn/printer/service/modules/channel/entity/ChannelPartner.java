@@ -1,14 +1,12 @@
 package com.yn.printer.service.modules.channel.entity;
 
 import com.yn.printer.service.common.entity.AuditableModel;
-import com.yn.printer.service.modules.enums.ChannelType;
-import com.yn.printer.service.modules.meta.entity.Area;
+import com.yn.printer.service.modules.channel.enums.ChannelType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Data

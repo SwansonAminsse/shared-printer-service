@@ -1,8 +1,7 @@
 package com.yn.printer.service.modules.common.mqtt.dto;
 
 import com.yn.printer.service.modules.common.mqtt.MessageType;
-import com.yn.printer.service.modules.enums.DeviceStatus;
-import com.yn.printer.service.modules.orders.enums.PrintTaskStatus;
+import com.yn.printer.service.modules.operation.enums.DeviceStatus;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

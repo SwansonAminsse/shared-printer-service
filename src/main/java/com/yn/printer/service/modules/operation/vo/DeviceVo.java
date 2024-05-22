@@ -1,6 +1,6 @@
 package com.yn.printer.service.modules.operation.vo;
 
-import com.yn.printer.service.modules.enums.DeviceStatus;
+import com.yn.printer.service.modules.operation.enums.DeviceStatus;
 import com.yn.printer.service.modules.meta.entity.Area;
 import com.yn.printer.service.modules.meta.enums.PaperType;
 import io.swagger.annotations.ApiModel;

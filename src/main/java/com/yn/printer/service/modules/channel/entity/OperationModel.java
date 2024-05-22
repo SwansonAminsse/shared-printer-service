@@ -1,8 +1,8 @@
 package com.yn.printer.service.modules.channel.entity;
 
 import com.yn.printer.service.common.entity.AuditableModel;
-import com.yn.printer.service.modules.enums.ChannelType;
-import com.yn.printer.service.modules.enums.OperatingModel;
+import com.yn.printer.service.modules.channel.enums.ChannelType;
+import com.yn.printer.service.modules.channel.enums.OperatingModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

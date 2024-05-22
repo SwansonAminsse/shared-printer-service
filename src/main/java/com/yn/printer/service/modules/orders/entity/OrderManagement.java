@@ -1,7 +1,7 @@
 package com.yn.printer.service.modules.orders.entity;
 
 import com.yn.printer.service.common.entity.AuditableModel;
-import com.yn.printer.service.modules.enums.PayMode;
+import com.yn.printer.service.modules.orders.enums.PayMode;
 import com.yn.printer.service.modules.member.entity.Member;
 import com.yn.printer.service.modules.operation.entity.DevicesList;
 import com.yn.printer.service.modules.orders.enums.OrderPrintType;

@@ -1,13 +1,11 @@
 package com.yn.printer.service.modules.orders.dto;
 
-import com.yn.printer.service.modules.enums.PayMode;
-import com.yn.printer.service.modules.operation.dto.PreprintTask;
+import com.yn.printer.service.modules.orders.enums.PayMode;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Data
 @ApiModel(value = "SubmitRechargeTaskDto", description = "提交充值任务")

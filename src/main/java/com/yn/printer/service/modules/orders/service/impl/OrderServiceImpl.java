@@ -12,7 +12,7 @@ import com.yn.printer.service.modules.common.api.tz.service.TzPayService;
 import com.yn.printer.service.modules.common.api.wx.dto.JsPayInfo;
 import com.yn.printer.service.modules.common.api.wx.service.WeChatApiService;
 import com.yn.printer.service.modules.common.service.IFileService;
-import com.yn.printer.service.modules.enums.PayMode;
+import com.yn.printer.service.modules.orders.enums.PayMode;
 import com.yn.printer.service.modules.member.entity.Member;
 import com.yn.printer.service.modules.member.repository.MemberRepository;
 import com.yn.printer.service.modules.member.service.IChargeFileService;
@@ -22,7 +22,6 @@ import com.yn.printer.service.modules.operation.dto.PreprintTask;
 import com.yn.printer.service.modules.operation.entity.DevicesList;
 import com.yn.printer.service.modules.operation.repository.DevicesListRepository;
 import com.yn.printer.service.modules.operation.service.IDeviceService;
-import com.yn.printer.service.modules.orders.dto.PrintInfoDTO;
 import com.yn.printer.service.modules.orders.dto.SubmitRechargeTaskDto;
 import com.yn.printer.service.modules.orders.entity.OrderManagement;
 import com.yn.printer.service.modules.orders.enums.*;
@@ -279,17 +278,17 @@ public void orderStatusUpdate() {
     public Boolean balancePayment(Long orderId) {
         log.info("开始确认余额支付>>>{}", orderId);
 
-        OrderManagement order = orderManagementRepository.findById(orderId).orElse(null);
-
-        if (order == null) throw new YnErrorException(YnError.YN_500001);
+        OrderManagement order = orderManagementRepository.findById(orderId).orElseThrow(() -> new YnErrorException(YnError.YN_500001));
 
         BigDecimal orderAmount = order.getOrderAmount();
 
         Member member = order.getPayer();
 
+        if (member == null) throw new YnErrorException(YnError.YN_200002);
+
         BigDecimal memberBalance = member.getAccountBalance();
 
-        if (memberBalance.compareTo(orderAmount) < 0)throw new YnErrorException(YnError.YN_500005);
+        if (memberBalance.compareTo(orderAmount) < 0) throw new YnErrorException(YnError.YN_500005);
 
         chargeFileService.lowAddChargeFile(orderAmount.negate(), member);
 
@@ -304,15 +303,14 @@ public void orderStatusUpdate() {
     @Transactional
     @Override
     public Boolean orderPaySuccess(OrderManagement order, BigDecimal amount) {
-        Member member = order.getPayer();
-        BigDecimal accumulatedAmount = member.getAccumulatedAmount();
-        member.setAccountBalance(accumulatedAmount.add(amount));
-        memberRepository.save(member);
         order.setPayStatus(PayStatus.PAID);
         order.setTransactionStatus(TransactionStatus.IN_PROGRESS);
         order.setPaymentAmount(amount);
         order.setPayDate(LocalDateTime.now());
         if(order.getOrderType().equals(OrderType.PRINT)) {
+            Member member = order.getPayer();
+            BigDecimal newAccumulatedAmount = member.getAccumulatedAmount() != null ? member.getAccumulatedAmount().add(amount) : amount;
+            member.setAccumulatedAmount(newAccumulatedAmount);
             orderManagementRepository.save(order);
             deviceService.executePrintingTask(order);
             pointsFileService.creatAddPointsFile(amount, order.getOrderer());
@@ -455,8 +453,6 @@ public void orderStatusUpdate() {
                 jsPrepayRequest.setOutTradeNo(sn);
                 PrepayResponse prepayResponse = weChatApiService.createJsPayOrder(jsPrepayRequest);
                 order.setWxPrepayId(prepayResponse.getPrepayId());
-                break;
-            case YU_E_PAY:
                 break;
             default:
                 throw new YnErrorException(YnError.YN_700001);

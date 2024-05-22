@@ -1,6 +1,6 @@
 package com.yn.printer.service.modules.operation.vo;
 
-import com.yn.printer.service.modules.enums.ChannelType;
+import com.yn.printer.service.modules.channel.enums.ChannelType;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 

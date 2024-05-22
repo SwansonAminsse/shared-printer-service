@@ -2,23 +2,20 @@ package com.yn.printer.service.modules.operation.entity;
 
 import com.yn.printer.service.common.entity.AuditableModel;
 import com.yn.printer.service.modules.channel.entity.ChannelPartner;
-import com.yn.printer.service.modules.enums.DeviceStatus;
+import com.yn.printer.service.modules.operation.enums.DeviceStatus;
 import com.yn.printer.service.modules.member.entity.Member;
 import com.yn.printer.service.modules.meta.entity.Area;
 import com.yn.printer.service.modules.meta.entity.XingHao;
-import com.yn.printer.service.modules.operation.entity.FixPrice;
 import com.yn.printer.service.modules.operation.enums.Cene;
 import com.yn.printer.service.modules.operation.enums.DeviceType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
