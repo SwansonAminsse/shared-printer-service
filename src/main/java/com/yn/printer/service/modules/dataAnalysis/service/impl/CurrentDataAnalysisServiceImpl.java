@@ -156,6 +156,7 @@ public class CurrentDataAnalysisServiceImpl implements ICurrentDataAnalysisServi
 
     @Override
     public IncometotalVO getIncomeTotal() {
+
         LocalDateTime currentDate = LocalDateTime.now();
         LocalDateTime startOfDay = LocalDateTime.of(currentDate.toLocalDate(), LocalTime.MIN);
         DayOfWeek currentDayOfWeek = currentDate.getDayOfWeek();
@@ -297,6 +298,7 @@ public class CurrentDataAnalysisServiceImpl implements ICurrentDataAnalysisServi
         {
             channelPartnerId = channelRepository.findChannelByChannelType(ChannelType.TZ);
         }
+
         LocalDateTime startDateTime = startDate.atStartOfDay();;
         LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
         List<ChannelPartner> byName = channelRepository.findChannelById(channelPartnerId);
@@ -315,6 +317,12 @@ public class CurrentDataAnalysisServiceImpl implements ICurrentDataAnalysisServi
 
     @Override
     public OrderAmountStatisticsVO getOrderAmountByOrderPrintType(Long channelPartnerId, TimeSelect dateTime) {
+        if (channelPartnerId == null) {
+            channelPartnerId = channelRepository.findChannelByChannelType(ChannelType.TZ);
+        }
+        if (dateTime == null) {
+            dateTime = TimeSelect.TODAY;
+        }
         List<LocalDateTime> date = getDate(dateTime);
         LocalDateTime startDateTime = date.get(0);
         LocalDateTime endDateTime = date.get(1);
@@ -334,6 +342,13 @@ public class CurrentDataAnalysisServiceImpl implements ICurrentDataAnalysisServi
 
     @Override
     public SingleOrderAmountStatisticsVO getSingleOrderAmount(Long channelPartnerId, TimeSelect dateTime) {
+        if (channelPartnerId == null) {
+            channelPartnerId = channelRepository.findChannelByChannelType(ChannelType.TZ);
+        }
+        if (dateTime == null) {
+            dateTime = TimeSelect.TODAY;
+        }
+
         List<LocalDateTime> date = getDate(dateTime);
         LocalDateTime startDateTime = date.get(0);
         LocalDateTime endDateTime = date.get(1);
@@ -367,6 +382,12 @@ public class CurrentDataAnalysisServiceImpl implements ICurrentDataAnalysisServi
 
     @Override
     public OrderIncomeRateVo getOrderIncomeRate(Long channelPartnerId, TimeSelect dateTime) {
+        if (channelPartnerId == null) {
+            channelPartnerId = channelRepository.findChannelByChannelType(ChannelType.TZ);
+        }
+        if (dateTime == null) {
+            dateTime = TimeSelect.TODAY;
+        }
         List<LocalDateTime> date = getDate(dateTime);
         LocalDateTime startDateTime = date.get(0);
         LocalDateTime endDateTime = date.get(1);
@@ -429,6 +450,12 @@ public class CurrentDataAnalysisServiceImpl implements ICurrentDataAnalysisServi
 
     @Override
     public List<DeviceRankVO> getDeviceRank(Long channelPartnerId, TimeSelect dateTime) {
+        if (channelPartnerId == null) {
+            channelPartnerId = channelRepository.findChannelByChannelType(ChannelType.TZ);
+        }
+        if (dateTime == null) {
+            dateTime = TimeSelect.TODAY;
+        }
         List<LocalDateTime> date = getDate(dateTime);
         LocalDateTime startDateTime = date.get(0);
         LocalDateTime endDateTime = date.get(1);

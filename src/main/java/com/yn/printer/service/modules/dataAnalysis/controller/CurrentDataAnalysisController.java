@@ -7,6 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,18 +40,28 @@ public class CurrentDataAnalysisController {
     public ChannelDataVO realTimeData(
             @RequestParam(value = "channelPartnerId", required = false) Long channelPartnerId,
             @RequestParam(value = "dateTime", required = false) TimeSelect dateTime,
-            @RequestParam(value = "startDate", required = false) LocalDate startDate,
-            @RequestParam(value = "endDate", required = false) LocalDate endDate){
-        if (dateTime != null)
-        {
-            startDate = currentDataAnalysisService.getDateBySelect(dateTime).get(0);
-            endDate = currentDataAnalysisService.getDateBySelect(dateTime).get(1);
+            @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        if (dateTime == null && startDate == null && endDate == null) {
+            List<LocalDate> todayRange = currentDataAnalysisService.getDateBySelect(TimeSelect.TODAY);
+            startDate = todayRange.get(0);
+            endDate = todayRange.get(1);
+        } else if (dateTime != null) {
+            List<LocalDate> dateRange = currentDataAnalysisService.getDateBySelect(dateTime);
+            startDate = dateRange.get(0);
+            endDate = dateRange.get(1);
+        } else if (startDate == null && endDate != null) {
+            startDate = endDate;
+        } else if (startDate != null && endDate == null) {
+            endDate = startDate;
         }
         ChannelDataVO channelDataVO = new ChannelDataVO();
         TaskByChannelVO taskByChannelVO = new TaskByChannelVO();
+
         channelDataVO.setDeviceStatistics(currentDataAnalysisService.getDeviceByChannelPartner(channelPartnerId));
-        channelDataVO.setUserStatistics(currentDataAnalysisService.getUserByChannelPartnerAndDateTime(channelPartnerId, startDate,endDate));
+        channelDataVO.setUserStatistics(currentDataAnalysisService.getUserByChannelPartnerAndDateTime(channelPartnerId, startDate, endDate));
         channelDataVO.setTaskByChannel(taskByChannelVO);
+
         return channelDataVO;
     }
 
@@ -59,15 +70,23 @@ public class CurrentDataAnalysisController {
     public ChannelOrderVO channelOrder(
             @RequestParam(value = "channelPartnerId", required = false) Long channelPartnerId,
             @RequestParam(value = "dateTime", required = false) TimeSelect dateTime,
-            @RequestParam(value = "startDate", required = false) LocalDate startDate,
-            @RequestParam(value = "endDate", required = false) LocalDate endDate) {
-        if (dateTime != null)
-        {
-            startDate = currentDataAnalysisService.getDateBySelect(dateTime).get(0);
-            endDate = currentDataAnalysisService.getDateBySelect(dateTime).get(1);
+            @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+
+        if (dateTime == null && startDate == null && endDate == null) {
+            List<LocalDate> todayRange = currentDataAnalysisService.getDateBySelect(TimeSelect.TODAY);
+            startDate = todayRange.get(0);
+            endDate = todayRange.get(1);
+        } else if (dateTime != null) {
+            List<LocalDate> dateRange = currentDataAnalysisService.getDateBySelect(dateTime);
+            startDate = dateRange.get(0);
+            endDate = dateRange.get(1);
+        } else if (startDate == null || endDate == null) {
+            endDate = (endDate != null) ? endDate : startDate;
+            startDate = (startDate != null) ? startDate : endDate;
         }
         ChannelOrderVO channelOrderVO = new ChannelOrderVO();
-        channelOrderVO.setOrderStatistics(currentDataAnalysisService.getOrderPrintType(channelPartnerId, startDate,endDate));
+        channelOrderVO.setOrderStatistics(currentDataAnalysisService.getOrderPrintType(channelPartnerId, startDate, endDate));
         channelOrderVO.setSingleOrderAmountStatistics(currentDataAnalysisService.getSingleOrderAmount(channelPartnerId, dateTime));
         channelOrderVO.setOrderAmountStatistics(currentDataAnalysisService.getOrderAmountByOrderPrintType(channelPartnerId, dateTime));
         channelOrderVO.setOrderIncomeRate(currentDataAnalysisService.getOrderIncomeRate(channelPartnerId, dateTime));
