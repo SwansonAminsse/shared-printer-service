@@ -36,20 +36,38 @@ public class CurrentDataAnalysisController {
 
     @GetMapping("/channelData")
     @ApiOperation(value = "依据渠道和时间统计设备、用户和运维数据")
-    public ChannelDataVO realTimeData(Long channelPartnerId, TimeSelect dateTime) {
+    public ChannelDataVO realTimeData(
+            @RequestParam(value = "channelPartnerId", required = false) Long channelPartnerId,
+            @RequestParam(value = "dateTime", required = false) TimeSelect dateTime,
+            @RequestParam(value = "startDate", required = false) LocalDate startDate,
+            @RequestParam(value = "endDate", required = false) LocalDate endDate){
+        if (dateTime != null)
+        {
+            startDate = currentDataAnalysisService.getDateBySelect(dateTime).get(0);
+            endDate = currentDataAnalysisService.getDateBySelect(dateTime).get(1);
+        }
         ChannelDataVO channelDataVO = new ChannelDataVO();
         TaskByChannelVO taskByChannelVO = new TaskByChannelVO();
-        channelDataVO.setDeviceStatistics(currentDataAnalysisService.getDeviceByChannelPartner(channelPartnerId, dateTime));
-        channelDataVO.setUserStatistics(currentDataAnalysisService.getUserByChannelPartnerAndDateTime(channelPartnerId, dateTime));
+        channelDataVO.setDeviceStatistics(currentDataAnalysisService.getDeviceByChannelPartner(channelPartnerId));
+        channelDataVO.setUserStatistics(currentDataAnalysisService.getUserByChannelPartnerAndDateTime(channelPartnerId, startDate,endDate));
         channelDataVO.setTaskByChannel(taskByChannelVO);
         return channelDataVO;
     }
 
     @GetMapping("/channelOrder")
     @ApiOperation(value = "依据渠道和时间统计订单数据")
-    public ChannelOrderVO channelOrder(Long channelPartnerId, TimeSelect dateTime) {
+    public ChannelOrderVO channelOrder(
+            @RequestParam(value = "channelPartnerId", required = false) Long channelPartnerId,
+            @RequestParam(value = "dateTime", required = false) TimeSelect dateTime,
+            @RequestParam(value = "startDate", required = false) LocalDate startDate,
+            @RequestParam(value = "endDate", required = false) LocalDate endDate) {
+        if (dateTime != null)
+        {
+            startDate = currentDataAnalysisService.getDateBySelect(dateTime).get(0);
+            endDate = currentDataAnalysisService.getDateBySelect(dateTime).get(1);
+        }
         ChannelOrderVO channelOrderVO = new ChannelOrderVO();
-        channelOrderVO.setOrderStatistics(currentDataAnalysisService.getOrderPrintType(channelPartnerId, dateTime));
+        channelOrderVO.setOrderStatistics(currentDataAnalysisService.getOrderPrintType(channelPartnerId, startDate,endDate));
         channelOrderVO.setSingleOrderAmountStatistics(currentDataAnalysisService.getSingleOrderAmount(channelPartnerId, dateTime));
         channelOrderVO.setOrderAmountStatistics(currentDataAnalysisService.getOrderAmountByOrderPrintType(channelPartnerId, dateTime));
         channelOrderVO.setOrderIncomeRate(currentDataAnalysisService.getOrderIncomeRate(channelPartnerId, dateTime));

@@ -23,4 +23,7 @@ public interface ChannelPartnerRepository extends JpaRepository<ChannelPartner, 
   @Query("SELECT new com.yn.printer.service.modules.dataAnalysis.vo.ChannelPartnerInfo(c.name,c.id) " +
           "FROM ChannelPartner c")
   List<ChannelPartnerInfo> findAllChannel();
+
+  @Query("SELECT c.id FROM ChannelPartner c WHERE c.channelType = :channelType")
+  Long findChannelByChannelType(ChannelType channelType);
 }

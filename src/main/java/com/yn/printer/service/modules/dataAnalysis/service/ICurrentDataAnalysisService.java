@@ -22,15 +22,15 @@ public interface ICurrentDataAnalysisService {
 
     Page<ChannelPartnerInfo> getAllChannelPartner(Pageable pageable);
 
-    List<DeviceStatisticsVO> getDeviceByChannelPartner(Long channelPartnerId, TimeSelect dateTime);
+    List<DeviceStatisticsVO> getDeviceByChannelPartner(Long channelPartnerId);
 
-    UserStatisticsVO getUserByChannelPartnerAndDateTime(Long channelPartnerId, TimeSelect dateTime);
+    UserStatisticsVO getUserByChannelPartnerAndDateTime(Long channelPartnerId, LocalDate startDate,LocalDate endDate);
 
     List<LocalDate> getDateBySelect(TimeSelect dateTime);
 
     List<LocalDateTime> getDate(TimeSelect dateTime);
 
-    OrderStatisticsVO getOrderPrintType(Long channelPartnerId, TimeSelect dateTime);
+    OrderStatisticsVO getOrderPrintType(Long channelPartnerId, LocalDate startDate,LocalDate endDate);
 
     OrderAmountStatisticsVO getOrderAmountByOrderPrintType(Long channelPartnerId, TimeSelect dateTime);
 

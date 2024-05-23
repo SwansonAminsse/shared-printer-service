@@ -3,6 +3,7 @@ package com.yn.printer.service.modules.dataAnalysis.service.impl;
 import cn.hutool.core.date.DateUtil;
 import com.yn.printer.service.modules.advertisement.repository.PlacementPaymentRepository;
 import com.yn.printer.service.modules.channel.entity.ChannelPartner;
+import com.yn.printer.service.modules.channel.enums.ChannelType;
 import com.yn.printer.service.modules.channel.repository.ChannelPartnerRepository;
 import com.yn.printer.service.modules.dataAnalysis.enums.TimeSelect;
 import com.yn.printer.service.modules.dataAnalysis.service.ICurrentDataAnalysisService;
@@ -203,7 +204,11 @@ public class CurrentDataAnalysisServiceImpl implements ICurrentDataAnalysisServi
     }
 
     @Override
-    public List<DeviceStatisticsVO> getDeviceByChannelPartner(Long channelPartnerId, TimeSelect dateTime) {
+    public List<DeviceStatisticsVO> getDeviceByChannelPartner(Long channelPartnerId) {
+        if(channelPartnerId == null)
+            {
+                channelPartnerId = channelRepository.findChannelByChannelType(ChannelType.TZ);
+            }
         ArrayList<DeviceStatisticsVO> deviceStatisticsVoList = new ArrayList<>();
         DeviceStatus[] statuses = {DeviceStatus.OFFLINE, DeviceStatus.ONLINE, DeviceStatus.RUN, DeviceStatus.NOT_ACTIVE, DeviceStatus.ABNORMAL, DeviceStatus.STOP};
         for (DeviceStatus status : statuses) {
@@ -219,10 +224,13 @@ public class CurrentDataAnalysisServiceImpl implements ICurrentDataAnalysisServi
     }
 
     @Override
-    public UserStatisticsVO getUserByChannelPartnerAndDateTime(Long channelPartnerId, TimeSelect dateTime) {
-        List<LocalDateTime> date = getDate(dateTime);
-        LocalDateTime startDateTime = date.get(0);
-        LocalDateTime endDateTime = date.get(1);
+    public UserStatisticsVO getUserByChannelPartnerAndDateTime(Long channelPartnerId, LocalDate startDate,LocalDate endDate) {
+        if(channelPartnerId == null)
+        {
+            channelPartnerId = channelRepository.findChannelByChannelType(ChannelType.TZ);
+        }
+        LocalDateTime startDateTime = startDate.atStartOfDay();;
+        LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
         UserStatisticsVO userStatisticsVO = new UserStatisticsVO();
         List<ChannelPartner> byName = channelRepository.findChannelById(channelPartnerId);
         List<DevicesList> DevicesList = devicesListRepository.findByChannel(byName);
@@ -284,10 +292,13 @@ public class CurrentDataAnalysisServiceImpl implements ICurrentDataAnalysisServi
     }
 
     @Override
-    public OrderStatisticsVO getOrderPrintType(Long channelPartnerId, TimeSelect dateTime) {
-        List<LocalDateTime> date = getDate(dateTime);
-        LocalDateTime startDateTime = date.get(0);
-        LocalDateTime endDateTime = date.get(1);
+    public OrderStatisticsVO getOrderPrintType(Long channelPartnerId, LocalDate startDate,LocalDate endDate) {
+        if(channelPartnerId == null)
+        {
+            channelPartnerId = channelRepository.findChannelByChannelType(ChannelType.TZ);
+        }
+        LocalDateTime startDateTime = startDate.atStartOfDay();;
+        LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
         List<ChannelPartner> byName = channelRepository.findChannelById(channelPartnerId);
         List<DevicesList> DevicesList = devicesListRepository.findByChannel(byName);
         OrderStatisticsVO orderStatisticsVO = new OrderStatisticsVO();
