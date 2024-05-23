@@ -1,7 +1,6 @@
 package com.yn.printer.service.modules.dataAnalysis.service.impl;
 
 import cn.hutool.core.date.DateUtil;
-import com.yn.printer.service.modules.advertisement.repository.PlacementPaymentRepository;
 import com.yn.printer.service.modules.channel.entity.ChannelPartner;
 import com.yn.printer.service.modules.channel.enums.ChannelType;
 import com.yn.printer.service.modules.channel.repository.ChannelPartnerRepository;
@@ -9,12 +8,11 @@ import com.yn.printer.service.modules.dataAnalysis.enums.TimeSelect;
 import com.yn.printer.service.modules.dataAnalysis.service.ICurrentDataAnalysisService;
 import com.yn.printer.service.modules.dataAnalysis.vo.*;
 import com.yn.printer.service.modules.member.entity.Member;
-import com.yn.printer.service.modules.operation.enums.DeviceStatus;
 import com.yn.printer.service.modules.member.repository.MemberRepository;
 import com.yn.printer.service.modules.operation.entity.DevicesList;
+import com.yn.printer.service.modules.operation.enums.DeviceStatus;
 import com.yn.printer.service.modules.operation.enums.DeviceType;
 import com.yn.printer.service.modules.operation.repository.DevicesListRepository;
-import com.yn.printer.service.modules.operation.repository.TaskListRepository;
 import com.yn.printer.service.modules.orders.entity.OrderManagement;
 import com.yn.printer.service.modules.orders.enums.OrderPrintType;
 import com.yn.printer.service.modules.orders.enums.PayStatus;
@@ -46,10 +44,7 @@ public class CurrentDataAnalysisServiceImpl implements ICurrentDataAnalysisServi
     private OrderManagementRepository orderManagementRepository;
     @Autowired
     private MemberRepository memberRepository;
-    @Autowired
-    private TaskListRepository taskListRepository;
-    @Autowired
-    private PlacementPaymentRepository placementPaymentRepository;
+
 
     @Override
     public TotalDevicesVO totalData() {
@@ -82,42 +77,39 @@ public class CurrentDataAnalysisServiceImpl implements ICurrentDataAnalysisServi
 
         Page<OrderManagement> byOrderDateBetween = orderManagementRepository.findByOrderDateBetweenOrderByOrderDateDesc(startOfDay, currentDate, pageable);
 
-        List<OrderVO> orderVOList = byOrderDateBetween.getContent().stream()
-                .map(orderManagement -> {
-                    if (orderManagement == null) {
-                        return null; // 或者抛出一个自定义的异常
-                    }
+        List<OrderVO> orderVOList = byOrderDateBetween.getContent().stream().map(orderManagement -> {
+            if (orderManagement == null) {
+                return null;
+            }
 
-                    OrderVO orderVO = new OrderVO();
+            OrderVO orderVO = new OrderVO();
 
-                    TransactionStatus transactionStatus = orderManagement.getTransactionStatus();
-                    if (transactionStatus != null) {
-                        orderVO.setTransactionStatus(transactionStatus.getName());
-                    }
+            TransactionStatus transactionStatus = orderManagement.getTransactionStatus();
+            if (transactionStatus != null) {
+                orderVO.setTransactionStatus(transactionStatus.getName());
+            }
 
-                    orderVO.setOrderdate(DateUtil.formatLocalDateTime(orderManagement.getOrderDate()));
+            orderVO.setOrderdate(DateUtil.formatLocalDateTime(orderManagement.getOrderDate()));
 
-                    OrderPrintType orderPrintType = orderManagement.getOrderPrintType();
-                    if (orderPrintType != null) {
-                        orderVO.setOrderPrintType(orderPrintType.getValue());
-                    }
+            OrderPrintType orderPrintType = orderManagement.getOrderPrintType();
+            if (orderPrintType != null) {
+                orderVO.setOrderPrintType(orderPrintType.getValue());
+            }
 
-                    Member orderer = orderManagement.getOrderer();
-                    if (orderer != null) {
-                        orderVO.setUserName(orderer.getName());
-                    }
+            Member orderer = orderManagement.getOrderer();
+            if (orderer != null) {
+                orderVO.setUserName(orderer.getName());
+            }
 
-                    orderVO.setOrderAmount(orderManagement.getOrderAmount());
+            orderVO.setOrderAmount(orderManagement.getOrderAmount());
 
-                    DevicesList device = orderManagement.getDevice();
-                    if (device != null) {
-                        orderVO.setDeviceName(device.getName());
-                    }
+            DevicesList device = orderManagement.getDevice();
+            if (device != null) {
+                orderVO.setDeviceName(device.getName());
+            }
 
-                    return orderVO;
-                })
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+            return orderVO;
+        }).filter(Objects::nonNull).collect(Collectors.toList());
 
         return new PageImpl<>(orderVOList, pageable, byOrderDateBetween.getTotalElements());
     }
@@ -178,9 +170,7 @@ public class CurrentDataAnalysisServiceImpl implements ICurrentDataAnalysisServi
         } else if (yesterdayIncome.compareTo(BigDecimal.ZERO) == 0) {
             yesterdayRate = new BigDecimal(100);
         } else {
-            yesterdayRate = incomeTotal.subtract(yesterdayIncome)
-                    .divide(yesterdayIncome, 4, RoundingMode.HALF_UP)
-                    .multiply(new BigDecimal(100));
+            yesterdayRate = incomeTotal.subtract(yesterdayIncome).divide(yesterdayIncome, 4, RoundingMode.HALF_UP).multiply(new BigDecimal(100));
         }
         BigDecimal lastWeekSameDayTimeIncomeRate;
         if (lastWeekSameDayTimeIncome.compareTo(BigDecimal.ZERO) == 0 && incomeTotal.compareTo(BigDecimal.ZERO) == 0) {
@@ -188,9 +178,7 @@ public class CurrentDataAnalysisServiceImpl implements ICurrentDataAnalysisServi
         } else if (lastWeekSameDayTimeIncome.compareTo(BigDecimal.ZERO) == 0) {
             lastWeekSameDayTimeIncomeRate = new BigDecimal(100);
         } else {
-            lastWeekSameDayTimeIncomeRate = incomeTotal.subtract(lastWeekSameDayTimeIncome)
-                    .divide(lastWeekSameDayTimeIncome, 4, RoundingMode.HALF_UP)
-                    .multiply(new BigDecimal(100));
+            lastWeekSameDayTimeIncomeRate = incomeTotal.subtract(lastWeekSameDayTimeIncome).divide(lastWeekSameDayTimeIncome, 4, RoundingMode.HALF_UP).multiply(new BigDecimal(100));
         }
         incometotalVO.setLastWeekRate(lastWeekSameDayTimeIncomeRate.doubleValue());
         incometotalVO.setYesterdayRate(yesterdayRate.doubleValue());
@@ -206,10 +194,9 @@ public class CurrentDataAnalysisServiceImpl implements ICurrentDataAnalysisServi
 
     @Override
     public List<DeviceStatisticsVO> getDeviceByChannelPartner(Long channelPartnerId) {
-        if(channelPartnerId == null)
-            {
-                channelPartnerId = channelRepository.findChannelByChannelType(ChannelType.TZ);
-            }
+        if (channelPartnerId == null) {
+            channelPartnerId = channelRepository.findChannelByChannelType(ChannelType.TZ);
+        }
         ArrayList<DeviceStatisticsVO> deviceStatisticsVoList = new ArrayList<>();
         DeviceStatus[] statuses = {DeviceStatus.OFFLINE, DeviceStatus.ONLINE, DeviceStatus.RUN, DeviceStatus.NOT_ACTIVE, DeviceStatus.ABNORMAL, DeviceStatus.STOP};
         for (DeviceStatus status : statuses) {
@@ -225,21 +212,18 @@ public class CurrentDataAnalysisServiceImpl implements ICurrentDataAnalysisServi
     }
 
     @Override
-    public UserStatisticsVO getUserByChannelPartnerAndDateTime(Long channelPartnerId, LocalDate startDate,LocalDate endDate) {
-        if(channelPartnerId == null)
-        {
+    public UserStatisticsVO getUserByChannelPartnerAndDateTime(Long channelPartnerId, LocalDate startDate, LocalDate endDate) {
+        if (channelPartnerId == null) {
             channelPartnerId = channelRepository.findChannelByChannelType(ChannelType.TZ);
         }
-        LocalDateTime startDateTime = startDate.atStartOfDay();;
+        LocalDateTime startDateTime = startDate.atStartOfDay();
         LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
         UserStatisticsVO userStatisticsVO = new UserStatisticsVO();
         List<ChannelPartner> byName = channelRepository.findChannelById(channelPartnerId);
         List<DevicesList> DevicesList = devicesListRepository.findByChannel(byName);
-        long uUserNumber = orderManagementRepository.
-                countDistinctOrderByOrderDateBetweenAndDeviceList(startDateTime, endDateTime, DevicesList);
+        long uUserNumber = orderManagementRepository.countDistinctOrderByOrderDateBetweenAndDeviceList(startDateTime, endDateTime, DevicesList);
         userStatisticsVO.setUserNumber(uUserNumber);
-        long newUserNumber = orderManagementRepository.
-                countNewUsersByOrderDateAndJoiningDateAndDeviceList(startDateTime, endDateTime, DevicesList);
+        long newUserNumber = orderManagementRepository.countNewUsersByOrderDateAndJoiningDateAndDeviceList(startDateTime, endDateTime, DevicesList);
         userStatisticsVO.setNewUserNumber(newUserNumber);
         long oldUserNumber = orderManagementRepository.countOldUsersByOrderDateAndJoiningDateAndDeviceList(startDateTime, endDateTime, DevicesList);
         userStatisticsVO.setOldUserNumber(oldUserNumber);
@@ -293,60 +277,54 @@ public class CurrentDataAnalysisServiceImpl implements ICurrentDataAnalysisServi
     }
 
     @Override
-    public OrderStatisticsVO getOrderPrintType(Long channelPartnerId, LocalDate startDate,LocalDate endDate) {
-        if(channelPartnerId == null)
-        {
+    public List<OrderStatisticsVO> getOrderPrintType(Long channelPartnerId, LocalDate startDate, LocalDate endDate, OrderPrintType orderPrintType) {
+        if (channelPartnerId == null) {
             channelPartnerId = channelRepository.findChannelByChannelType(ChannelType.TZ);
         }
 
-        LocalDateTime startDateTime = startDate.atStartOfDay();;
+        LocalDateTime startDateTime = startDate.atStartOfDay();
         LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
         List<ChannelPartner> byName = channelRepository.findChannelById(channelPartnerId);
         List<DevicesList> DevicesList = devicesListRepository.findByChannel(byName);
-        OrderStatisticsVO orderStatisticsVO = new OrderStatisticsVO();
-        orderStatisticsVO.setPhotoPrintNumber(orderManagementRepository
-                .countByOrderPrintTypeAndOrderDateBetweenAndDeviceIn(OrderPrintType.PHOTO, startDateTime, endDateTime, DevicesList));
-        orderStatisticsVO.setDocumentPrintNumber(orderManagementRepository
-                .countByOrderPrintTypeAndOrderDateBetweenAndDeviceIn(OrderPrintType.DOCUMENT, startDateTime, endDateTime, DevicesList));
-        orderStatisticsVO.setDocumentAndPhotoPrintNumber(orderManagementRepository
-                .countByOrderPrintTypeAndOrderDateBetweenAndDeviceIn(OrderPrintType.DOCUMENT_PHOTO, startDateTime, endDateTime, DevicesList));
-        String[] orderPrintTypes = {OrderPrintType.PHOTO.getValue(), OrderPrintType.DOCUMENT.getValue(), OrderPrintType.DOCUMENT_PHOTO.getValue()};
-        orderStatisticsVO.setOrderPrintType(Arrays.asList(orderPrintTypes));
-        return orderStatisticsVO;
+        List<OrderStatisticsVO> orderStatisticsVOs = new ArrayList<>();
+        for (OrderPrintType printType : OrderPrintType.values()) {
+            OrderStatisticsVO vo = new OrderStatisticsVO();
+            vo.setPrintNumber(orderManagementRepository.countByOrderPrintTypeAndOrderDateBetweenAndDeviceIn(OrderPrintType.PHOTO, startDateTime, endDateTime, DevicesList));
+            vo.setOrderPrintType (printType.getValue());
+            orderStatisticsVOs.add(vo);
+        }
+
+        return orderStatisticsVOs;
     }
 
     @Override
-    public OrderAmountStatisticsVO getOrderAmountByOrderPrintType(Long channelPartnerId, LocalDate startDate, LocalDate endDate) {
+    public List<OrderAmountStatisticsVO> getOrderAmountByOrderPrintType(Long channelPartnerId, LocalDate startDate, LocalDate endDate, OrderPrintType orderPrintType) {
         if (channelPartnerId == null) {
             channelPartnerId = channelRepository.findChannelByChannelType(ChannelType.TZ);
         }
         LocalDateTime startDateTime = startDate.atStartOfDay();
-        ;
         LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
         if (endDateTime.isAfter(LocalDateTime.now())) {
             endDateTime = LocalDateTime.now();
         }
-        OrderAmountStatisticsVO orderAmountStatisticsVO = new OrderAmountStatisticsVO();
+        List<OrderAmountStatisticsVO> orderAmountStatisticsVOs = new ArrayList<>();
         List<ChannelPartner> byName = channelRepository.findChannelById(channelPartnerId);
         List<DevicesList> DevicesList = devicesListRepository.findByChannel(byName);
-        orderAmountStatisticsVO.setPhotoPrintAmount(orderManagementRepository
-                .sumOrderAmountByOrderPrintTypeAndOrderDateBetweenAndDeviceIn(OrderPrintType.PHOTO, startDateTime, endDateTime, DevicesList));
-        orderAmountStatisticsVO.setDocumentPrintAmount(orderManagementRepository
-                .sumOrderAmountByOrderPrintTypeAndOrderDateBetweenAndDeviceIn(OrderPrintType.DOCUMENT, startDateTime, endDateTime, DevicesList));
-        orderAmountStatisticsVO.setDocumentAndPhotoPrintAmount(orderManagementRepository
-                .sumOrderAmountByOrderPrintTypeAndOrderDateBetweenAndDeviceIn(OrderPrintType.DOCUMENT_PHOTO, startDateTime, endDateTime, DevicesList));
-        String[] orderPrintTypes = {OrderPrintType.PHOTO.getValue(), OrderPrintType.DOCUMENT.getValue(), OrderPrintType.DOCUMENT_PHOTO.getValue()};
-        orderAmountStatisticsVO.setOrderPrintType(Arrays.asList(orderPrintTypes));
-        return orderAmountStatisticsVO;
+        for (OrderPrintType printType : OrderPrintType.values()) {
+            OrderAmountStatisticsVO vo = new OrderAmountStatisticsVO();
+            vo.setOrderPrintType (printType.getValue());
+            vo.setPrintAmount(orderManagementRepository.sumOrderAmountByOrderPrintTypeAndOrderDateBetweenAndDeviceIn(OrderPrintType.PHOTO, startDateTime, endDateTime, DevicesList));
+            orderAmountStatisticsVOs.add(vo);
+        }
+        return orderAmountStatisticsVOs;
     }
 
     @Override
-    public SingleOrderAmountStatisticsVO getSingleOrderAmount(Long channelPartnerId, LocalDate startDate, LocalDate endDate) {
+    public SingleOrderAmountStatisticsVO getSingleOrderAmount(Long channelPartnerId, LocalDate startDate, LocalDate endDate, OrderPrintType orderPrintType) {
         if (channelPartnerId == null) {
             channelPartnerId = channelRepository.findChannelByChannelType(ChannelType.TZ);
         }
         LocalDateTime startDateTime = startDate.atStartOfDay();
-        ;
         LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
         if (endDateTime.isAfter(LocalDateTime.now())) {
             endDateTime = LocalDateTime.now();
@@ -356,37 +334,24 @@ public class CurrentDataAnalysisServiceImpl implements ICurrentDataAnalysisServi
         List<DevicesList> DevicesList = devicesListRepository.findByChannel(byName);
         SingleOrderAmountStatisticsVO singleOrderAmountStatisticsVO = new SingleOrderAmountStatisticsVO();
 
-        singleOrderAmountStatisticsVO.setOneToTwoYuan(orderManagementRepository.
-                countByOrderDateAndOrderAmountAndDeviceIn(startDateTime, endDateTime,
-                        BigDecimal.valueOf(1.00), BigDecimal.valueOf(2.00), DevicesList));
+        singleOrderAmountStatisticsVO.setOneToTwoYuan(orderManagementRepository.countByOrderDateAndOrderAmountAndDeviceIn(startDateTime, endDateTime, BigDecimal.valueOf(1.00), BigDecimal.valueOf(2.00), DevicesList,orderPrintType));
 
-        singleOrderAmountStatisticsVO.setTwoToFourYuan(orderManagementRepository.
-                countByOrderDateAndOrderAmountAndDeviceIn(startDateTime, endDateTime,
-                        BigDecimal.valueOf(2.00), BigDecimal.valueOf(4.00), DevicesList));
+        singleOrderAmountStatisticsVO.setTwoToFourYuan(orderManagementRepository.countByOrderDateAndOrderAmountAndDeviceIn(startDateTime, endDateTime, BigDecimal.valueOf(2.00), BigDecimal.valueOf(4.00), DevicesList,orderPrintType));
 
-        singleOrderAmountStatisticsVO.setFourToTenYuan(orderManagementRepository.
-                countByOrderDateAndOrderAmountAndDeviceIn(startDateTime, endDateTime,
-                        BigDecimal.valueOf(4.00), BigDecimal.valueOf(10.00), DevicesList));
+        singleOrderAmountStatisticsVO.setFourToTenYuan(orderManagementRepository.countByOrderDateAndOrderAmountAndDeviceIn(startDateTime, endDateTime, BigDecimal.valueOf(4.00), BigDecimal.valueOf(10.00), DevicesList,orderPrintType));
 
-        singleOrderAmountStatisticsVO.setTenToTwentyYuan(orderManagementRepository.
-                countByOrderDateAndOrderAmountAndDeviceIn(startDateTime, endDateTime,
-                        BigDecimal.valueOf(10.00), BigDecimal.valueOf(20.00), DevicesList));
-        singleOrderAmountStatisticsVO.setOneYuanLess(
-                orderManagementRepository.countByOrderDateAndOrderAmountLessAndDeviceIn(startDateTime, endDateTime,
-                        BigDecimal.valueOf(0.00), BigDecimal.valueOf(1.00), DevicesList));
-        singleOrderAmountStatisticsVO.setTwentyYuanMore(
-                orderManagementRepository.countByOrderDateAndOrderAmountMoreAndDeviceIn(startDateTime, endDateTime,
-                        BigDecimal.valueOf(20.00), DevicesList));
+        singleOrderAmountStatisticsVO.setTenToTwentyYuan(orderManagementRepository.countByOrderDateAndOrderAmountAndDeviceIn(startDateTime, endDateTime, BigDecimal.valueOf(10.00), BigDecimal.valueOf(20.00), DevicesList,orderPrintType));
+        singleOrderAmountStatisticsVO.setOneYuanLess(orderManagementRepository.countByOrderDateAndOrderAmountLessAndDeviceIn(startDateTime, endDateTime, BigDecimal.valueOf(0.00), BigDecimal.valueOf(1.00), DevicesList,orderPrintType));
+        singleOrderAmountStatisticsVO.setTwentyYuanMore(orderManagementRepository.countByOrderDateAndOrderAmountMoreAndDeviceIn(startDateTime, endDateTime, BigDecimal.valueOf(20.00), DevicesList));
         return singleOrderAmountStatisticsVO;
     }
 
     @Override
-    public OrderIncomeRateVo getOrderIncomeRate(Long channelPartnerId, LocalDate startDate, LocalDate endDate) {
+    public OrderIncomeRateVo getOrderIncomeRate(Long channelPartnerId, LocalDate startDate, LocalDate endDate, OrderPrintType orderPrintType) {
         if (channelPartnerId == null) {
             channelPartnerId = channelRepository.findChannelByChannelType(ChannelType.TZ);
         }
         LocalDateTime startDateTime = startDate.atStartOfDay();
-        ;
         LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
         if (endDateTime.isAfter(LocalDateTime.now())) {
             endDateTime = LocalDateTime.now();
@@ -394,29 +359,17 @@ public class CurrentDataAnalysisServiceImpl implements ICurrentDataAnalysisServi
         List<ChannelPartner> byName = channelRepository.findChannelById(channelPartnerId);
         List<DevicesList> DevicesList = devicesListRepository.findByChannel(byName);
         OrderIncomeRateVo orderIncomeRateVo = new OrderIncomeRateVo();
-        BigDecimal totalIncome = Optional.ofNullable(orderManagementRepository
-                .sumPaymentAmountByOrderDateAndDeviceAndpayStatusAndTransactionStatus(
-                        startDateTime, endDateTime, DevicesList, PayStatus.PAID, TransactionStatus.COMPLETE)).orElse(BigDecimal.ZERO);
+        BigDecimal totalIncome = Optional.ofNullable(orderManagementRepository.sumPaymentAmountByOrderDateAndDeviceAndpayStatusAndTransactionStatus(startDateTime, endDateTime, DevicesList, PayStatus.PAID, TransactionStatus.COMPLETE,orderPrintType)).orElse(BigDecimal.ZERO);
 
-        long totalIncomeOrder = Optional.ofNullable(orderManagementRepository
-                .countByOrderDateAndDeviceAndpayStatusAndTransactionStatus(
-                        startDateTime, endDateTime, DevicesList, PayStatus.PAID, TransactionStatus.COMPLETE)).orElse(0L);
+        long totalIncomeOrder = Optional.of(orderManagementRepository.countByOrderDateAndDeviceAndpayStatusAndTransactionStatus(startDateTime, endDateTime, DevicesList, PayStatus.PAID, TransactionStatus.COMPLETE,orderPrintType)).orElse(0L);
 
-        BigDecimal cancelIncome = Optional.ofNullable(orderManagementRepository
-                .sumOrderAmountByOrderDateAndDeviceAndTransactionStatus(
-                        startDateTime, endDateTime, DevicesList, TransactionStatus.CANCELED)).orElse(BigDecimal.ZERO);
+        BigDecimal cancelIncome = Optional.ofNullable(orderManagementRepository.sumOrderAmountByOrderDateAndDeviceAndTransactionStatus(startDateTime, endDateTime, DevicesList, TransactionStatus.CANCELED,orderPrintType)).orElse(BigDecimal.ZERO);
 
-        long cancelOrder = Optional.ofNullable(orderManagementRepository
-                .countByOrderDateAndDeviceAndTransactionStatus(
-                        startDateTime, endDateTime, DevicesList, TransactionStatus.CANCELED)).orElse(0L);
+        long cancelOrder = Optional.of(orderManagementRepository.countByOrderDateAndDeviceAndTransactionStatus(startDateTime, endDateTime, DevicesList, TransactionStatus.CANCELED,orderPrintType)).orElse(0L);
 
-        BigDecimal abnormalIncome = Optional.ofNullable(orderManagementRepository
-                .sumOrderAmountByOrderDateAndDeviceAndTransactionStatus(
-                        startDateTime, endDateTime, DevicesList, TransactionStatus.ABNORMAL)).orElse(BigDecimal.ZERO);
+        BigDecimal abnormalIncome = Optional.ofNullable(orderManagementRepository.sumOrderAmountByOrderDateAndDeviceAndTransactionStatus(startDateTime, endDateTime, DevicesList, TransactionStatus.ABNORMAL,orderPrintType)).orElse(BigDecimal.ZERO);
 
-        long abnormalOrder = Optional.ofNullable(orderManagementRepository
-                .countByOrderDateAndDeviceAndTransactionStatus(
-                        startDateTime, endDateTime, DevicesList, TransactionStatus.ABNORMAL)).orElse(0L);
+        long abnormalOrder = Optional.of(orderManagementRepository.countByOrderDateAndDeviceAndTransactionStatus(startDateTime, endDateTime, DevicesList, TransactionStatus.ABNORMAL,orderPrintType)).orElse(0L);
 
         orderIncomeRateVo.setTotalIncome(totalIncome);
         orderIncomeRateVo.setTotalIncomeOrder(totalIncomeOrder);
@@ -443,27 +396,23 @@ public class CurrentDataAnalysisServiceImpl implements ICurrentDataAnalysisServi
         orderIncomeRateVo.setCancelOrderRate(cancelOrderRate);
         orderIncomeRateVo.setAbnormalOrderRate(abnormalOrderRate);
 
-        orderIncomeRateVo.setOrderAveragePrice(BigDecimal.valueOf(totalOrders).equals(BigDecimal.ZERO) ?
-                BigDecimal.ZERO : totalAmount.divide(BigDecimal.valueOf(totalOrders), 2, RoundingMode.HALF_UP));
+        orderIncomeRateVo.setOrderAveragePrice(BigDecimal.valueOf(totalOrders).equals(BigDecimal.ZERO) ? BigDecimal.ZERO : totalAmount.divide(BigDecimal.valueOf(totalOrders), 2, RoundingMode.HALF_UP));
         return orderIncomeRateVo;
     }
 
     @Override
-    public List<DeviceRankVO> getDeviceRank(Long channelPartnerId, LocalDate startDate, LocalDate endDate) {
+    public List<DeviceRankVO> getDeviceRank(Long channelPartnerId, LocalDate startDate, LocalDate endDate, OrderPrintType orderPrintType) {
         if (channelPartnerId == null) {
             channelPartnerId = channelRepository.findChannelByChannelType(ChannelType.TZ);
         }
         LocalDateTime startDateTime = startDate.atStartOfDay();
-        ;
         LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
         if (endDateTime.isAfter(LocalDateTime.now())) {
             endDateTime = LocalDateTime.now();
         }
         List<ChannelPartner> byName = channelRepository.findChannelById(channelPartnerId);
         List<DevicesList> DevicesList = devicesListRepository.findByChannel(byName);
-        return orderManagementRepository
-                .sumPaymentAmountByOrderDateAndDeviceRankAndpayStatusAndTransactionStatus(startDateTime,
-                        endDateTime, DevicesList);
+        return orderManagementRepository.sumPaymentAmountByOrderDateAndDeviceRankAndpayStatusAndTransactionStatus(startDateTime, endDateTime, DevicesList,orderPrintType);
     }
 
 }

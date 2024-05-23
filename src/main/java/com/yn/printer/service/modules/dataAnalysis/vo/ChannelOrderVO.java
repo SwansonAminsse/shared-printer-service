@@ -10,14 +10,13 @@ import java.util.List;
 @ApiModel(value = "ChannelOrderVO", description = "依据渠道和时间统计订单数据")
 public class ChannelOrderVO {
     @ApiModelProperty(value = "订单类型统计")
-    private OrderStatisticsVO orderStatistics;
+    private List<OrderStatisticsVO> orderStatistics;
     @ApiModelProperty(value = "类型金额统计")
-    private OrderAmountStatisticsVO orderAmountStatistics;
+    private List<OrderAmountStatisticsVO> orderAmountStatistics;
     @ApiModelProperty(value = "单笔订单金额统计")
     private   SingleOrderAmountStatisticsVO singleOrderAmountStatistics;
     @ApiModelProperty(value = "各类收入占比")
     private OrderIncomeRateVo orderIncomeRate;
     @ApiModelProperty(value = "站点排行")
     private List<DeviceRankVO> deviceRankList;
-
 }

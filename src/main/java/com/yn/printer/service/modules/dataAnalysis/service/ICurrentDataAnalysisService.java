@@ -2,6 +2,7 @@ package com.yn.printer.service.modules.dataAnalysis.service;
 
 import com.yn.printer.service.modules.dataAnalysis.enums.TimeSelect;
 import com.yn.printer.service.modules.dataAnalysis.vo.*;
+import com.yn.printer.service.modules.orders.enums.OrderPrintType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -30,14 +31,14 @@ public interface ICurrentDataAnalysisService {
 
     List<LocalDateTime> getDate(TimeSelect dateTime);
 
-    OrderStatisticsVO getOrderPrintType(Long channelPartnerId, LocalDate startDate,LocalDate endDate);
+    List<OrderStatisticsVO> getOrderPrintType(Long channelPartnerId, LocalDate startDate, LocalDate endDate, OrderPrintType orderPrintType);
 
-    OrderAmountStatisticsVO getOrderAmountByOrderPrintType(Long channelPartnerId, LocalDate startDate, LocalDate endDate);
+    List<OrderAmountStatisticsVO> getOrderAmountByOrderPrintType(Long channelPartnerId, LocalDate startDate, LocalDate endDate, OrderPrintType orderPrintType);
 
-    SingleOrderAmountStatisticsVO getSingleOrderAmount(Long channelPartnerId, LocalDate startDate, LocalDate endDate);
+    SingleOrderAmountStatisticsVO getSingleOrderAmount(Long channelPartnerId, LocalDate startDate, LocalDate endDate, OrderPrintType orderPrintType);
 
-    OrderIncomeRateVo getOrderIncomeRate(Long channelPartnerId, LocalDate startDate, LocalDate endDate);
+    OrderIncomeRateVo getOrderIncomeRate(Long channelPartnerId, LocalDate startDate, LocalDate endDate, OrderPrintType orderPrintType);
 
-    List<DeviceRankVO> getDeviceRank(Long channelPartnerId, LocalDate startDate, LocalDate endDate);
+    List<DeviceRankVO> getDeviceRank(Long channelPartnerId, LocalDate startDate, LocalDate endDate, OrderPrintType orderPrintType);
 
 }
