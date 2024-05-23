@@ -87,10 +87,10 @@ public class CurrentDataAnalysisController {
         }
         ChannelOrderVO channelOrderVO = new ChannelOrderVO();
         channelOrderVO.setOrderStatistics(currentDataAnalysisService.getOrderPrintType(channelPartnerId, startDate, endDate));
-        channelOrderVO.setSingleOrderAmountStatistics(currentDataAnalysisService.getSingleOrderAmount(channelPartnerId, dateTime));
-        channelOrderVO.setOrderAmountStatistics(currentDataAnalysisService.getOrderAmountByOrderPrintType(channelPartnerId, dateTime));
-        channelOrderVO.setOrderIncomeRate(currentDataAnalysisService.getOrderIncomeRate(channelPartnerId, dateTime));
-        channelOrderVO.setDeviceRankList(currentDataAnalysisService.getDeviceRank(channelPartnerId, dateTime));
+        channelOrderVO.setSingleOrderAmountStatistics(currentDataAnalysisService.getSingleOrderAmount(channelPartnerId, startDate, endDate));
+        channelOrderVO.setOrderAmountStatistics(currentDataAnalysisService.getOrderAmountByOrderPrintType(channelPartnerId, startDate, endDate));
+        channelOrderVO.setOrderIncomeRate(currentDataAnalysisService.getOrderIncomeRate(channelPartnerId, startDate, endDate));
+        channelOrderVO.setDeviceRankList(currentDataAnalysisService.getDeviceRank(channelPartnerId, startDate, endDate));
         return channelOrderVO;
     }
 

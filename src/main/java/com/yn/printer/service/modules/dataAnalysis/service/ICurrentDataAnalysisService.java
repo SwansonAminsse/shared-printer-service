@@ -32,12 +32,12 @@ public interface ICurrentDataAnalysisService {
 
     OrderStatisticsVO getOrderPrintType(Long channelPartnerId, LocalDate startDate,LocalDate endDate);
 
-    OrderAmountStatisticsVO getOrderAmountByOrderPrintType(Long channelPartnerId, TimeSelect dateTime);
+    OrderAmountStatisticsVO getOrderAmountByOrderPrintType(Long channelPartnerId, LocalDate startDate, LocalDate endDate);
 
-    SingleOrderAmountStatisticsVO getSingleOrderAmount(Long channelPartnerId, TimeSelect dateTime);
+    SingleOrderAmountStatisticsVO getSingleOrderAmount(Long channelPartnerId, LocalDate startDate, LocalDate endDate);
 
-    OrderIncomeRateVo getOrderIncomeRate(Long channelPartnerId, TimeSelect dateTime);
+    OrderIncomeRateVo getOrderIncomeRate(Long channelPartnerId, LocalDate startDate, LocalDate endDate);
 
-    List<DeviceRankVO> getDeviceRank(Long channelPartnerId, TimeSelect dateTime);
+    List<DeviceRankVO> getDeviceRank(Long channelPartnerId, LocalDate startDate, LocalDate endDate);
 
 }

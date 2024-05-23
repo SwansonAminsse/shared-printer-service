@@ -316,16 +316,16 @@ public class CurrentDataAnalysisServiceImpl implements ICurrentDataAnalysisServi
     }
 
     @Override
-    public OrderAmountStatisticsVO getOrderAmountByOrderPrintType(Long channelPartnerId, TimeSelect dateTime) {
+    public OrderAmountStatisticsVO getOrderAmountByOrderPrintType(Long channelPartnerId, LocalDate startDate, LocalDate endDate) {
         if (channelPartnerId == null) {
             channelPartnerId = channelRepository.findChannelByChannelType(ChannelType.TZ);
         }
-        if (dateTime == null) {
-            dateTime = TimeSelect.TODAY;
+        LocalDateTime startDateTime = startDate.atStartOfDay();
+        ;
+        LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
+        if (endDateTime.isAfter(LocalDateTime.now())) {
+            endDateTime = LocalDateTime.now();
         }
-        List<LocalDateTime> date = getDate(dateTime);
-        LocalDateTime startDateTime = date.get(0);
-        LocalDateTime endDateTime = date.get(1);
         OrderAmountStatisticsVO orderAmountStatisticsVO = new OrderAmountStatisticsVO();
         List<ChannelPartner> byName = channelRepository.findChannelById(channelPartnerId);
         List<DevicesList> DevicesList = devicesListRepository.findByChannel(byName);
@@ -341,17 +341,17 @@ public class CurrentDataAnalysisServiceImpl implements ICurrentDataAnalysisServi
     }
 
     @Override
-    public SingleOrderAmountStatisticsVO getSingleOrderAmount(Long channelPartnerId, TimeSelect dateTime) {
+    public SingleOrderAmountStatisticsVO getSingleOrderAmount(Long channelPartnerId, LocalDate startDate, LocalDate endDate) {
         if (channelPartnerId == null) {
             channelPartnerId = channelRepository.findChannelByChannelType(ChannelType.TZ);
         }
-        if (dateTime == null) {
-            dateTime = TimeSelect.TODAY;
+        LocalDateTime startDateTime = startDate.atStartOfDay();
+        ;
+        LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
+        if (endDateTime.isAfter(LocalDateTime.now())) {
+            endDateTime = LocalDateTime.now();
         }
 
-        List<LocalDateTime> date = getDate(dateTime);
-        LocalDateTime startDateTime = date.get(0);
-        LocalDateTime endDateTime = date.get(1);
         List<ChannelPartner> byName = channelRepository.findChannelById(channelPartnerId);
         List<DevicesList> DevicesList = devicesListRepository.findByChannel(byName);
         SingleOrderAmountStatisticsVO singleOrderAmountStatisticsVO = new SingleOrderAmountStatisticsVO();
@@ -381,16 +381,16 @@ public class CurrentDataAnalysisServiceImpl implements ICurrentDataAnalysisServi
     }
 
     @Override
-    public OrderIncomeRateVo getOrderIncomeRate(Long channelPartnerId, TimeSelect dateTime) {
+    public OrderIncomeRateVo getOrderIncomeRate(Long channelPartnerId, LocalDate startDate, LocalDate endDate) {
         if (channelPartnerId == null) {
             channelPartnerId = channelRepository.findChannelByChannelType(ChannelType.TZ);
         }
-        if (dateTime == null) {
-            dateTime = TimeSelect.TODAY;
+        LocalDateTime startDateTime = startDate.atStartOfDay();
+        ;
+        LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
+        if (endDateTime.isAfter(LocalDateTime.now())) {
+            endDateTime = LocalDateTime.now();
         }
-        List<LocalDateTime> date = getDate(dateTime);
-        LocalDateTime startDateTime = date.get(0);
-        LocalDateTime endDateTime = date.get(1);
         List<ChannelPartner> byName = channelRepository.findChannelById(channelPartnerId);
         List<DevicesList> DevicesList = devicesListRepository.findByChannel(byName);
         OrderIncomeRateVo orderIncomeRateVo = new OrderIncomeRateVo();
@@ -449,16 +449,16 @@ public class CurrentDataAnalysisServiceImpl implements ICurrentDataAnalysisServi
     }
 
     @Override
-    public List<DeviceRankVO> getDeviceRank(Long channelPartnerId, TimeSelect dateTime) {
+    public List<DeviceRankVO> getDeviceRank(Long channelPartnerId, LocalDate startDate, LocalDate endDate) {
         if (channelPartnerId == null) {
             channelPartnerId = channelRepository.findChannelByChannelType(ChannelType.TZ);
         }
-        if (dateTime == null) {
-            dateTime = TimeSelect.TODAY;
+        LocalDateTime startDateTime = startDate.atStartOfDay();
+        ;
+        LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
+        if (endDateTime.isAfter(LocalDateTime.now())) {
+            endDateTime = LocalDateTime.now();
         }
-        List<LocalDateTime> date = getDate(dateTime);
-        LocalDateTime startDateTime = date.get(0);
-        LocalDateTime endDateTime = date.get(1);
         List<ChannelPartner> byName = channelRepository.findChannelById(channelPartnerId);
         List<DevicesList> DevicesList = devicesListRepository.findByChannel(byName);
         return orderManagementRepository
