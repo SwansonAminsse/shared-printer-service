@@ -31,6 +31,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
@@ -140,7 +141,9 @@ public class SettlementDetailsServiceImpl implements ISettlementDetailsService {
 
         return new PageImpl<>(userTotalVOList, pageable, devicesLists.getTotalElements());
     }
+
     @Scheduled(cron = "0 0 0 * * ?")
+    @Transactional
     public void updateSettlementTask() {
         LocalDate now = LocalDate.now();
         SettlementTime settlementTime = settlementTimeRepository.findAll().stream().findFirst().orElse(null);
@@ -154,6 +157,7 @@ public class SettlementDetailsServiceImpl implements ISettlementDetailsService {
     }
 
     @Override
+    @Transactional
     public void updateSettlement() {
         log.info("结算任务执行");
         LocalDate now = LocalDate.now();
@@ -231,7 +235,7 @@ public class SettlementDetailsServiceImpl implements ISettlementDetailsService {
             settlementDetails.setChannelPartner(device.getTerminalMerchants());
             settlementDetails.setSettlementAmount(dueAmount4);
             settlementDetails.setSettlementRatio(settlementRatio4);
-            settlementDetailsRepository.save(settlementDetails);
+            settlementDetailsRepository.saveAndFlush(settlementDetails);
         }
     }
 
