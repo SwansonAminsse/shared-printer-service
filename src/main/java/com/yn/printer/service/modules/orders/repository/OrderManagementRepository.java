@@ -193,24 +193,28 @@ public interface OrderManagementRepository extends JpaRepository<OrderManagement
     @Query("SELECT COUNT(o) FROM OrderManagement o " +
             "WHERE o.orderDate BETWEEN :startDate AND :endDate " +
             "AND o.orderAmount >= :startAmount AND o.orderAmount < :endAmount " +
-            "AND o.device IN :deviceLists")
+            "AND o.device IN :deviceLists " +
+            "AND (:orderPrintType IS NULL OR o.orderPrintType = :orderPrintType)")
     long countByOrderDateAndOrderAmountAndDeviceIn(
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate,
             @Param("startAmount") BigDecimal startAmount,
             @Param("endAmount") BigDecimal endAmount,
-            @Param("deviceLists") List<DevicesList> deviceLists);
+            @Param("deviceLists") List<DevicesList> deviceLists,
+            @Param("orderPrintType") OrderPrintType orderPrintType);
 
     @Query("SELECT COUNT(o) FROM OrderManagement o " +
             "WHERE o.orderDate BETWEEN :startDate AND :endDate " +
             "AND o.orderAmount > :startAmount AND o.orderAmount < :endAmount " +
-            "AND o.device IN :deviceLists")
+            "AND o.device IN :deviceLists " +
+            "AND (:orderPrintType IS NULL OR o.orderPrintType = :orderPrintType)")
     long countByOrderDateAndOrderAmountLessAndDeviceIn(
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate,
             @Param("startAmount") BigDecimal startAmount,
             @Param("endAmount") BigDecimal endAmount,
-            @Param("deviceLists") List<DevicesList> deviceLists);
+            @Param("deviceLists") List<DevicesList> deviceLists,
+            @Param("orderPrintType") OrderPrintType orderPrintType);
 
     @Query("SELECT COUNT(o) FROM OrderManagement o " +
             "WHERE o.orderDate BETWEEN :startDate AND :endDate " +
@@ -226,52 +230,62 @@ public interface OrderManagementRepository extends JpaRepository<OrderManagement
             "WHERE o.orderDate BETWEEN :startDate AND :endDate " +
             "AND o.device IN :deviceLists " +
             "AND o.payStatus = :payStatus " +
-            "AND o.transactionStatus = :transactionStatus")
+            "AND o.transactionStatus = :transactionStatus " +
+            "AND (:orderPrintType IS NULL OR o.orderPrintType = :orderPrintType)")
     BigDecimal sumPaymentAmountByOrderDateAndDeviceAndpayStatusAndTransactionStatus(@Param("startDate") LocalDateTime startDate,
                                                                                     @Param("endDate") LocalDateTime endDate,
                                                                                     @Param("deviceLists") List<DevicesList> deviceLists,
                                                                                     @Param("payStatus") PayStatus payStatus,
-                                                                                    @Param("transactionStatus") TransactionStatus transactionStatus);
+                                                                                    @Param("transactionStatus") TransactionStatus transactionStatus,
+                                                                                    @Param("orderPrintType") OrderPrintType orderPrintType);
 
     @Query("SELECT COUNT(o) FROM OrderManagement o " +
             "WHERE o.orderDate BETWEEN :startDate AND :endDate " +
             "AND o.device IN :deviceLists " +
             "AND o.payStatus = :payStatus " +
-            "AND o.transactionStatus = :transactionStatus")
+            "AND o.transactionStatus = :transactionStatus " +
+            "AND (:orderPrintType IS NULL OR o.orderPrintType = :orderPrintType)")
     long countByOrderDateAndDeviceAndpayStatusAndTransactionStatus(@Param("startDate") LocalDateTime startDate,
                                                                    @Param("endDate") LocalDateTime endDate,
                                                                    @Param("deviceLists") List<DevicesList> deviceLists,
                                                                    @Param("payStatus") PayStatus payStatus,
-                                                                   @Param("transactionStatus") TransactionStatus transactionStatus);
+                                                                   @Param("transactionStatus") TransactionStatus transactionStatus,
+                                                                   @Param("orderPrintType") OrderPrintType orderPrintType);
 
     @Query("SELECT SUM(o.orderAmount) FROM OrderManagement o " +
             "WHERE o.orderDate BETWEEN :startDate AND :endDate " +
             "AND o.device IN :deviceLists " +
-            "AND o.transactionStatus = :transactionStatus")
+            "AND o.transactionStatus = :transactionStatus " +
+            "AND (:orderPrintType IS NULL OR o.orderPrintType = :orderPrintType)")
     BigDecimal sumOrderAmountByOrderDateAndDeviceAndTransactionStatus(@Param("startDate") LocalDateTime startDate,
                                                                       @Param("endDate") LocalDateTime endDate,
                                                                       @Param("deviceLists") List<DevicesList> deviceLists,
-                                                                      @Param("transactionStatus") TransactionStatus transactionStatus);
+                                                                      @Param("transactionStatus") TransactionStatus transactionStatus,
+                                                                      @Param("orderPrintType") OrderPrintType orderPrintType);
 
     @Query("SELECT COUNT(o) FROM OrderManagement o " +
             "WHERE o.orderDate BETWEEN :startDate AND :endDate " +
             "AND o.device IN :deviceLists " +
-            "AND o.transactionStatus = :transactionStatus")
+            "AND o.transactionStatus = :transactionStatus " +
+            "AND (:orderPrintType IS NULL OR o.orderPrintType = :orderPrintType)")
     long countByOrderDateAndDeviceAndTransactionStatus(@Param("startDate") LocalDateTime startDate,
                                                        @Param("endDate") LocalDateTime endDate,
                                                        @Param("deviceLists") List<DevicesList> deviceLists,
-                                                       @Param("transactionStatus") TransactionStatus transactionStatus);
+                                                       @Param("transactionStatus") TransactionStatus transactionStatus,
+                                                       @Param("orderPrintType") OrderPrintType orderPrintType);
 
 
     @Query("SElECT New com.yn.printer.service.modules.dataAnalysis.vo.DeviceRankVO" +
             "(sum(o.paymentAmount),count(o.id),o.device.name) FROM OrderManagement o " +
             "WHERE o.orderDate BETWEEN :startDate AND :endDate " +
             "AND o.device IN :deviceLists " +
+            "AND (:orderPrintType IS NULL OR o.orderPrintType = :orderPrintType) " +
             "GROUP BY o.device.name " +
             "ORDER BY sum(o.paymentAmount) DESC")
     List<DeviceRankVO> sumPaymentAmountByOrderDateAndDeviceRankAndpayStatusAndTransactionStatus(@Param("startDate") LocalDateTime startDate,
                                                                                                 @Param("endDate") LocalDateTime endDate,
-                                                                                                @Param("deviceLists") List<DevicesList> deviceLists
+                                                                                                @Param("deviceLists") List<DevicesList> deviceLists,
+                                                                                                @Param("orderPrintType") OrderPrintType orderPrintType
     );
 }
 

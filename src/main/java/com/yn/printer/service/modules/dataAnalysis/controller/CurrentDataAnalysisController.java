@@ -3,6 +3,7 @@ package com.yn.printer.service.modules.dataAnalysis.controller;
 import com.yn.printer.service.modules.dataAnalysis.enums.TimeSelect;
 import com.yn.printer.service.modules.dataAnalysis.service.ICurrentDataAnalysisService;
 import com.yn.printer.service.modules.dataAnalysis.vo.*;
+import com.yn.printer.service.modules.orders.enums.OrderPrintType;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.data.domain.Page;
@@ -50,18 +51,15 @@ public class CurrentDataAnalysisController {
             List<LocalDate> dateRange = currentDataAnalysisService.getDateBySelect(dateTime);
             startDate = dateRange.get(0);
             endDate = dateRange.get(1);
-        } else if (startDate == null && endDate != null) {
-            startDate = endDate;
-        } else if (startDate != null && endDate == null) {
-            endDate = startDate;
+        } else if (startDate == null || endDate == null) {
+            endDate = (endDate != null) ? endDate : startDate;
+            startDate = (startDate != null) ? startDate : endDate;
         }
         ChannelDataVO channelDataVO = new ChannelDataVO();
         TaskByChannelVO taskByChannelVO = new TaskByChannelVO();
-
         channelDataVO.setDeviceStatistics(currentDataAnalysisService.getDeviceByChannelPartner(channelPartnerId));
         channelDataVO.setUserStatistics(currentDataAnalysisService.getUserByChannelPartnerAndDateTime(channelPartnerId, startDate, endDate));
         channelDataVO.setTaskByChannel(taskByChannelVO);
-
         return channelDataVO;
     }
 
@@ -71,7 +69,8 @@ public class CurrentDataAnalysisController {
             @RequestParam(value = "channelPartnerId", required = false) Long channelPartnerId,
             @RequestParam(value = "dateTime", required = false) TimeSelect dateTime,
             @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+            @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @RequestParam(value = "orderPrintType", required = false) String orderPrintType) {
 
         if (dateTime == null && startDate == null && endDate == null) {
             List<LocalDate> todayRange = currentDataAnalysisService.getDateBySelect(TimeSelect.TODAY);
@@ -85,12 +84,16 @@ public class CurrentDataAnalysisController {
             endDate = (endDate != null) ? endDate : startDate;
             startDate = (startDate != null) ? startDate : endDate;
         }
+        OrderPrintType orderPrint = null;
+        if (orderPrintType != null) {
+            orderPrint = OrderPrintType.valueOf(orderPrintType.toUpperCase());
+        }
         ChannelOrderVO channelOrderVO = new ChannelOrderVO();
-        channelOrderVO.setOrderStatistics(currentDataAnalysisService.getOrderPrintType(channelPartnerId, startDate, endDate));
-        channelOrderVO.setSingleOrderAmountStatistics(currentDataAnalysisService.getSingleOrderAmount(channelPartnerId, startDate, endDate));
-        channelOrderVO.setOrderAmountStatistics(currentDataAnalysisService.getOrderAmountByOrderPrintType(channelPartnerId, startDate, endDate));
-        channelOrderVO.setOrderIncomeRate(currentDataAnalysisService.getOrderIncomeRate(channelPartnerId, startDate, endDate));
-        channelOrderVO.setDeviceRankList(currentDataAnalysisService.getDeviceRank(channelPartnerId, startDate, endDate));
+        channelOrderVO.setOrderStatistics(currentDataAnalysisService.getOrderPrintType(channelPartnerId, startDate, endDate,orderPrint));
+        channelOrderVO.setSingleOrderAmountStatistics(currentDataAnalysisService.getSingleOrderAmount(channelPartnerId, startDate, endDate,orderPrint));
+        channelOrderVO.setOrderAmountStatistics(currentDataAnalysisService.getOrderAmountByOrderPrintType(channelPartnerId, startDate, endDate,orderPrint));
+        channelOrderVO.setOrderIncomeRate(currentDataAnalysisService.getOrderIncomeRate(channelPartnerId, startDate, endDate,orderPrint));
+        channelOrderVO.setDeviceRankList(currentDataAnalysisService.getDeviceRank(channelPartnerId, startDate, endDate,orderPrint));
         return channelOrderVO;
     }
 
