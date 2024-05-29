@@ -50,7 +50,10 @@ public interface IMemberService {
 
     MemberLoginVo bindEmail(String email, String verificationCode);
 
-    boolean sendVerificationCode(String phoneNumber,String email);
+    boolean sendVerificationCode(String phoneNumber, String email);
+
+    Boolean authentication(String tel, String trueName, String idenNo);
 
     BigDecimal getChargeBalance();
+
 }

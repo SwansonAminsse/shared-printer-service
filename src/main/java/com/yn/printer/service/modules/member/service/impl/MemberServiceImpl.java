@@ -1,6 +1,9 @@
 package com.yn.printer.service.modules.member.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.google.common.net.MediaType;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.yn.printer.service.common.consts.CacheConst;
 import com.yn.printer.service.common.exception.YnError;
 import com.yn.printer.service.common.exception.YnErrorException;
@@ -19,6 +22,8 @@ import com.yn.printer.service.modules.member.vo.integralBalanceVO;
 import com.yn.printer.service.modules.meta.repository.ThirdPartyVouchersRepository;
 import com.yn.printer.service.modules.operation.repository.DevicesListRepository;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.*;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -31,6 +36,10 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+
+
+import java.io.*;
+import java.util.regex.Pattern;
 
 /**
  * 会员服务
@@ -68,6 +77,8 @@ public class MemberServiceImpl implements IMemberService {
     ThirdPartyVouchersRepository thirdPartyVouchersRepository;
     // 验证码长度
     private static final int VERIFICATION_CODE_LENGTH = 6;
+
+    static final OkHttpClient HTTP_CLIENT = new OkHttpClient().newBuilder().build();
 
 
     @Override
@@ -143,9 +154,9 @@ public class MemberServiceImpl implements IMemberService {
             System.out.println("自动注册会员用户");
             memberRepository.save(member);
         }
-
         return createLoginVo(member);
     }
+
 
     @Override
     public Boolean modifyInfo(MemberModifyInfoDto dto) {
@@ -185,7 +196,6 @@ public class MemberServiceImpl implements IMemberService {
     }
     @Override
     public integralBalanceVO getIntegralBalance() {
-
         Member member = AuditInterceptor.CURRENT_MEMBER.get();
         integralBalanceVO vo = new integralBalanceVO();
         vo.setAccountBalance(member.getAccountBalance());
@@ -243,10 +253,59 @@ public class MemberServiceImpl implements IMemberService {
         return true;
     }
 
+    public Boolean authentication(String tel, String trueName, String idenNo) {
+        boolean matches = Pattern.matches(
+                "^1[3-9]\\d{9}$|" +
+                        "^1[3-9]\\d{1}[-\\s]\\d{4}[-\\s]\\d{4}$|" +
+                        "^\\(1[3-9]\\d{1}\\)\\d{4}-\\d{4}$|" +
+                        "^(?:\\(\\+\\d{2}\\)|\\+\\d{2})(\\d{11})$|" +
+                        "^0\\d{3}-\\d{7}$|" +
+                        "^0\\d{2}-\\d{8}$", tel);
+        if (tel == null || tel.isEmpty() || matches == false) {
+            throw new YnErrorException(YnError.YN_200005);
+        }
+        boolean matches1 = Pattern.matches("^[0-9]{17}[0-9Xx]$", idenNo);
+        if (idenNo == null || idenNo.isEmpty() || matches1 == false) {
+            throw new YnErrorException(YnError.YN_200006);
+        }
+        MediaType mediaType = MediaType.parse("text/plain");
+        RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart("key", "N6Mu3tfa9Kid5PGVMQt11L")
+                .addFormDataPart("secret", "2b83afff7b064e208f645a3b62dd624f")
+                .addFormDataPart("trueName", trueName)
+                .addFormDataPart("idenNo", idenNo)
+                .addFormDataPart("typeId", "3010")
+                .addFormDataPart("tel", tel)
+                .addFormDataPart("format", "json")
+                .build();
+        Request request = new Request.Builder()
+                .url("https://netocr.com/verapi/vertelOrd.do")
+                .method("POST", body)
+                .build();
+        try (Response response = HTTP_CLIENT.newCall(request).execute()) {
+            if (!response.isSuccessful()) {
+                throw new YnErrorException(YnError.YN_400013);
+            }
+            String responseBody = response.body().string();
+            JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
+            JsonObject messageString = jsonObject.getAsJsonObject("messageString");
+            String status = messageString.get("status").getAsString();
+            if ("0000".equals(status)) {
+                JsonObject veritem = jsonObject.getAsJsonArray("infoList").get(0).getAsJsonObject().getAsJsonArray("veritem").get(0).getAsJsonObject();
+                String content = veritem.get("content").getAsString();
+                return "00".equals(content);
+            } else {
+                return false;
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     public BigDecimal getChargeBalance() {
         Member member = AuditInterceptor.CURRENT_MEMBER.get();
-        return  member.getAccountBalance();
+        return member.getAccountBalance();
     }
 
 

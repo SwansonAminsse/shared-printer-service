@@ -1,5 +1,6 @@
 package com.yn.printer.service.modules.member.controller.auth;
 
+import cn.hutool.json.JSONObject;
 import com.yn.printer.service.modules.member.dto.MemberModifyInfoDto;
 import com.yn.printer.service.modules.member.service.IMemberService;
 import com.yn.printer.service.modules.member.service.IPointsFileService;
@@ -53,9 +54,14 @@ public class MemberAuthController {
 
     @ApiOperation(value = "会员-绑定邮箱")
     @GetMapping(value = "/bindEmail")
-    public MemberLoginVo bindEmail(@RequestParam String email,@RequestParam String verificationCode) {
-        return memberService.bindEmail(email,verificationCode);
+    public MemberLoginVo bindEmail(@RequestParam String email, @RequestParam String verificationCode) {
+        return memberService.bindEmail(email, verificationCode);
     }
 
+    @ApiOperation(value = "会员-实名认证")
+    @PostMapping(value = "/authentication")
+    public Boolean authentication(@RequestParam String tel, @RequestParam String trueName, @RequestParam String idenNo) {
+        return memberService.authentication(tel, trueName, idenNo);
+    }
 
 }

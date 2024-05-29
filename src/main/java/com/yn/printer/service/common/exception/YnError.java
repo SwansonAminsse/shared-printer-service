@@ -32,7 +32,8 @@ public interface YnError {
     YnErrorCode YN_200002 = new YnErrorCode("200002", "账户不存在");
     YnErrorCode YN_200003 = new YnErrorCode("200003", "密码错误");
     YnErrorCode YN_200004 = new YnErrorCode("200003", "验证码错误");
-
+    YnErrorCode YN_200005 = new YnErrorCode("200005", "手机号不合法");
+    YnErrorCode YN_200006 = new YnErrorCode("200006", "身份证号码不合法");
     /**
      * 会员模块
      */
@@ -68,6 +69,7 @@ public interface YnError {
     YnErrorCode YN_500006 = new YnErrorCode("500005", "充值失败");
 
     YnErrorCode YN_500007 = new YnErrorCode("500005", "余额扣减失败");
+    YnErrorCode YN_500008 = new YnErrorCode("500008", "异常登录用户无法充值");
     /**
      * 运营模块
      */
