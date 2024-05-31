@@ -139,12 +139,16 @@ public interface OrderManagementRepository extends JpaRepository<OrderManagement
             @Param("endDate") LocalDateTime endDate,
             @Param("device") DevicesList device,
             @Param("paid") PayStatus paid);
+
     @Query("SELECT SUM(o.paymentAmount) FROM OrderManagement o " +
             "WHERE o.orderDate BETWEEN :startDate AND :endDate " +
-            "AND o.payStatus = :paidStatus ")
+            "AND o.payStatus = :paidStatus " +
+            "AND o.transactionStatus = :transactionStatus ")
     BigDecimal sumByDeviceIncome(@Param("startDate") LocalDateTime startDate,
                                  @Param("endDate") LocalDateTime endDate,
-                                 @Param("paidStatus") PayStatus paidStatus);
+                                 @Param("paidStatus") PayStatus paidStatus,
+                                 @Param("paidStatus") TransactionStatus transactionStatus);
+
     @Query("SELECT SUM(o.paymentAmount) FROM OrderManagement o " +
             "WHERE o.orderDate < :startDate " +
             "AND o.payStatus = :paidStatus ")
