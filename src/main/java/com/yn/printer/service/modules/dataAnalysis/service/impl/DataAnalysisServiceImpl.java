@@ -10,6 +10,7 @@ import com.yn.printer.service.modules.operation.entity.DevicesList;
 import com.yn.printer.service.modules.operation.repository.DevicesListRepository;
 import com.yn.printer.service.modules.operation.repository.TaskListRepository;
 import com.yn.printer.service.modules.orders.entity.OrderManagement;
+import com.yn.printer.service.modules.orders.enums.TransactionStatus;
 import com.yn.printer.service.modules.orders.repository.OrderManagementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,7 +54,7 @@ public class DataAnalysisServiceImpl implements IDataAnalysisService {
         LocalDateTime endOfDate = LocalDateTime.now();
         IncomeSumVO incomeSumVO = new IncomeSumVO();
         incomeSumVO.setDevicesNumber(devicesListRepository.countByDeviceStatus(true));
-        incomeSumVO.setDeviceIncome(orderManagementRepository.sumByDeviceIncome(startOfDate, endOfDate, PAID));
+        incomeSumVO.setDeviceIncome(orderManagementRepository.sumByDeviceIncome(startOfDate, endOfDate, PAID, TransactionStatus.COMPLETE));
         List<DevicesList> devicesLists = devicesListRepository.findByDeviceStatus(true);
         BigDecimal totalTzIncome = BigDecimal.ZERO;
         for (DevicesList devicesList : devicesLists) {
@@ -108,8 +109,8 @@ public class DataAnalysisServiceImpl implements IDataAnalysisService {
         devicesDataVO.setNewDevicesNumber(devicesListRepository.countByCreatedOnAfter(startOfDate));
         devicesDataVO.setUseDevicesNumber(orderManagementRepository.countOrdersByOrderDateBetween(startOfDate, endOfDate));
         devicesDataVO.setTaskDevicesNumber(taskListRepository.countByCompletionTimeAfter(startOfDate));
-        BigDecimal turnoverNumber = orderManagementRepository.sumByDeviceIncome(startOfDate, endOfDate, PAID);
-        devicesDataVO.setOrdersTurnoverNumber(orderManagementRepository.sumByDeviceIncome(startOfDate, endOfDate, PAID));
+        BigDecimal turnoverNumber = orderManagementRepository.sumByDeviceIncome(startOfDate, endOfDate, PAID, TransactionStatus.COMPLETE);
+        devicesDataVO.setOrdersTurnoverNumber(orderManagementRepository.sumByDeviceIncome(startOfDate, endOfDate, PAID, TransactionStatus.COMPLETE));
         BigDecimal oldTurnoverNumber = orderManagementRepository.sumByOldDeviceIncome(startOfDate, PAID);
         if (turnoverNumber != null && oldTurnoverNumber != null) {
             double turnoverRate = (oldTurnoverNumber.compareTo(BigDecimal.ZERO) != 0) ? turnoverNumber.subtract(oldTurnoverNumber).divide(oldTurnoverNumber, 2, RoundingMode.HALF_UP).multiply(new BigDecimal("100")).doubleValue() : oldTurnoverNumber.compareTo(BigDecimal.ZERO) == 0 ? 100.0 : 0.0;
@@ -144,7 +145,7 @@ public class DataAnalysisServiceImpl implements IDataAnalysisService {
         }
         for (LocalDateTime startOfDate : daysOfWeek) {
             long ordersNumber = orderManagementRepository.countOrdersByOrderDateBetween(startOfDate, startOfDate.with(LocalTime.MAX));
-            BigDecimal orderTurnoverNumber = orderManagementRepository.sumByDeviceIncome(startOfDate, startOfDate.with(LocalTime.MAX), PAID);
+            BigDecimal orderTurnoverNumber = orderManagementRepository.sumByDeviceIncome(startOfDate, startOfDate.with(LocalTime.MAX), PAID, TransactionStatus.COMPLETE);
             userDealNumber.add(ordersNumber);
             ordersTurnoverNumber.add(orderTurnoverNumber);
         }
@@ -172,7 +173,7 @@ public class DataAnalysisServiceImpl implements IDataAnalysisService {
             }
         }
         for (LocalDateTime startOfDate : daysOfWeek) {
-            grossProfit.add(orderManagementRepository.sumByDeviceIncome(startOfDate, startOfDate.with(LocalTime.MAX), PAID));
+            grossProfit.add(orderManagementRepository.sumByDeviceIncome(startOfDate, startOfDate.with(LocalTime.MAX), PAID, TransactionStatus.COMPLETE));
         }
         return grossProfit;
     }
