@@ -158,11 +158,11 @@ public class CurrentDataAnalysisServiceImpl implements ICurrentDataAnalysisServi
         LocalDateTime startOfYesterday = LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.MIN);
         LocalDateTime yesterdayEnd = LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.MAX);
         IncometotalVO incometotalVO = new IncometotalVO();
-        BigDecimal incomeTotal = Optional.ofNullable(orderManagementRepository.sumByDeviceIncome(startOfDay, currentDate, PayStatus.PAID)).orElse(BigDecimal.ZERO);
+        BigDecimal incomeTotal = Optional.ofNullable(orderManagementRepository.sumByDeviceIncome(startOfDay, currentDate, PayStatus.PAID, TransactionStatus.COMPLETE)).orElse(BigDecimal.ZERO);
         incometotalVO.setDeviceIncome(incomeTotal);
-        orderManagementRepository.sumByDeviceIncome(startOfYesterday, startOfDay, PayStatus.PAID);
-        BigDecimal yesterdayIncome = Optional.ofNullable(orderManagementRepository.sumByDeviceIncome(startOfYesterday, yesterdayEnd, PayStatus.PAID)).orElse(BigDecimal.ZERO);
-        BigDecimal lastWeekSameDayTimeIncome = Optional.ofNullable(orderManagementRepository.sumByDeviceIncome(lastWeekSameDayTime, lastWeekSameDayEnd, PayStatus.PAID)).orElse(BigDecimal.ZERO);
+        orderManagementRepository.sumByDeviceIncome(startOfYesterday, startOfDay, PayStatus.PAID, TransactionStatus.COMPLETE);
+        BigDecimal yesterdayIncome = Optional.ofNullable(orderManagementRepository.sumByDeviceIncome(startOfYesterday, yesterdayEnd, PayStatus.PAID, TransactionStatus.COMPLETE)).orElse(BigDecimal.ZERO);
+        BigDecimal lastWeekSameDayTimeIncome = Optional.ofNullable(orderManagementRepository.sumByDeviceIncome(lastWeekSameDayTime, lastWeekSameDayEnd, PayStatus.PAID, TransactionStatus.COMPLETE)).orElse(BigDecimal.ZERO);
         lastWeekSameDayTimeIncome = (lastWeekSameDayTimeIncome != null) ? lastWeekSameDayTimeIncome : BigDecimal.ZERO;
         BigDecimal yesterdayRate;
         if (yesterdayIncome.compareTo(BigDecimal.ZERO) == 0 && incomeTotal.compareTo(BigDecimal.ZERO) == 0) {
