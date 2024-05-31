@@ -12,6 +12,7 @@ import com.yn.printer.service.modules.operation.enums.TutorialTypes;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.List;
 
@@ -57,7 +58,8 @@ public interface IFileService {
 
     ApiResponse handleCallBack(String requestId, String accessKey);
 
-    void previewImages(String image1Path, String image2Path, HttpServletResponse response);
+    BufferedImage handleIDcard(IDcardRecoVO frontIDcardRecoVO, IDcardRecoVO backIDcardRecoVO,
+                               String frontoutputFilePath, String backoutputFilePath, HttpServletResponse response);
 
     IDcardRecoVO IDcardReco(MultipartFile file, String typeId);
 }

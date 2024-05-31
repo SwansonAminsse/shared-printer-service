@@ -133,10 +133,6 @@ public class FileServiceImpl implements IFileService {
         return metaFile2Vo(this.file2MetaFile(dest));
     }
 
-    public
-    @Autowired
-    RestTemplate restTemplate;
-
     @Override
     public MetaFileVo updataFile(MultipartFile file) {
         String key = file.getOriginalFilename();
@@ -676,48 +672,56 @@ public class FileServiceImpl implements IFileService {
         return iDcardRecoVO;
     }
 
-    //对两张照片进行解码
-    public void handleIDcard(IDcardRecoVO frontIDcardRecoVO, IDcardRecoVO backIDcardRecoVO,
-                             String frontoutputFilePath, String backoutputFilePath) throws IOException {
-        String base64ImageString = null;
-        List<IDcardRecoVO.Item> items = frontIDcardRecoVO.getData().getCardsinfo().getCard().getItem();
-        for (IDcardRecoVO.Item item : items) {
-            if ("处理后的图片".equals(item.getDesc())) {
-                String content = item.getContent();
-                base64ImageString = content;
+    //对两张照片进行解码,调用previewImages方法完成身份证预览
+    public BufferedImage handleIDcard(IDcardRecoVO frontIDcardRecoVO, IDcardRecoVO backIDcardRecoVO,
+                                      String frontoutputFilePath, String backoutputFilePath, HttpServletResponse response) {
+        try {
+            String base64ImageString = null;
+            List<IDcardRecoVO.Item> items = frontIDcardRecoVO.getData().getCardsinfo().getCard().getItem();
+            for (IDcardRecoVO.Item item : items) {
+                if ("处理后的图片".equals(item.getDesc())) {
+                    String content = item.getContent();
+                    base64ImageString = content;
+                }
             }
-        }
-        Base64Util base64Util = new Base64Util();
-        base64Util.decodeImage(base64ImageString, frontoutputFilePath);
-        List<IDcardRecoVO.Item> items1 = backIDcardRecoVO.getData().getCardsinfo().getCard().getItem();
-        for (IDcardRecoVO.Item item : items1) {
-            if ("处理后的图片".equals(item.getDesc())) {
-                String content = item.getContent();
-                base64ImageString = content;
+            Base64Util base64Util = new Base64Util();
+
+            base64Util.decodeImage(base64ImageString, frontoutputFilePath);
+            List<IDcardRecoVO.Item> items1 = backIDcardRecoVO.getData().getCardsinfo().getCard().getItem();
+            for (IDcardRecoVO.Item item : items1) {
+                if ("处理后的图片".equals(item.getDesc())) {
+                    String content = item.getContent();
+                    base64ImageString = content;
+                }
             }
+            base64Util.decodeImage(base64ImageString, backoutputFilePath);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        base64Util.decodeImage(base64ImageString, backoutputFilePath);
+        BufferedImage bufferedImage = previewImages(frontoutputFilePath, backoutputFilePath, response);
+        return bufferedImage;
     }
 
-    public void previewImages(String frontOutPutFilePath, String backOutPutFilePath, HttpServletResponse response) {
+    private BufferedImage previewImages(String frontOutPutFilePath, String backOutPutFilePath, HttpServletResponse response) {
         try {
             File image1 = new File(basePath + frontOutPutFilePath);
             File image2 = new File(basePath + backOutPutFilePath);
 
             if (!image1.exists() || !image2.exists()) {
-                throw new YnErrorException(YnError.YN_700001); // 自定义错误，表示文件不存在
+                throw new YnErrorException(YnError.YN_700001);
             }
 
             BufferedImage combinedImage = mergeImages(image1, image2);
             response.setContentType("image/jpg");
             ImageIO.write(combinedImage, "jpg", response.getOutputStream());
+            return combinedImage;
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new YnErrorException(YnError.YN_700002);
         }
     }
 
-
-    public BufferedImage mergeImages(File image1, File image2) throws IOException {
+    //将身份证正反面放入A4纸中预览
+    private BufferedImage mergeImages(File image1, File image2) throws IOException {
         // 从文件中读取图像
         BufferedImage img1 = ImageIO.read(image1);
         BufferedImage img2 = ImageIO.read(image2);

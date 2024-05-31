@@ -6,6 +6,7 @@ import com.yn.printer.service.modules.common.constant.ColorEnum;
 import com.yn.printer.service.modules.common.service.IFileService;
 import com.yn.printer.service.modules.common.vo.ApiResponse;
 import com.yn.printer.service.modules.common.vo.CallbackResult;
+import com.yn.printer.service.modules.common.vo.IDcardRecoVO;
 import com.yn.printer.service.modules.common.vo.MetaFileVo;
 import com.yn.printer.service.modules.meta.enums.IdPhotoSize;
 import com.yn.printer.service.modules.operation.enums.TutorialTypes;
@@ -145,10 +146,12 @@ public class FileController {
 
     @ApiOperation(value = "身份证预览")
     @GetMapping("/preview")
-    public void previewImages(@RequestParam("image1Path") String image1Path,
-                              @RequestParam("image2Path") String image2Path,
-                              HttpServletResponse response) {
-        fileService.previewImages(image1Path, image2Path, response);
+    public void previewImages(@RequestParam("frontIDcardRecoVO") IDcardRecoVO frontIDcardRecoVO,
+                              @RequestParam("backIDcardRecoVO") IDcardRecoVO backIDcardRecoVO,
+                              @RequestParam("frontoutputFilePath") String frontoutputFilePath,
+                              @RequestParam("backoutputFilePath") String backoutputFilePath,
+                              @RequestParam("response") HttpServletResponse response) {
+        fileService.handleIDcard(frontIDcardRecoVO, backIDcardRecoVO, frontoutputFilePath, backoutputFilePath, response);
     }
 
     @ApiOperation(value = "身份证识别")
