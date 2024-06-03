@@ -9,6 +9,7 @@ import com.yn.printer.service.modules.member.entity.Member;
 import com.yn.printer.service.modules.operation.entity.DevicesList;
 import com.yn.printer.service.modules.operation.repository.DevicesListRepository;
 import com.yn.printer.service.modules.operation.util.ChannelUtils;
+import com.yn.printer.service.modules.orders.enums.TransactionStatus;
 import com.yn.printer.service.modules.orders.repository.OrderManagementRepository;
 import com.yn.printer.service.modules.settlement.entity.ChannelSettlement;
 import com.yn.printer.service.modules.settlement.entity.Equipment;
@@ -117,7 +118,7 @@ public class SettlementDetailsServiceImpl implements ISettlementDetailsService {
             Long repeatBuyers = Optional.ofNullable(orderManagementRepository.countRepeatBuyersByOrderDateAndDevice(startOfDate, endOfDay, device)).orElse(0L);
             Long ordersNumber = Optional.ofNullable(orderManagementRepository.countOrdersByOrderDateBetweenAndDevice(startOfDate, endOfDay, device)).orElse(0L);
             Long oldUserNumber = Optional.ofNullable(orderManagementRepository.countDistinctOrderByOrderDateBeforeAndDevice(startOfDate, device)).orElse(0L);
-            BigDecimal countOrderAmount = orderManagementRepository.sumPaymentAmountByOrderDateBetweenAndDevice(startOfDate, endOfDay, device, PAID);
+            BigDecimal countOrderAmount = orderManagementRepository.sumPaymentAmountByOrderDateBetweenAndDevice(startOfDate, endOfDay, device, PAID, TransactionStatus.COMPLETE);
             if (countOrderAmount == null) {
                 countOrderAmount = BigDecimal.ZERO;
             }
@@ -189,7 +190,7 @@ public class SettlementDetailsServiceImpl implements ISettlementDetailsService {
     }
 
     private BigDecimal calculateIncome(LocalDateTime startTime, LocalDateTime endTime, DevicesList device) {
-        BigDecimal income = orderManagementRepository.sumPaymentAmountByOrderDateBetweenAndDevice(startTime, endTime, device, PAID);
+        BigDecimal income = orderManagementRepository.sumPaymentAmountByOrderDateBetweenAndDevice(startTime, endTime, device, PAID, TransactionStatus.COMPLETE);
         return income != null ? income : BigDecimal.ZERO;
     }
 
