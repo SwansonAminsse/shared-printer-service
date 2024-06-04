@@ -1,13 +1,17 @@
 package com.yn.printer.service.modules.common.controller;
 
 import com.yn.printer.service.common.vo.ResponseVO;
+import com.yn.printer.service.modules.channel.entity.ApiRequest;
 import com.yn.printer.service.modules.common.constant.ColorEnum;
 import com.yn.printer.service.modules.common.service.IFileService;
+import com.yn.printer.service.modules.common.vo.ApiResponse;
+import com.yn.printer.service.modules.common.vo.CallbackResult;
 import com.yn.printer.service.modules.common.vo.MetaFileVo;
 import com.yn.printer.service.modules.meta.enums.IdPhotoSize;
 import com.yn.printer.service.modules.operation.enums.TutorialTypes;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +24,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/file")
 public class FileController {
+    @Value("${accessKey}")
+    String accessKey;
 
     @Autowired
     IFileService fileService;
@@ -29,6 +35,7 @@ public class FileController {
     public MetaFileVo upload(@RequestPart("file") @ApiParam(value = "文件", required = true) MultipartFile file) {
         return fileService.uploadFile(file);
     }
+
     @ApiOperation(value = "文件-更新")
     @PostMapping(value = "/update")
     public MetaFileVo update(@RequestPart("file") @ApiParam(value = "文件", required = true) MultipartFile file) {
@@ -121,4 +128,33 @@ public class FileController {
         return fileService.toPDF(fileName);
     }
 
+    @ApiOperation(value = "敏感识别")
+    @PostMapping("/riskControl")
+    public void riskControl(@RequestBody ApiRequest request) {
+        fileService.callApi(request);
+    }
+
+    @ApiOperation(value = "文档结果回调")
+    @PostMapping("/callback")
+    public ApiResponse callBack(@RequestBody CallbackResult callbackResult) {
+        System.out.println(callbackResult);
+        // 处理接口回调结果
+        String requestId = callbackResult.getRequestId();
+        return fileService.handleCallBack(requestId, accessKey);
+    }
+
+    @ApiOperation(value = "身份证预览")
+    @GetMapping("/preview")
+    public void previewImages(@RequestParam("image1Path") String image1Path,
+                              @RequestParam("image2Path") String image2Path,
+                              HttpServletResponse response) {
+        fileService.previewImages(image1Path, image2Path, response);
+    }
+
+    @ApiOperation(value = "身份证识别")
+    @PostMapping("/IDcardReco")
+    public void IDcardReco(@RequestPart("file") @ApiParam(value = "文件", required = true) MultipartFile file,
+                           @RequestParam("typeId") String typeId) {
+        fileService.IDcardReco(file, typeId);
+    }
 }

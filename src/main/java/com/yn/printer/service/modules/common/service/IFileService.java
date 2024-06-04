@@ -1,6 +1,10 @@
 package com.yn.printer.service.modules.common.service;
 
+import com.yn.printer.service.modules.channel.entity.ApiRequest;
 import com.yn.printer.service.modules.common.constant.ColorEnum;
+import com.yn.printer.service.modules.common.vo.ApiResponse;
+import com.yn.printer.service.modules.common.vo.CallbackResult;
+import com.yn.printer.service.modules.common.vo.IDcardRecoVO;
 import com.yn.printer.service.modules.common.vo.MetaFileVo;
 import com.yn.printer.service.modules.meta.entity.MetaFile;
 import com.yn.printer.service.modules.meta.enums.IdPhotoSize;
@@ -48,4 +52,13 @@ public interface IFileService {
     MetaFileVo getPresignedUrl(String fileType);
 
     MetaFileVo toPDF(String fileName);
+
+    void callApi(ApiRequest request);
+
+    ApiResponse handleCallBack(String requestId, String accessKey);
+
+    void previewImages(String image1Path, String image2Path, HttpServletResponse response);
+
+    IDcardRecoVO IDcardReco(MultipartFile file, String typeId);
 }
+

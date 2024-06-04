@@ -95,6 +95,10 @@ file:
     https://mps-oss-south.s3.cn-south-1.jdcloud-oss.com/
   ossPath1:
     https://mps-oss-south.s3.cn-south-1.jdcloud-oss.com/
+  username:
+    yuzhen
+accessKey:
+  tibgpuEUoNUUTAWavrG4
 
 oss:
   jd:
