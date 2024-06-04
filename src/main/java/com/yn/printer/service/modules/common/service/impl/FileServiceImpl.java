@@ -6,12 +6,17 @@ import cn.hutool.core.io.FileTypeUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.http.HttpUtil;
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONException;
+import cn.hutool.json.JSONObject;
 import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.Image;
 import com.yn.printer.service.common.exception.YnError;
 import com.yn.printer.service.common.exception.YnErrorException;
+import com.yn.printer.service.modules.channel.entity.ApiRequest;
 import com.yn.printer.service.modules.common.api.ali.idPhoto.AliIdPhotoApi;
 import com.yn.printer.service.modules.common.api.ali.idPhoto.Matting;
 import com.yn.printer.service.modules.common.api.ali.idPhoto.request.IdPhotoMakeRequest;
@@ -21,7 +26,11 @@ import com.yn.printer.service.modules.common.mqtt.MqttConfig;
 import com.yn.printer.service.modules.common.mqtt.MqttSender;
 import com.yn.printer.service.modules.common.oss.OssConfig;
 import com.yn.printer.service.modules.common.service.IFileService;
+import com.yn.printer.service.modules.common.util.Base64Util;
 import com.yn.printer.service.modules.common.util.PdfUtil;
+import com.yn.printer.service.modules.common.vo.ApiResponse;
+import com.yn.printer.service.modules.common.vo.CallbackResult;
+import com.yn.printer.service.modules.common.vo.IDcardRecoVO;
 import com.yn.printer.service.modules.common.vo.MetaFileVo;
 import com.yn.printer.service.modules.member.repository.PointsFileRepository;
 import com.yn.printer.service.modules.meta.entity.MetaFile;
@@ -33,23 +42,30 @@ import com.yn.printer.service.modules.operation.repository.DevicesListRepository
 import com.yn.printer.service.modules.operation.repository.TutorialsRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.channels.FileChannel;
-import java.util.Base64;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
 
 /**
@@ -91,6 +107,8 @@ public class FileServiceImpl implements IFileService {
     MqttConfig mqttConfig;
     @Value("${oss.s3.bucketName}")
     private String bucketName;
+    @Value("${file.username}")
+    String username;
 
     @Override
     public MetaFileVo uploadFile(MultipartFile file) {
@@ -114,6 +132,10 @@ public class FileServiceImpl implements IFileService {
 
         return metaFile2Vo(this.file2MetaFile(dest));
     }
+
+    public
+    @Autowired
+    RestTemplate restTemplate;
 
     @Override
     public MetaFileVo updataFile(MultipartFile file) {
@@ -493,5 +515,247 @@ public class FileServiceImpl implements IFileService {
         return metaFile2Vo(file2MetaFile(dest));
     }
 
+    private void imgRiskControl(ApiRequest request) {
+        String url = "http://api-img-bj.fengkongcloud.com/image/v4";
+        try {
+            // 构建请求体
+            JSONObject json = new JSONObject();
+            json.put("accessKey", request.getAccessKey());
+            json.put("appId", request.getAppId());
+            JSONObject data = new JSONObject();
+            data.put("img", request.getImg());
+            data.put("tokenId", request.getTokenId());
+            json.put("data", data);
+            json.put("eventId", request.getEventId());
+            json.put("type", request.getType());
+            // 创建连接
+            HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setDoOutput(true);
+            // 发送请求
+            try (OutputStream os = conn.getOutputStream()) {
+                byte[] input = json.toString().getBytes("utf-8");
+                os.write(input, 0, input.length);
+            }
+            // 处理响应
+            StringBuilder response = new StringBuilder();
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    response.append(line);
+                }
+            }
+            // 解析响应
+            JSONObject jsonResponse = new JSONObject(response.toString());
+            System.out.println(jsonResponse);
+        } catch (IOException | JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void docRiskControl(ApiRequest request) {
+        String url = "http://api-article-bj.fengkongcloud.com/v1/saas/anti_fraud/article";
+        try {
+            // 构建请求体
+            JSONObject json = new JSONObject();
+            json.put("accessKey", request.getAccessKey());
+            json.put("type", request.getType());
+            json.put("imgType", request.getImgType());
+            json.put("txtType", request.getTxtType());
+            json.put("callback", request.getCallback());
+            JSONObject data = new JSONObject();
+            data.put("fileFormat", request.getFileFormat());
+            data.put("tokenId", request.getTokenId());
+            data.put("contents", request.getContents());
+            json.put("data", data);
+            // 创建连接
+            HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setDoOutput(true);
+            // 发送请求
+            try (OutputStream os = conn.getOutputStream()) {
+                byte[] input = json.toString().getBytes("utf-8");
+                os.write(input, 0, input.length);
+            }
+            // 处理响应
+            StringBuilder response = new StringBuilder();
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    response.append(line);
+                }
+            }
+            // 解析响应
+            JSONObject jsonResponse = new JSONObject(response.toString());
+            System.out.println(jsonResponse);
+        } catch (IOException | JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void callApi(ApiRequest request) {
+        if ("img".equalsIgnoreCase(request.getInterType())) {
+            imgRiskControl(request);
+        } else if ("document".equalsIgnoreCase(request.getInterType())) {
+            docRiskControl(request);
+        } else {
+            throw new IllegalArgumentException("Invalid interType: " + request.getInterType());
+        }
+    }
+
+    @Override
+    public ApiResponse handleCallBack(String requestId, String accessKey) {
+        String url = "http://api-article-bj.fengkongcloud.com/v1/saas/anti_fraud/article/query";
+        try {
+            // 构建请求体
+            JSONObject json = new JSONObject();
+            json.put("accessKey", accessKey);
+            JSONArray requestIds = new JSONArray();
+            requestIds.put(requestId);
+            json.put("requestIds", requestIds);
+            HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setDoOutput(true);
+            // 发送请求
+            try (OutputStream os = conn.getOutputStream()) {
+                byte[] input = json.toString().getBytes("utf-8");
+                os.write(input, 0, input.length);
+            }
+            // 处理响应
+            StringBuilder response = new StringBuilder();
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    response.append(line);
+                }
+            }
+            // 解析响应
+            JSONObject jsonResponse = new JSONObject(response.toString());
+            ObjectMapper mapper = new ObjectMapper();
+            ApiResponse apiResponse = mapper.readValue(jsonResponse.toString(), ApiResponse.class);
+            System.out.println(apiResponse.toString());
+            return apiResponse;
+        } catch (IOException | JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public IDcardRecoVO IDcardReco(MultipartFile file, String typeId) {
+        String url = "http://103.139.212.226:8888/cxfServerX/doAllCardFileRecon";
+
+        // 构建请求头
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+        // 构建请求体
+        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+        body.add("username", username);
+        body.add("typeId", typeId);
+        ByteArrayResource fileAsResource = null;
+        try {
+            fileAsResource = new ByteArrayResource(file.getBytes()) {
+                @Override
+                public String getFilename() {
+                    return file.getOriginalFilename();
+                }
+            };
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        body.add("file", fileAsResource);
+
+        // 发送请求
+        RestTemplate restTemplate = new RestTemplate();
+        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+        IDcardRecoVO iDcardRecoVO = restTemplate.postForObject(url, requestEntity, IDcardRecoVO.class);
+        System.out.println(iDcardRecoVO.toString());
+        return iDcardRecoVO;
+    }
+
+    //对两张照片进行解码
+    public void handleIDcard(IDcardRecoVO frontIDcardRecoVO, IDcardRecoVO backIDcardRecoVO,
+                             String frontoutputFilePath, String backoutputFilePath) throws IOException {
+        String base64ImageString = null;
+        List<IDcardRecoVO.Item> items = frontIDcardRecoVO.getData().getCardsinfo().getCard().getItem();
+        for (IDcardRecoVO.Item item : items) {
+            if ("处理后的图片".equals(item.getDesc())) {
+                String content = item.getContent();
+                base64ImageString = content;
+            }
+        }
+        Base64Util base64Util = new Base64Util();
+        base64Util.decodeImage(base64ImageString, frontoutputFilePath);
+        List<IDcardRecoVO.Item> items1 = backIDcardRecoVO.getData().getCardsinfo().getCard().getItem();
+        for (IDcardRecoVO.Item item : items1) {
+            if ("处理后的图片".equals(item.getDesc())) {
+                String content = item.getContent();
+                base64ImageString = content;
+            }
+        }
+        base64Util.decodeImage(base64ImageString, backoutputFilePath);
+    }
+
+    public void previewImages(String frontOutPutFilePath, String backOutPutFilePath, HttpServletResponse response) {
+        try {
+            File image1 = new File(basePath + frontOutPutFilePath);
+            File image2 = new File(basePath + backOutPutFilePath);
+
+            if (!image1.exists() || !image2.exists()) {
+                throw new YnErrorException(YnError.YN_700001); // 自定义错误，表示文件不存在
+            }
+
+            BufferedImage combinedImage = mergeImages(image1, image2);
+            response.setContentType("image/png");
+            ImageIO.write(combinedImage, "png", response.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public BufferedImage mergeImages(File image1, File image2) throws IOException {
+        // 从文件中读取图像
+        BufferedImage img1 = ImageIO.read(image1);
+        BufferedImage img2 = ImageIO.read(image2);
+
+        int A4_WIDTH = 2480; // A4纸宽度像素 (300 dpi)
+        int A4_HEIGHT = 3508; // A4纸高度像素 (300 dpi)
+        int MARGIN = 50; // 图片与边界的距离
+        int SPACING = 20; // 图片之间的距离
+
+        // 创建一个新的图像，用于存放合并后的图像
+        BufferedImage combined = new BufferedImage(A4_WIDTH, A4_HEIGHT, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = combined.createGraphics();
+
+        // 填充背景色
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, A4_WIDTH, A4_HEIGHT);
+
+        // 计算图片的最大宽度
+        int maxWidth = A4_WIDTH - 2 * MARGIN;
+        // 计算图片1的高度
+        int img1Height = img1.getHeight() * maxWidth / img1.getWidth();
+        // 计算图片2的高度
+        int img2Height = img2.getHeight() * maxWidth / img2.getWidth();
+
+        // 计算图片1的y坐标
+        int yPositionImg1 = MARGIN;
+        // 计算图片2的y坐标
+        int yPositionImg2 = yPositionImg1 + img1Height + SPACING;
+
+        // 将图片1绘制到新图像上
+        g.drawImage(img1, MARGIN, yPositionImg1, maxWidth, img1Height, null);
+        // 将图片2绘制到新图像上
+        g.drawImage(img2, MARGIN, yPositionImg2, maxWidth, img2Height, null);
+
+        // 释放资源
+        g.dispose();
+        // 返回合并后的图像
+        return combined;
+    }
 
 }
