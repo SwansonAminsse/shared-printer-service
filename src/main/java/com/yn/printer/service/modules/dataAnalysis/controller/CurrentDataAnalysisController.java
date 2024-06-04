@@ -43,15 +43,11 @@ public class CurrentDataAnalysisController {
             @RequestParam(value = "dateTime", required = false) TimeSelect dateTime,
             @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
-        if (dateTime == null && startDate == null && endDate == null) {
-            List<LocalDate> todayRange = currentDataAnalysisService.getDateBySelect(TimeSelect.TODAY);
-            startDate = todayRange.get(0);
-            endDate = todayRange.get(1);
-        } else if (dateTime != null) {
+        if (dateTime != null && startDate == null && endDate == null) {
             List<LocalDate> dateRange = currentDataAnalysisService.getDateBySelect(dateTime);
             startDate = dateRange.get(0);
             endDate = dateRange.get(1);
-        } else if (startDate == null || endDate == null) {
+        } else if ((startDate != null && endDate == null) || (startDate == null && endDate != null)) {
             endDate = (endDate != null) ? endDate : startDate;
             startDate = (startDate != null) ? startDate : endDate;
         }
@@ -71,16 +67,27 @@ public class CurrentDataAnalysisController {
             @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
             @RequestParam(value = "orderPrintType", required = false) String orderPrintType) {
-
-        if (dateTime == null && startDate == null && endDate == null) {
-            List<LocalDate> todayRange = currentDataAnalysisService.getDateBySelect(TimeSelect.TODAY);
-            startDate = todayRange.get(0);
-            endDate = todayRange.get(1);
-        } else if (dateTime != null) {
+//        if (dateTime == null && startDate == null && endDate == null) {
+//            List<LocalDate> todayRange = currentDataAnalysisService.getDateBySelect(TimeSelect.TODAY);
+//            startDate = todayRange.get(0);
+//            endDate = todayRange.get(1);
+//        } else if (dateTime != null) {
+//            List<LocalDate> dateRange = currentDataAnalysisService.getDateBySelect(dateTime);
+//            startDate = dateRange.get(0);
+//            endDate = dateRange.get(1);
+//        } else if (startDate == null || endDate == null) {
+//            endDate = (endDate != null) ? endDate : startDate;
+//            startDate = (startDate != null) ? startDate : endDate;
+//        }
+//        OrderPrintType orderPrint = null;
+//        if (orderPrintType != null) {
+//            orderPrint = OrderPrintType.valueOf(orderPrintType.toUpperCase());
+//        }
+        if (dateTime != null && startDate == null && endDate == null) {
             List<LocalDate> dateRange = currentDataAnalysisService.getDateBySelect(dateTime);
             startDate = dateRange.get(0);
             endDate = dateRange.get(1);
-        } else if (startDate == null || endDate == null) {
+        } else if ((startDate != null && endDate == null) || (startDate == null && endDate != null)) {
             endDate = (endDate != null) ? endDate : startDate;
             startDate = (startDate != null) ? startDate : endDate;
         }
