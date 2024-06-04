@@ -709,8 +709,8 @@ public class FileServiceImpl implements IFileService {
             }
 
             BufferedImage combinedImage = mergeImages(image1, image2);
-            response.setContentType("image/png");
-            ImageIO.write(combinedImage, "png", response.getOutputStream());
+            response.setContentType("image/jpg");
+            ImageIO.write(combinedImage, "jpg", response.getOutputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
