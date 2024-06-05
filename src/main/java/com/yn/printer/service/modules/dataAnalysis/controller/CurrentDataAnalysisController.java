@@ -93,7 +93,7 @@ public class CurrentDataAnalysisController {
         }
         OrderPrintType orderPrint = null;
         if (orderPrintType != null) {
-            orderPrint = OrderPrintType.valueOf(orderPrintType.toUpperCase());
+            orderPrint = OrderPrintType.fromValue(orderPrintType);
         }
         ChannelOrderVO channelOrderVO = new ChannelOrderVO();
         channelOrderVO.setOrderStatistics(currentDataAnalysisService.getOrderPrintType(channelPartnerId, startDate, endDate,orderPrint));

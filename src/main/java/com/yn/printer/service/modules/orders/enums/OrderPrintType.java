@@ -13,4 +13,12 @@ public enum OrderPrintType {
     public String getValue() {
         return value;
     }
+    public static OrderPrintType fromValue(String value) {
+        for (OrderPrintType type : values()) {
+            if (type.getValue().equals(value)) {
+                return type;
+            }
+        }
+        return null;
+    }
 }
