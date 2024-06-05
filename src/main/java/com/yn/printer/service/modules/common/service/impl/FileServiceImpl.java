@@ -51,6 +51,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -639,6 +640,7 @@ public class FileServiceImpl implements IFileService {
         }
     }
 
+    //中安大陆证件接口
     @Override
     public IDcardRecoVO IDcardReco(MultipartFile file, String typeId) {
         String url = "http://103.139.212.226:8888/cxfServerX/doAllCardFileRecon";
@@ -668,68 +670,44 @@ public class FileServiceImpl implements IFileService {
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
         IDcardRecoVO iDcardRecoVO = restTemplate.postForObject(url, requestEntity, IDcardRecoVO.class);
-        System.out.println(iDcardRecoVO.toString());
         return iDcardRecoVO;
     }
 
-    //对两张照片进行解码,调用previewImages方法完成身份证预览
-    public BufferedImage handleIDcard(IDcardRecoVO frontIDcardRecoVO, IDcardRecoVO backIDcardRecoVO,
-                                      String frontoutputFilePath, String backoutputFilePath, HttpServletResponse response) {
-        try {
-            String base64ImageString = null;
-            List<IDcardRecoVO.Item> items = frontIDcardRecoVO.getData().getCardsinfo().getCard().getItem();
-            for (IDcardRecoVO.Item item : items) {
-                if ("处理后的图片".equals(item.getDesc())) {
-                    String content = item.getContent();
-                    base64ImageString = content;
-                }
-            }
-            Base64Util base64Util = new Base64Util();
-
-            base64Util.decodeImage(base64ImageString, frontoutputFilePath);
-            List<IDcardRecoVO.Item> items1 = backIDcardRecoVO.getData().getCardsinfo().getCard().getItem();
-            for (IDcardRecoVO.Item item : items1) {
-                if ("处理后的图片".equals(item.getDesc())) {
-                    String content = item.getContent();
-                    base64ImageString = content;
-                }
-            }
-            base64Util.decodeImage(base64ImageString, backoutputFilePath);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        BufferedImage bufferedImage = previewImages(frontoutputFilePath, backoutputFilePath, response);
-        return bufferedImage;
-    }
-
-    private BufferedImage previewImages(String frontOutPutFilePath, String backOutPutFilePath, HttpServletResponse response) {
-        try {
-            File image1 = new File(basePath + frontOutPutFilePath);
-            File image2 = new File(basePath + backOutPutFilePath);
-
-            if (!image1.exists() || !image2.exists()) {
-                throw new YnErrorException(YnError.YN_700001);
-            }
-
-            BufferedImage combinedImage = mergeImages(image1, image2);
-            response.setContentType("image/jpg");
-            ImageIO.write(combinedImage, "jpg", response.getOutputStream());
-            return combinedImage;
-        } catch (IOException e) {
-            throw new YnErrorException(YnError.YN_700002);
-        }
+    //调用中安接口识别身份证，处理图片并上传到oss，最后调用mergeImages方法获得身份证预览
+    public MetaFileVo handleIDcard(MultipartFile frontIDcard, MultipartFile backIDcard,
+                                   String frontTypeId, String backTypeId) {
+        IDcardRecoVO frontIDcardRecoVO = IDcardReco(frontIDcard, frontTypeId);
+        IDcardRecoVO backIDcardRecoVO = IDcardReco(backIDcard, backTypeId);
+        Base64Util base64Util = new Base64Util();
+        MultipartFile frontMultipartFile = base64Util.decodeImage(frontIDcardRecoVO);
+        MultipartFile backMultipartFile = base64Util.decodeImage(backIDcardRecoVO);
+        MetaFileVo frontMetaFileVo = uploadFile(frontMultipartFile);
+        MetaFileVo backMetaFileVo = uploadFile(backMultipartFile);
+        String frontDownloadPath = frontMetaFileVo.getDownloadPath();
+        String backDownloadPath = backMetaFileVo.getDownloadPath();
+        MultipartFile bufferedImage = mergeImages(frontDownloadPath, backDownloadPath);
+        MetaFileVo metaFileVo = uploadFile(bufferedImage);
+        return metaFileVo;
     }
 
     //将身份证正反面放入A4纸中预览
-    private BufferedImage mergeImages(File image1, File image2) throws IOException {
+    private MultipartFile mergeImages(String frontDownloadPath, String backDownloadPath) {
         // 从文件中读取图像
-        BufferedImage img1 = ImageIO.read(image1);
-        BufferedImage img2 = ImageIO.read(image2);
+        BufferedImage img1 = null;
+        BufferedImage img2 =null;
+        try {
+            img1 = ImageIO.read(new URL(frontDownloadPath));
+            img2  = ImageIO.read(new URL(backDownloadPath));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
-        int A4_WIDTH = 2480; // A4纸宽度像素 (300 dpi)
-        int A4_HEIGHT = 3508; // A4纸高度像素 (300 dpi)
-        int MARGIN = 50; // 图片与边界的距离
-        int SPACING = 20; // 图片之间的距离
+
+        int A4_WIDTH = 794; // A4纸宽度像素 (96 dpi)
+        int A4_HEIGHT = 1123; // A4纸高度像素 (96 dpi)
+        int SPACING = 57; // 图片之间的距离 (1.5 cm)
+        int IMAGE_WIDTH = 345; // 调整后的身份证宽度像素
+        int IMAGE_HEIGHT = 219; // 调整后的身份证高度像素
 
         // 创建一个新的图像，用于存放合并后的图像
         BufferedImage combined = new BufferedImage(A4_WIDTH, A4_HEIGHT, BufferedImage.TYPE_INT_RGB);
@@ -739,27 +717,44 @@ public class FileServiceImpl implements IFileService {
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, A4_WIDTH, A4_HEIGHT);
 
-        // 计算图片的最大宽度
-        int maxWidth = A4_WIDTH - 2 * MARGIN;
-        // 计算图片1的高度
-        int img1Height = img1.getHeight() * maxWidth / img1.getWidth();
-        // 计算图片2的高度
-        int img2Height = img2.getHeight() * maxWidth / img2.getWidth();
-
+        // 计算居中的x坐标
+        int xPosition = (A4_WIDTH - IMAGE_WIDTH) / 2;
         // 计算图片1的y坐标
-        int yPositionImg1 = MARGIN;
+        int yPositionImg1 = (A4_HEIGHT - 2 * IMAGE_HEIGHT - SPACING) / 2;
         // 计算图片2的y坐标
-        int yPositionImg2 = yPositionImg1 + img1Height + SPACING;
+        int yPositionImg2 = yPositionImg1 + IMAGE_HEIGHT + SPACING;
+
+        // 缩放图片到指定大小
+        BufferedImage scaledImg1 = new BufferedImage(IMAGE_WIDTH, IMAGE_HEIGHT, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g1 = scaledImg1.createGraphics();
+        g1.drawImage(img1, 0, 0, IMAGE_WIDTH, IMAGE_HEIGHT, null);
+        g1.dispose();
+
+        BufferedImage scaledImg2 = new BufferedImage(IMAGE_WIDTH, IMAGE_HEIGHT, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2 = scaledImg2.createGraphics();
+        g2.drawImage(img2, 0, 0, IMAGE_WIDTH, IMAGE_HEIGHT, null);
+        g2.dispose();
 
         // 将图片1绘制到新图像上
-        g.drawImage(img1, MARGIN, yPositionImg1, maxWidth, img1Height, null);
+        g.drawImage(scaledImg1, xPosition, yPositionImg1, null);
         // 将图片2绘制到新图像上
-        g.drawImage(img2, MARGIN, yPositionImg2, maxWidth, img2Height, null);
+        g.drawImage(scaledImg2, xPosition, yPositionImg2, null);
 
         // 释放资源
         g.dispose();
         // 返回合并后的图像
-        return combined;
-    }
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try {
+            ImageIO.write(combined, "jpg", baos);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        byte[] bytes = baos.toByteArray();
 
+        // 创建MultipartFile
+        MultipartFile multipartFile = new MockMultipartFile("file", "combined.jpg", "image/jpeg", bytes);
+
+        // 返回MultipartFile
+        return multipartFile;
+    }
 }

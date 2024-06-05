@@ -58,8 +58,8 @@ public interface IFileService {
 
     ApiResponse handleCallBack(String requestId, String accessKey);
 
-    BufferedImage handleIDcard(IDcardRecoVO frontIDcardRecoVO, IDcardRecoVO backIDcardRecoVO,
-                               String frontoutputFilePath, String backoutputFilePath, HttpServletResponse response);
+    MetaFileVo handleIDcard(MultipartFile frontIDcard, MultipartFile backIDcard,
+                            String frontTypeId, String backTypeId);
 
     IDcardRecoVO IDcardReco(MultipartFile file, String typeId);
 }
