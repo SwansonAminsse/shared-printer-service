@@ -4,6 +4,7 @@ import com.yn.printer.service.common.vo.ResponseVO;
 import com.yn.printer.service.modules.channel.entity.ApiRequest;
 import com.yn.printer.service.modules.common.constant.ColorEnum;
 import com.yn.printer.service.modules.common.service.IFileService;
+import com.yn.printer.service.modules.common.util.Base64Util;
 import com.yn.printer.service.modules.common.vo.ApiResponse;
 import com.yn.printer.service.modules.common.vo.CallbackResult;
 import com.yn.printer.service.modules.common.vo.IDcardRecoVO;
@@ -145,19 +146,20 @@ public class FileController {
     }
 
     @ApiOperation(value = "身份证预览")
-    @GetMapping("/preview")
-    public void previewImages(@RequestParam("frontIDcardRecoVO") IDcardRecoVO frontIDcardRecoVO,
-                              @RequestParam("backIDcardRecoVO") IDcardRecoVO backIDcardRecoVO,
-                              @RequestParam("frontoutputFilePath") String frontoutputFilePath,
-                              @RequestParam("backoutputFilePath") String backoutputFilePath,
-                              @RequestParam("response") HttpServletResponse response) {
-        fileService.handleIDcard(frontIDcardRecoVO, backIDcardRecoVO, frontoutputFilePath, backoutputFilePath, response);
+    @PostMapping("/preview")
+    public MetaFileVo IDcardPreview(@RequestPart("frontIDcard") @ApiParam(value = "身份证照片", required = true) MultipartFile frontIDcard,
+                                    @RequestPart("backIDcard") @ApiParam(value = "身份证国徽", required = true) MultipartFile backIDcard,
+                                    @RequestParam("frontTypeId") String frontTypeId,
+                                    @RequestParam("backTypeId") String backTypeId) {
+        return fileService.handleIDcard(frontIDcard, backIDcard,
+                frontTypeId, backTypeId);
     }
 
-    @ApiOperation(value = "身份证识别")
+    @ApiOperation(value = "中安大陆证件识别")
     @PostMapping("/IDcardReco")
-    public void IDcardReco(@RequestPart("file") @ApiParam(value = "文件", required = true) MultipartFile file,
-                           @RequestParam("typeId") String typeId) {
-        fileService.IDcardReco(file, typeId);
+    public IDcardRecoVO IDcardReco(@RequestPart("file") @ApiParam(value = "文件", required = true) MultipartFile file,
+                                 @RequestParam("typeId") String typeId) {
+        IDcardRecoVO iDcardRecoVO = fileService.IDcardReco(file, typeId);
+        return  iDcardRecoVO;
     }
 }
